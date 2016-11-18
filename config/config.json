@@ -1,0 +1,20 @@
+{
+  "development": {
+    "database": "mongodb://localhost/barter-r-books",
+    "host": "http://localhost:3000",
+    "port": "3000"
+  },
+  "test": {
+    "database": "mongodb://localhost/barter-r-books-test",
+    "host": "http://localhost:3000",
+    "port": "3000"
+  },
+  "production": {
+    "database": "MONGO_URI",
+    "host": "https://bar-hop-bar.herokuapp.com",
+    "CONSUMER_KEY": "CONSUMER_KEY",
+    "CONSUMER_SECRET": "CONSUMER_SECRET",
+    "TOKEN": "TOKEN",
+    "TOKEN_SECRET": "TOKEN_SECRET"
+  }
+}
