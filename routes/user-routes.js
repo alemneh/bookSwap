@@ -45,6 +45,20 @@ let UserRoutes = {
     });
   },
 
+  deleteUser: function(req, res) {
+    User.findById(req.params.id).exec()
+      .then((user) => {
+        user.books.forEach((bookId) => {
+          Book.findById(bookId).remove().exec();
+        });
+        user.remove();
+        res.json({message: 'user removed'});
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
+
   getUserBooks: function(req, res) {
     User.findOne({_id: req.params.id})
       .populate('books')
