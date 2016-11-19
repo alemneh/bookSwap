@@ -24,8 +24,8 @@ module.exports = (userRouter, models) => {
     .post(jwtAuth, (req, res)   => { UserRoutes.addAbook(req, res); });
 
 
-  userRouter.route('/users/:id/bookings/:bookId')
-    .delete(jwtAuth, (req, res) => { UserRoutes.delete_a_booking(req, res); });
+  userRouter.route('/users/:id/books/:bookId')
+    .delete(jwtAuth, (req, res) => { UserRoutes.removeABook(req, res); });
 
 
 

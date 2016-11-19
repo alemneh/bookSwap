@@ -55,12 +55,11 @@ let UserRoutes = {
   },
 
   addAbook: function(req, res) {
-    var userHolder, books;
 
     User.findOne({_id: req.params.id})
       .populate('books').exec()
       .then((user) => {
-        books = user.books.filter((book) => {
+        let books = user.books.filter((book) => {
           return req.body.title == book.title;
         });
         if(books.length > 0) {
@@ -84,6 +83,30 @@ let UserRoutes = {
         }
       });
 
+  },
+
+  removeABook: function(req, res) {
+
+    User.findById(req.params.id).exec()
+     .then((user) => {
+       if(user.books.indexOf(req.params.bookId) == -1) {
+         res.json({message: 'book does not exist'});
+         console.log('aborted promise');
+         throw new Error('book does not exist');
+       } else {
+         user.books.pull(req.params.bookId);
+         user.save();
+         Book.findById(req.params.bookId).remove();
+         res.json({message: 'book removed!'})
+       }
+     })
+     .catch((err) => {
+       if(err.message == 'book does not exist') {
+         // aborted promise
+       } else {
+         throw err;
+       }
+     });
 
   }
 
