@@ -17,6 +17,8 @@ module.exports = function(mongoose, models) {
       require: false,
       default: true
     }
+  },{
+    timestamps: true
   });
   var _this;
   userSchema.pre('save', function(next) {

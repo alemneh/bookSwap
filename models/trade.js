@@ -5,6 +5,8 @@ module.exports = (mongoose, models) => {
   const tradeSchema = new mongoose.Schema({
     requesteeBook: [{type: Schema.Types.ObjectId, ref: 'Book'}],
     requesterBook: [{type: Schema.Types.ObjectId, ref: 'Book'}]
+  },{
+    timestamps: true
   });
 
   const Trade = mongoose.model('Trade', tradeSchema);
