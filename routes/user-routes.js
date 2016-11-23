@@ -4,6 +4,7 @@ const models = require('../models');
 
 const Book = models.Book;
 const User = models.User;
+const Trade = models.Trade;
 
 let UserRoutes = {
 
@@ -111,7 +112,7 @@ let UserRoutes = {
          user.books.pull(req.params.bookId);
          user.save();
          Book.findById(req.params.bookId).remove();
-         res.json({message: 'book removed!'})
+         res.json({message: 'book removed!'});
        }
      })
      .catch((err) => {
@@ -122,6 +123,81 @@ let UserRoutes = {
        }
      });
 
+  },
+
+  requestATrade: function(req, res) {
+    let newTrade = new Trade(req.body);
+    User.findById(req.params.id).exec()
+      .then((requesterUser) => {
+        requesterUser.pendingTrade.push(newTrade._id);
+        requesterUser.save();
+        return User.findById(req.body.requesteeId).exec();
+      })
+      .then((requesteeUser) => {
+        requesteeUser.tradeRequest.push(newTrade._id);
+        requesteeUser.save();
+        newTrade.save();
+        res.json({message: 'trade request sent!'});
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
+
+  getUserTrades: function(req, res) {
+    User.findById(req.params.id)
+      .populate('tradeRequest pendingTrade')
+      .exec((err, user) => {
+        if(err) throw err;
+        res.json({
+          tradeRequest: user.tradeRequest,
+          pendingTrade: user.pendingTrade
+        });
+      });
+  },
+
+  acceptTrade: function(req, res) {
+    var requesterId, requesteeId,
+      requesterBook, requesteeBook;
+
+    Trade.findById(req.params.tradeId)
+      .populate('requesterBook requesteeBook')
+      .exec()
+      .then((trade) => {
+        requesterBook = trade.requesterBook[0],
+        requesteeBook = trade.requesteeBook[0];
+        requesterId = requesterBook._owner[0];
+        requesteeId = requesteeBook._owner[0];
+        requesterBook._owner.pull(requesteeId);
+        requesteeBook._owner.push(requesterId);
+        requesterBook._owner.pull(requesterId);
+        requesteeBook._owner.push(requesteeId);
+        requesteeBook.save();
+        requesterBook.save();
+        trade.remove();
+        return User.findById(requesterId).exec();
+      })
+      .then((requesterUser) => {
+        requesterUser.books.pull(requesterBook._id);
+        console.log('requesterUser pendingTrade before:' +requesterUser.pendingTrade);
+        requesterUser.pendingTrade.pull(req.params.tradeId);
+        console.log('requesterUser pendingTrade after:' +requesterUser.pendingTrade);
+        requesterUser.books.push(requesteeBook._id);
+        requesterUser.save();
+        return User.findById(requesteeId).exec();
+      })
+      .then((requesteeUser) => {
+        requesteeUser.books.pull(requesteeBook._id);
+        console.log('requesteeUser tradeRequest before:' +requesteeUser.tradeRequest);
+        requesteeUser.tradeRequest.pull(req.params.tradeId);
+        console.log('requesteeUser tradeRequest after:' +requesteeUser.tradeRequest);
+        requesteeUser.books.push(requesterBook._id);
+        requesteeUser.save();
+        res.json({message: 'trade successful!'});
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
 };

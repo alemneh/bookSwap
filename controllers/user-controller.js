@@ -27,6 +27,13 @@ module.exports = (userRouter, models) => {
   userRouter.route('/users/:id/books/:bookId')
     .delete(jwtAuth, (req, res) => { UserRoutes.removeABook(req, res); });
 
+  userRouter.route('/users/:id/trades')
+    .post(jwtAuth, (req, res) => { UserRoutes.requestATrade(req, res); })
+    .get(jwtAuth,  (req, res) => { UserRoutes.getUserTrades(req, res); });
+
+  userRouter.route('/users/:id/trades/:tradeId')
+    .put(jwtAuth, (req, res) => { UserRoutes.acceptTrade(req, res); });
+
 
 
 
