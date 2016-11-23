@@ -5,6 +5,7 @@ const bodyParser    = require('body-parser');
 const models        = require('./models');
 const userRouter    = express.Router();
 const loginRouter   = express.Router();
+const bookRouter    = express.Router();
 const env           = process.env.NODE_ENV || 'devlopment';
 const CONFIG        = require('./config/config.json')[env];
 const port          = process.env.PORT || CONFIG.port || 3000;
@@ -14,6 +15,7 @@ const url           = process.env.URL || CONFIG.host || 'http://localhost:3000';
 
 require('./controllers/user-controller')(userRouter, models);
 require('./controllers/login-controller')(loginRouter, models);
+require('./controllers/book-controller')(bookRouter, models);
 
 
 app.use(express.static(__dirname + '/src/client'));
@@ -29,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 
-app.use('/', userRouter, loginRouter);
+app.use('/', userRouter, loginRouter, bookRouter);
 
 
 app.listen(port, () => {console.log('port up on '+ port);});

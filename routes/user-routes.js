@@ -164,34 +164,48 @@ let UserRoutes = {
       .populate('requesterBook requesteeBook')
       .exec()
       .then((trade) => {
+
+        // store vars for book and user ids
         requesterBook = trade.requesterBook[0],
         requesteeBook = trade.requesteeBook[0];
         requesterId = requesterBook._owner[0];
         requesteeId = requesteeBook._owner[0];
-        requesterBook._owner.pull(requesteeId);
+
+        //swap owners of requesteebook
+        requesteeBook._owner.pull(requesteeId);
         requesteeBook._owner.push(requesterId);
+
+        //swap owners of requesterbook
         requesterBook._owner.pull(requesterId);
-        requesteeBook._owner.push(requesteeId);
+        requesterBook._owner.push(requesteeId);
         requesteeBook.save();
         requesterBook.save();
+
+        //remove trade from db
         trade.remove();
+
         return User.findById(requesterId).exec();
       })
       .then((requesterUser) => {
+
+        // swicth bookId of requester with requestee bookId
         requesterUser.books.pull(requesterBook._id);
-        console.log('requesterUser pendingTrade before:' +requesterUser.pendingTrade);
-        requesterUser.pendingTrade.pull(req.params.tradeId);
-        console.log('requesterUser pendingTrade after:' +requesterUser.pendingTrade);
         requesterUser.books.push(requesteeBook._id);
+
+        // remove tradeId
+        requesterUser.pendingTrade.pull(req.params.tradeId);
         requesterUser.save();
+
         return User.findById(requesteeId).exec();
       })
       .then((requesteeUser) => {
+
+        // swicth bookId of requestee with requester bookId
         requesteeUser.books.pull(requesteeBook._id);
-        console.log('requesteeUser tradeRequest before:' +requesteeUser.tradeRequest);
-        requesteeUser.tradeRequest.pull(req.params.tradeId);
-        console.log('requesteeUser tradeRequest after:' +requesteeUser.tradeRequest);
         requesteeUser.books.push(requesterBook._id);
+
+        // remove tradeId
+        requesteeUser.tradeRequest.pull(req.params.tradeId);
         requesteeUser.save();
         res.json({message: 'trade successful!'});
       })
