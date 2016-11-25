@@ -60,12 +60,22 @@ let UserRoutes = {
       });
   },
 
-  getUserBooks: function(req, res) {
+  getAllUserBooks: function(req, res) {
     User.findOne({_id: req.params.id})
       .populate('books')
       .exec((err, user) => {
         if(err) throw err;
         res.status(200).json({data: user.books});
+      });
+  },
+
+  getOneUserBook: function(req, res) {
+    Book.findById(req.params.bookId).exec()
+      .then((book) => {
+        res.json({ book });
+      })
+      .catch((err) => {
+        throw err;
       });
   },
 
@@ -111,9 +121,11 @@ let UserRoutes = {
        } else {
          user.books.pull(req.params.bookId);
          user.save();
-         Book.findById(req.params.bookId).remove();
-         res.json({message: 'book removed!'});
+         return Book.findById(req.params.bookId).remove().exec();
        }
+     })
+     .then((book) => {
+       res.json({message: 'book removed!'});
      })
      .catch((err) => {
        if(err.message == 'book does not exist') {

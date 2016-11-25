@@ -20,11 +20,12 @@ module.exports = (userRouter, models) => {
 
 
   userRouter.route('/users/:id/books')
-    .get(jwtAuth, (req, res)    => { UserRoutes.getUserBooks(req, res); })
+    .get(jwtAuth, (req, res)    => { UserRoutes.getAllUserBooks(req, res); })
     .post(jwtAuth, (req, res)   => { UserRoutes.addAbook(req, res); });
 
 
   userRouter.route('/users/:id/books/:bookId')
+    .get(jwtAuth, (req, res)    => { UserRoutes.getOneUserBook(req, res); })
     .delete(jwtAuth, (req, res) => { UserRoutes.removeABook(req, res); });
 
   userRouter.route('/users/:id/trades')
