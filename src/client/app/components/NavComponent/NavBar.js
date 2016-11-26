@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router';
 
 
 class NavComponent extends Component {
@@ -13,7 +14,7 @@ class NavComponent extends Component {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" href="#">BK</a>
+            <Link to="/"><a className="navbar-brand" href="#">BK</a></Link>
           </div>
 
           <div className="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true">
@@ -25,6 +26,7 @@ class NavComponent extends Component {
                 <input type="password" className="form-control" placeholder="Password..." />
               </div>
               <button type="submit" className="btn btn-default">Login</button>
+              <button type="submit" className="btn btn-default"><Link to="/profile">Profile</Link></button>
             </form>
           </div>
         </div>

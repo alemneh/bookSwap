@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import HomePageComponent from './components/HomePageComponent/HomePageComponent';
+import NavBar from './components/NavComponent/NavBar';
 
 
 class App extends Component {
   render() {
     return (
       <div className="container">
-        <HomePageComponent />
+        <NavBar />
+        {this.props.children}
       </div>
     );
   }
