@@ -9,6 +9,7 @@ const Trade = models.Trade;
 let UserRoutes = {
 
   signUp: function(req, res) {
+    console.log(req.body);
     User.findOne({name: req.body.name}, (err, user) => {
       if(err) throw err;
       if(!user) {
