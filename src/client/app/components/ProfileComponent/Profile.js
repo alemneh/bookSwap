@@ -29,10 +29,10 @@ class ProfileComponent extends Component {
     axios.get(process.env.URL + '/users/' + user._id, {
       headers: {'token': localStorage.token }
     })
-      .then((res) => {
-        console.log(res.data.data);
-        this.setState({ user: res.data.data})
-      })
+    .then((res) => {
+      console.log(res.data.data);
+      this.setState({ user: res.data.data})
+    })
   }
 
   render() {

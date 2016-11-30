@@ -125,6 +125,7 @@ class NavComponent extends Component {
               <form className="navbar-form navbar-right" role="search">
                 <button type="button" disabled>Welcome, { user.name }</button>
                 <button type="submit" className="btn btn-default"><Link to="/profile">Profile</Link></button>
+                <button type="submit" className="btn btn-default"><Link to="/books">Browse Books</Link></button>
                 <button type="submit" className="btn btn-default" onClick={this.handleLogout}>Logout</button>
               </form>
             </div>

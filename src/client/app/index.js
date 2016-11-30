@@ -6,6 +6,7 @@ import HomePage from './components/HomePageComponent/HomePage';
 import Profile  from './components/ProfileComponent/Profile';
 import SignUp   from './components/SignUpComponent/SignUp';
 import Trade    from './components/TradeComponent/Trade';
+import BookPage from './components/BookPageComponent/BookPage';
 
 
 render(
@@ -15,5 +16,6 @@ render(
       <Route path="/profile" component={Profile} />
       <Route path="/signup"  component={SignUp}  />
       <Route path="/trade"   component={Trade}   />
+      <Route path="/books"   component={BookPage} />
     </Route>
   </Router>, document.getElementById('app'));

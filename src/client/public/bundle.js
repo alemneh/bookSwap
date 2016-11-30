@@ -81,6 +81,10 @@
 
 	var _Trade2 = _interopRequireDefault(_Trade);
 
+	var _BookPage = __webpack_require__(290);
+
+	var _BookPage2 = _interopRequireDefault(_BookPage);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	(0, _reactDom.render)(_react2.default.createElement(
@@ -92,7 +96,8 @@
 	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _HomePage2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/profile', component: _Profile2.default }),
 	    _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _SignUp2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/trade', component: _Trade2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: '/trade', component: _Trade2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/books', component: _BookPage2.default })
 	  )
 	), document.getElementById('app'));
 
@@ -26918,6 +26923,15 @@
 	              ),
 	              _react2.default.createElement(
 	                'button',
+	                { type: 'submit', className: 'btn btn-default' },
+	                _react2.default.createElement(
+	                  _reactRouter.Link,
+	                  { to: '/books' },
+	                  'Browse Books'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'button',
 	                { type: 'submit', className: 'btn btn-default', onClick: this.handleLogout },
 	                'Logout'
 	              )
@@ -52861,6 +52875,153 @@
 	}(_react.Component);
 
 	exports.default = SignUpComponent;
+
+/***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var BookPage = function (_Component) {
+	  _inherits(BookPage, _Component);
+
+	  function BookPage(props) {
+	    _classCallCheck(this, BookPage);
+
+	    var _this = _possibleConstructorReturn(this, (BookPage.__proto__ || Object.getPrototypeOf(BookPage)).call(this, props));
+
+	    _this.state = {
+	      books: []
+	    };
+	    return _this;
+	  }
+
+	  _createClass(BookPage, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.fetchAllBooks();
+	    }
+	  }, {
+	    key: 'renderBooks',
+	    value: function renderBooks() {
+	      console.log(this.state.books);
+	      if (this.state.books.length < 1) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          'There are no books for trade.'
+	        );
+	      }
+	      return this.state.books.map(function (book, index) {
+	        return _react2.default.createElement(
+	          'div',
+	          { key: index },
+	          _react2.default.createElement('img', { src: book.imgUrl, style: { float: 'left', margin: '10px' }, 'data-toggle': 'modal', 'data-target': '#myModal' })
+	        );
+	      });
+	    }
+	  }, {
+	    key: 'fetchAllBooks',
+	    value: function fetchAllBooks() {
+	      var _this2 = this;
+
+	      var user = localStorage.user ? JSON.parse(localStorage.user) : '';
+	      if (!user) return;
+	      axios.get(("http://localhost:3000") + '/books', {
+	        headers: { 'token': localStorage.token }
+	      }).then(function (res) {
+	        _this2.setState({ books: res.data.books });
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        this.renderBooks(),
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'button', className: 'btn btn-info btn-lg', 'data-toggle': 'modal', 'data-target': '#myModal' },
+	          'Open Modal'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'modal fade', id: 'myModal', role: 'dialog' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-dialog' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-content' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'modal-header' },
+	                _react2.default.createElement(
+	                  'button',
+	                  { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
+	                  '\xD7'
+	                ),
+	                _react2.default.createElement(
+	                  'h4',
+	                  { className: 'modal-title' },
+	                  'Modal title'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'modal-body' },
+	                _react2.default.createElement(
+	                  'p',
+	                  null,
+	                  'One fine body\u2026'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'modal-footer' },
+	                _react2.default.createElement(
+	                  'button',
+	                  { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+	                  'Close'
+	                ),
+	                _react2.default.createElement(
+	                  'button',
+	                  { type: 'button', className: 'btn btn-primary' },
+	                  'Save changes'
+	                )
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return BookPage;
+	}(_react.Component);
+
+	exports.default = BookPage;
 
 /***/ }
 /******/ ]);
