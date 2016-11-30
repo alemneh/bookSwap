@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import books from 'google-books-search';
 
 class Books extends Component {
   constructor(props) {
@@ -21,11 +22,9 @@ class Books extends Component {
         <div>No books added!</div>
       )
     }
-    return (
-      this.props.books.forEach((book) => {
-        return <div style={ {backgroundColor: 'blue', width: '200px', height: '250px', float: 'left', margin: '10px'} }>Book</div>
-      })
-    )
+    return this.props.books.map((book, index) => {
+      return <img src={book.imgUrl} key={index} style={ {float: 'left', margin: '10px'} } />
+    })
   }
 
   render() {
@@ -33,7 +32,7 @@ class Books extends Component {
       <div className="tab-pane fade" id="books">
         <div>
           <h3>Add more books!</h3>
-          <input type="text" onChange={ this.props.handleBookSearchChange } />
+          <input type="text" onChange={ this.handleBookSearchChange } value={this.state.search} />
           <input type="button" value="Add"  onClick={ this.handleAddBook }/>
         </div>
         <hr />
@@ -46,7 +45,9 @@ class Books extends Component {
 
   handleAddBook(e) {
     e.preventDefault()
+    this.props._queryBook2Add(this.state.search);
     console.log(this.state.search);
+    this.setState({ search: ''});
   }
 }
 
