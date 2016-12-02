@@ -27143,6 +27143,20 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+	//Helper function to find book in array
+	function searchByValue(value, property, array) {
+	  for (var i = 0; i < array.length; i++) {
+	    // check that property is defined first
+	    if (typeof array[i][property] !== 'undefined') {
+	      // then check its value
+	      if (array[i][property] === value) {
+	        return array[i];
+	      }
+	    }
+	  }
+	  return false;
+	}
+
 	var ProfileComponent = function (_Component) {
 	  _inherits(ProfileComponent, _Component);
 
@@ -27231,7 +27245,8 @@
 	            handleUpdateOnUser: this.handleUpdateOnUser.bind(this)
 	          }),
 	          _react2.default.createElement(_Books2.default, { books: this.state.books,
-	            _queryBook2Add: this._queryBook2Add.bind(this)
+	            _queryBook2Add: this._queryBook2Add.bind(this),
+	            removeBookFromUserList: this.removeBookFromUserList.bind(this)
 	          }),
 	          _react2.default.createElement(_Trade2.default, { trades: this.state.trades })
 	        )
@@ -27287,6 +27302,30 @@
 	        books.push(book);
 	        console.log(books);
 	        _this5.setState({ books: books });
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'removeBookFromUserList',
+	    value: function removeBookFromUserList(title) {
+	      var books = this.state.books;
+	      console.log(books);
+	      var book = books.filter(function (book) {
+	        return book.title == title;
+	      });
+	      books = books.filter(function (book) {
+	        return book.title != title;
+	      });
+	      this.setState({ books: books });
+	      this._deleteBook(book[0]);
+	    }
+	  }, {
+	    key: '_deleteBook',
+	    value: function _deleteBook(book) {
+	      var user = this.state.user;
+	      axios.delete(("http://localhost:3000") + '/users/' + user._id + '/books/' + book._id, { headers: { 'token': localStorage.token } }).then(function (res) {
+	        console.log(res);
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -27562,6 +27601,7 @@
 	    _this.handleBookSearchChange = _this.handleBookSearchChange.bind(_this);
 	    _this.renderBookList = _this.renderBookList.bind(_this);
 	    _this.handleAddBook = _this.handleAddBook.bind(_this);
+	    _this.handleRemoveBook = _this.handleRemoveBook.bind(_this);
 	    return _this;
 	  }
 
@@ -27571,8 +27611,15 @@
 	      this.setState({ search: e.target.value });
 	    }
 	  }, {
+	    key: 'handleRemoveBook',
+	    value: function handleRemoveBook(e) {
+	      this.props.removeBookFromUserList(e.target.alt);
+	    }
+	  }, {
 	    key: 'renderBookList',
 	    value: function renderBookList() {
+	      var _this2 = this;
+
 	      if (this.props.books.length < 1) {
 	        return _react2.default.createElement(
 	          'div',
@@ -27581,7 +27628,8 @@
 	        );
 	      }
 	      return this.props.books.map(function (book, index) {
-	        return _react2.default.createElement('img', { src: book.imgUrl, key: index, style: { float: 'left', margin: '10px' } });
+	        return _react2.default.createElement('img', { src: book.imgUrl, key: index, style: { float: 'left', margin: '10px' },
+	          alt: book.title, onClick: _this2.handleRemoveBook });
 	      });
 	    }
 	  }, {

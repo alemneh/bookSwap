@@ -4,6 +4,20 @@ import Books from './Books';
 import Trade from '../TradeComponent/Trade';
 import books from 'google-books-search';
 
+//Helper function to find book in array
+function searchByValue(value, property, array){
+   for(var i = 0; i < array.length; i++){
+       // check that property is defined first
+       if(typeof array[i][property] !== 'undefined') {
+           // then check its value
+           if(array[i][property] === value){
+               return array[i];
+           }
+       }
+   }
+   return false;
+}
+
 
 class ProfileComponent extends Component {
   constructor(props) {
@@ -51,6 +65,7 @@ class ProfileComponent extends Component {
                   />
             <Books books={ this.state.books }
                    _queryBook2Add={ this._queryBook2Add.bind(this) }
+                   removeBookFromUserList={ this.removeBookFromUserList.bind(this) }
                    />
             <Trade trades={this.state.trades} />
           </div>
@@ -112,6 +127,28 @@ class ProfileComponent extends Component {
     .catch((err) => {
       console.log(err);
     })
+  }
+
+  removeBookFromUserList(title) {
+    let books = this.state.books;
+    console.log(books);
+    const book  = books.filter((book) => book.title == title);
+    books = books.filter((book) => book.title != title);
+    this.setState({ books });
+    this._deleteBook(book[0]);
+
+  }
+
+  _deleteBook(book) {
+    const user = this.state.user
+    axios.delete(process.env.URL + '/users/' + user._id + '/books/' + book._id,
+      { headers: {'token': localStorage.token }})
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
   }
 
   _queryBook2Add(query) {

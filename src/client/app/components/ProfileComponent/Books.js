@@ -10,10 +10,15 @@ class Books extends Component {
     this.handleBookSearchChange = this.handleBookSearchChange.bind(this);
     this.renderBookList = this.renderBookList.bind(this);
     this.handleAddBook = this.handleAddBook.bind(this);
+    this.handleRemoveBook = this.handleRemoveBook.bind(this);
   }
 
   handleBookSearchChange(e) {
     this.setState({ search: e.target.value });
+  }
+
+  handleRemoveBook(e) {
+    this.props.removeBookFromUserList(e.target.alt);
   }
 
   renderBookList() {
@@ -23,7 +28,8 @@ class Books extends Component {
       )
     }
     return this.props.books.map((book, index) => {
-      return <img src={book.imgUrl} key={index} style={ {float: 'left', margin: '10px'} } />
+      return <img src={book.imgUrl} key={index} style={ {float: 'left', margin: '10px'} }
+                  alt={ book.title } onClick={ this.handleRemoveBook }/>
     })
   }
 
