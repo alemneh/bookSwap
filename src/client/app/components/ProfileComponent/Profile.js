@@ -95,9 +95,10 @@ class ProfileComponent extends Component {
   }
 
   addBookToUser(book) {
-    const userId = this.state.user._id;
-    axios.post(process.env.URL + '/users/' + userId + '/books',
-      { title: book.title, imgUrl: book.imgUrl},
+    const user = this.state.user;
+    console.log(user);
+    axios.post(process.env.URL + '/users/' + user._id + '/books',
+      { title: book.title, imgUrl: book.imgUrl, owner: user.name },
       { headers: {'token': localStorage.token }})
     .then((res) => {
       console.log(res);

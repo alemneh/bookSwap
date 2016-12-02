@@ -2,6 +2,7 @@
 const express       = require('express');
 const app           = express();
 const bodyParser    = require('body-parser');
+const path          = require('path');
 const models        = require('./models');
 const userRouter    = express.Router();
 const loginRouter   = express.Router();
@@ -19,6 +20,10 @@ require('./controllers/book-controller')(bookRouter, models);
 
 
 app.use(express.static(__dirname + '/src/client'));
+
+// app.get('*', function (request, response){
+//   response.sendFile(__dirname + '/src/client/index.html');
+// });
 
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());

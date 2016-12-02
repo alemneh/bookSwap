@@ -97,6 +97,7 @@ let UserRoutes = {
           newBook._owner.push(user._id);
           newBook.save();
           user.books.push(newBook._id);
+          user.hookEnabled = false;
           user.save();
           res.json({message: 'book added!'});
         }
@@ -191,6 +192,7 @@ let UserRoutes = {
         //swap owners of requesterbook
         requesterBook._owner.pull(requesterId);
         requesterBook._owner.push(requesteeId);
+
         requesteeBook.save();
         requesterBook.save();
 

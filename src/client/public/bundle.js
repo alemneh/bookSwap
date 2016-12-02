@@ -27277,8 +27277,9 @@
 	    value: function addBookToUser(book) {
 	      var _this5 = this;
 
-	      var userId = this.state.user._id;
-	      axios.post(("http://localhost:3000") + '/users/' + userId + '/books', { title: book.title, imgUrl: book.imgUrl }, { headers: { 'token': localStorage.token } }).then(function (res) {
+	      var user = this.state.user;
+	      console.log(user);
+	      axios.post(("http://localhost:3000") + '/users/' + user._id + '/books', { title: book.title, imgUrl: book.imgUrl, owner: user.name }, { headers: { 'token': localStorage.token } }).then(function (res) {
 	        console.log(res);
 	        console.log(book);
 	        var books = _this5.state.books;
@@ -52892,6 +52893,10 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _TradeRequest = __webpack_require__(291);
+
+	var _TradeRequest2 = _interopRequireDefault(_TradeRequest);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -52899,6 +52904,20 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	//Helper function to filter usersBooks from allBooks
+	function searchByValue(value, property, array) {
+	  for (var i = 0; i < array.length; i++) {
+	    // check that property is defined first
+	    if (typeof array[i][property] !== 'undefined') {
+	      // then check its value
+	      if (array[i][property] === value) {
+	        return true;
+	      }
+	    }
+	  }
+	  return false;
+	}
 
 	var BookPage = function (_Component) {
 	  _inherits(BookPage, _Component);
@@ -52909,46 +52928,77 @@
 	    var _this = _possibleConstructorReturn(this, (BookPage.__proto__ || Object.getPrototypeOf(BookPage)).call(this, props));
 
 	    _this.state = {
-	      books: []
+	      books: [],
+	      userBooks: [],
+	      requesteeBook: [{
+	        title: '48 laws of Power',
+	        _owner: 'Alem',
+	        imgUrl: "http://books.google.com/books/content?id=P_zMW3EHnTEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+	      }]
 	    };
+	    _this.onRequesteeBookClick = _this.onRequesteeBookClick.bind(_this);
 	    return _this;
 	  }
 
 	  _createClass(BookPage, [{
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
+	      this.fetchUserBooks();
 	      this.fetchAllBooks();
+	    }
+	  }, {
+	    key: 'fetchUserBooks',
+	    value: function fetchUserBooks() {
+	      var _this2 = this;
+
+	      var user = localStorage.user ? JSON.parse(localStorage.user) : '';
+	      if (!user) return;
+	      axios.get(("http://localhost:3000") + '/users/' + user._id + '/books', { headers: { 'token': localStorage.token } }).then(function (res) {
+	        _this2.setState({ userBooks: res.data.data });
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'onRequesteeBookClick',
+	    value: function onRequesteeBookClick(e) {
+	      var book = this.state.books.filter(function (book) {
+	        return book.title == e.target.alt;
+	      });
+	      this.setState({ requesteeBook: book });
 	    }
 	  }, {
 	    key: 'renderBooks',
 	    value: function renderBooks() {
-	      console.log(this.state.books);
-	      if (this.state.books.length < 1) {
+	      var _this3 = this;
+
+	      var books = this.state.books.filter(function (book) {
+	        return !searchByValue(book.title, 'title', _this3.state.userBooks);
+	      });
+	      if (books.length < 1) {
 	        return _react2.default.createElement(
 	          'div',
 	          null,
 	          'There are no books for trade.'
 	        );
 	      }
-	      return this.state.books.map(function (book, index) {
-	        return _react2.default.createElement(
-	          'div',
-	          { key: index },
-	          _react2.default.createElement('img', { src: book.imgUrl, style: { float: 'left', margin: '10px' }, 'data-toggle': 'modal', 'data-target': '#myModal' })
-	        );
+	      return books.map(function (book, index) {
+	        return _react2.default.createElement('img', { src: book.imgUrl, alt: book.title, key: index, style: { float: 'left', margin: '10px' },
+	          'data-toggle': 'modal', 'data-target': '#myModal',
+	          onClick: _this3.onRequesteeBookClick });
 	      });
 	    }
 	  }, {
 	    key: 'fetchAllBooks',
 	    value: function fetchAllBooks() {
-	      var _this2 = this;
+	      var _this4 = this;
 
 	      var user = localStorage.user ? JSON.parse(localStorage.user) : '';
 	      if (!user) return;
 	      axios.get(("http://localhost:3000") + '/books', {
 	        headers: { 'token': localStorage.token }
 	      }).then(function (res) {
-	        _this2.setState({ books: res.data.books });
+	        _this4.setState({ books: res.data.books });
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -52960,60 +53010,8 @@
 	        'div',
 	        null,
 	        this.renderBooks(),
-	        _react2.default.createElement(
-	          'button',
-	          { type: 'button', className: 'btn btn-info btn-lg', 'data-toggle': 'modal', 'data-target': '#myModal' },
-	          'Open Modal'
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'modal fade', id: 'myModal', role: 'dialog' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'modal-dialog' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'modal-content' },
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'modal-header' },
-	                _react2.default.createElement(
-	                  'button',
-	                  { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
-	                  '\xD7'
-	                ),
-	                _react2.default.createElement(
-	                  'h4',
-	                  { className: 'modal-title' },
-	                  'Modal title'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'modal-body' },
-	                _react2.default.createElement(
-	                  'p',
-	                  null,
-	                  'One fine body\u2026'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'modal-footer' },
-	                _react2.default.createElement(
-	                  'button',
-	                  { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-	                  'Close'
-	                ),
-	                _react2.default.createElement(
-	                  'button',
-	                  { type: 'button', className: 'btn btn-primary' },
-	                  'Save changes'
-	                )
-	              )
-	            )
-	          )
-	        )
+	        _react2.default.createElement(_TradeRequest2.default, { requesteeBook: this.state.requesteeBook[0],
+	          userBooks: this.state.userBooks })
 	      );
 	    }
 	  }]);
@@ -53022,6 +53020,209 @@
 	}(_react.Component);
 
 	exports.default = BookPage;
+
+/***/ },
+/* 291 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var TradeRequest = function (_Component) {
+	  _inherits(TradeRequest, _Component);
+
+	  function TradeRequest(props) {
+	    _classCallCheck(this, TradeRequest);
+
+	    var _this = _possibleConstructorReturn(this, (TradeRequest.__proto__ || Object.getPrototypeOf(TradeRequest)).call(this, props));
+
+	    _this.state = {
+	      requesterBook: null,
+	      requesteeBook: null,
+	      books: [{
+	        title: '48 laws of Power',
+	        _owner: 'Alem',
+	        imgUrl: "http://books.google.com/books/content?id=P_zMW3EHnTEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+	      }, {
+	        title: 'Economic Hitman',
+	        _owner: 'Tesfu',
+	        imgUrl: "http://books.google.com/books/content?id=nJFFrLX-924C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+	      }, {
+	        title: 'Power',
+	        _owner: 'Shumye',
+	        imgUrl: "http://books.google.com/books/content?id=OVfdq4O8fb8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+	      }]
+	    };
+	    _this.onBookSelect = _this.onBookSelect.bind(_this);
+	    _this.changRequesterBook = _this.changRequesterBook.bind(_this);
+	    return _this;
+	  }
+
+	  _createClass(TradeRequest, [{
+	    key: 'onBookSelect',
+	    value: function onBookSelect(e) {
+	      var book = this.props.userBooks.filter(function (book) {
+	        return book.title == e.target.value;
+	      });
+	      this.setState({ requesterBook: book[0] });
+	    }
+	  }, {
+	    key: 'renderRequesteeBook',
+	    value: function renderRequesteeBook() {
+	      if (!this.props.requesteeBook) return;
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'p',
+	          null,
+	          _react2.default.createElement(
+	            'b',
+	            null,
+	            'Owner:'
+	          ),
+	          ' ',
+	          this.props.requesteeBook.owner
+	        ),
+	        _react2.default.createElement('img', { src: this.props.requesteeBook.imgUrl })
+	      );
+	    }
+	  }, {
+	    key: 'changRequesterBook',
+	    value: function changRequesterBook() {
+	      this.setState({ requesterBook: null });
+	    }
+	  }, {
+	    key: 'renderBook2Trade',
+	    value: function renderBook2Trade() {
+	      var book = this.state.requesterBook;
+	      if (book) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            _react2.default.createElement(
+	              'b',
+	              null,
+	              'Owner:'
+	            ),
+	            ' ',
+	            book.owner
+	          ),
+	          _react2.default.createElement('img', { src: book.imgUrl }),
+	          _react2.default.createElement('br', null),
+	          _react2.default.createElement(
+	            'a',
+	            { href: '#', onClick: this.changRequesterBook, className: 'btn btn-link' },
+	            'Change'
+	          )
+	        );
+	      }
+	      return _react2.default.createElement(
+	        'select',
+	        { onChange: this.onBookSelect, style: { marginTop: '40%', width: '100%' }, className: 'custom-select' },
+	        _react2.default.createElement(
+	          'option',
+	          null,
+	          'Select a book to trade'
+	        ),
+	        this.props.userBooks.map(function (book, index) {
+	          return _react2.default.createElement(
+	            'option',
+	            { value: book.title, key: index },
+	            book.title
+	          );
+	        })
+	      );
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      console.log(this.props.userBooks);
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'modal fade', id: 'myModal', role: 'dialog' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'modal-dialog' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-content' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-header' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
+	                '\xD7'
+	              ),
+	              _react2.default.createElement(
+	                'h4',
+	                { className: 'modal-title' },
+	                'Trade Request'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'row text-center' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'col-xs-6' },
+	                  this.renderBook2Trade()
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'col-xs-6' },
+	                  this.renderRequesteeBook()
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-footer' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+	                'Cancel'
+	              ),
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-primary' },
+	                'Send'
+	              )
+	            )
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return TradeRequest;
+	}(_react.Component);
+
+	exports.default = TradeRequest;
 
 /***/ }
 /******/ ]);

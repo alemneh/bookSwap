@@ -5,7 +5,8 @@ module.exports = (mongoose, models) => {
   const bookSchema = new mongoose.Schema({
     _owner: [{type: Schema.Types.ObjectId, ref: 'User'}],
     title: String,
-    imgUrl: String
+    imgUrl: String,
+    owner: String
   });
 
   const Book = mongoose.model('Book', bookSchema);
