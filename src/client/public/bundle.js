@@ -27317,15 +27317,17 @@
 	      books = books.filter(function (book) {
 	        return book.title != title;
 	      });
-	      this.setState({ books: books });
-	      this._deleteBook(book[0]);
+	      this._deleteBook(book[0], books);
 	    }
 	  }, {
 	    key: '_deleteBook',
-	    value: function _deleteBook(book) {
+	    value: function _deleteBook(book, books) {
+	      var _this6 = this;
+
 	      var user = this.state.user;
 	      axios.delete(("http://localhost:3000") + '/users/' + user._id + '/books/' + book._id, { headers: { 'token': localStorage.token } }).then(function (res) {
 	        console.log(res);
+	        _this6.setState({ books: books });
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -27333,12 +27335,12 @@
 	  }, {
 	    key: '_queryBook2Add',
 	    value: function _queryBook2Add(query) {
-	      var _this6 = this;
+	      var _this7 = this;
 
 	      _googleBooksSearch2.default.search(query, function (err, res) {
 	        if (!err) {
 	          var newBook = { title: res[0].title, imgUrl: res[0].thumbnail };
-	          _this6.addBookToUser(newBook);
+	          _this7.addBookToUser(newBook);
 	          console.log(res[0]);
 	        } else {
 	          console.log(err);
@@ -27596,12 +27598,14 @@
 	    var _this = _possibleConstructorReturn(this, (Books.__proto__ || Object.getPrototypeOf(Books)).call(this, props));
 
 	    _this.state = {
-	      search: ''
+	      search: '',
+	      book2Remove: ''
 	    };
 	    _this.handleBookSearchChange = _this.handleBookSearchChange.bind(_this);
 	    _this.renderBookList = _this.renderBookList.bind(_this);
 	    _this.handleAddBook = _this.handleAddBook.bind(_this);
 	    _this.handleRemoveBook = _this.handleRemoveBook.bind(_this);
+	    _this.renderBookDeleteModal = _this.renderBookDeleteModal.bind(_this);
 	    return _this;
 	  }
 
@@ -27613,7 +27617,7 @@
 	  }, {
 	    key: 'handleRemoveBook',
 	    value: function handleRemoveBook(e) {
-	      this.props.removeBookFromUserList(e.target.alt);
+	      this.setState({ book2Remove: e.target.alt });
 	    }
 	  }, {
 	    key: 'renderBookList',
@@ -27629,8 +27633,78 @@
 	      }
 	      return this.props.books.map(function (book, index) {
 	        return _react2.default.createElement('img', { src: book.imgUrl, key: index, style: { float: 'left', margin: '10px' },
-	          alt: book.title, onClick: _this2.handleRemoveBook });
+	          alt: book.title,
+	          'data-toggle': 'modal', 'data-target': '#myModal', onClick: _this2.handleRemoveBook });
 	      });
+	    }
+	  }, {
+	    key: 'renderBookDeleteModal',
+	    value: function renderBookDeleteModal() {
+	      var _this3 = this;
+
+	      var title = this.state.book2Remove;
+	      console.log(title);
+	      if (!title) return;
+	      console.log(this.props.books);
+	      var book = this.props.books.filter(function (book) {
+	        return book.title == title;
+	      });
+	      console.log(book);
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'modal fade', id: 'myModal', role: 'dialog' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'modal-dialog' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'modal-content' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-header' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
+	                '\xD7'
+	              ),
+	              _react2.default.createElement(
+	                'h4',
+	                { className: 'modal-title' },
+	                'Delete book'
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-body' },
+	              _react2.default.createElement(
+	                'div',
+	                { className: 'row text-center' },
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'col-xs-12' },
+	                  _react2.default.createElement('img', { src: book[0] ? book[0].imgUrl : '' })
+	                )
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'modal-footer' },
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+	                'Cancel'
+	              ),
+	              _react2.default.createElement(
+	                'button',
+	                { type: 'button', className: 'btn btn-primary', 'data-dismiss': 'modal', onClick: function onClick() {
+	                    return _this3.props.removeBookFromUserList(title);
+	                  } },
+	                'Delete'
+	              )
+	            )
+	          )
+	        )
+	      );
 	    }
 	  }, {
 	    key: 'render',
@@ -27654,7 +27728,8 @@
 	          'div',
 	          null,
 	          this.renderBookList()
-	        )
+	        ),
+	        this.renderBookDeleteModal()
 	      );
 	    }
 	  }, {

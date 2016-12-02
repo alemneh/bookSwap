@@ -5,12 +5,14 @@ class Books extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      search: ''
+      search: '',
+      book2Remove: ''
     }
     this.handleBookSearchChange = this.handleBookSearchChange.bind(this);
     this.renderBookList = this.renderBookList.bind(this);
     this.handleAddBook = this.handleAddBook.bind(this);
     this.handleRemoveBook = this.handleRemoveBook.bind(this);
+    this.renderBookDeleteModal = this.renderBookDeleteModal.bind(this);
   }
 
   handleBookSearchChange(e) {
@@ -18,7 +20,7 @@ class Books extends Component {
   }
 
   handleRemoveBook(e) {
-    this.props.removeBookFromUserList(e.target.alt);
+    this.setState({book2Remove: e.target.alt})
   }
 
   renderBookList() {
@@ -29,8 +31,39 @@ class Books extends Component {
     }
     return this.props.books.map((book, index) => {
       return <img src={book.imgUrl} key={index} style={ {float: 'left', margin: '10px'} }
-                  alt={ book.title } onClick={ this.handleRemoveBook }/>
+                  alt={ book.title }
+                  data-toggle="modal" data-target="#myModal" onClick={ this.handleRemoveBook }/>
     })
+  }
+
+  renderBookDeleteModal() {
+    const title = this.state.book2Remove;
+    console.log(title);
+    if(!title) return;
+    console.log(this.props.books);
+    const book = this.props.books.filter((book) => book.title == title);
+    console.log(book);
+    return (
+      <div className="modal fade" id="myModal" role="dialog">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 className="modal-title">Delete book</h4>
+            </div>
+            <div className="modal-body">
+              <div className="row text-center">
+                <div className="col-xs-12"><img src={book[0] ? book[0].imgUrl : ''} /></div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
+              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.props.removeBookFromUserList(title)}>Delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   render() {
@@ -45,6 +78,7 @@ class Books extends Component {
         <div>
           {this.renderBookList()}
         </div>
+        { this.renderBookDeleteModal() }
       </div>
     )
   }

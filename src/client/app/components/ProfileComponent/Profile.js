@@ -134,17 +134,17 @@ class ProfileComponent extends Component {
     console.log(books);
     const book  = books.filter((book) => book.title == title);
     books = books.filter((book) => book.title != title);
-    this.setState({ books });
-    this._deleteBook(book[0]);
+    this._deleteBook(book[0], books);
 
   }
 
-  _deleteBook(book) {
+  _deleteBook(book, books) {
     const user = this.state.user
     axios.delete(process.env.URL + '/users/' + user._id + '/books/' + book._id,
       { headers: {'token': localStorage.token }})
       .then((res) => {
         console.log(res);
+        this.setState({ books });
       })
       .catch((err) => {
         console.log(err);
