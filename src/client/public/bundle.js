@@ -27643,13 +27643,11 @@
 	      var _this3 = this;
 
 	      var title = this.state.book2Remove;
-	      console.log(title);
 	      if (!title) return;
-	      console.log(this.props.books);
 	      var book = this.props.books.filter(function (book) {
 	        return book.title == title;
 	      });
-	      console.log(book);
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'modal fade', id: 'myModal', role: 'dialog' },
@@ -53127,6 +53125,20 @@
 	      });
 	    }
 	  }, {
+	    key: 'makeTradeRequest',
+	    value: function makeTradeRequest(requesterBook, requesteeBook) {
+	      console.log(localStorage.token);
+	      axios.post(("http://localhost:3000") + '/users/' + requesterBook._owner + '/trades', {
+	        requesteeId: requesteeBook._owner,
+	        requesteeBook: requesteeBook._id,
+	        requesterBook: requesterBook._id
+	      }, { headers: { 'token': localStorage.token } }).then(function (res) {
+	        console.log(res);
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -53134,7 +53146,8 @@
 	        null,
 	        this.renderBooks(),
 	        _react2.default.createElement(_TradeRequest2.default, { requesteeBook: this.state.requesteeBook[0],
-	          userBooks: this.state.userBooks })
+	          userBooks: this.state.userBooks,
+	          makeTradeRequest: this.makeTradeRequest })
 	      );
 	    }
 	  }]);
@@ -53178,7 +53191,6 @@
 
 	    _this.state = {
 	      requesterBook: null,
-	      requesteeBook: null,
 	      books: [{
 	        title: '48 laws of Power',
 	        _owner: 'Alem',
@@ -53280,6 +53292,8 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this2 = this;
+
 	      console.log(this.props.userBooks);
 	      return _react2.default.createElement(
 	        'div',
@@ -53332,7 +53346,11 @@
 	              ),
 	              _react2.default.createElement(
 	                'button',
-	                { type: 'button', className: 'btn btn-primary' },
+	                { type: 'button', className: 'btn btn-primary', 'data-dismiss': 'modal',
+	                  onClick: function onClick() {
+	                    return _this2.props.makeTradeRequest(_this2.state.requesterBook, _this2.props.requesteeBook);
+	                  }
+	                },
 	                'Send'
 	              )
 	            )

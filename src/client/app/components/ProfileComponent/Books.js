@@ -38,11 +38,9 @@ class Books extends Component {
 
   renderBookDeleteModal() {
     const title = this.state.book2Remove;
-    console.log(title);
     if(!title) return;
-    console.log(this.props.books);
     const book = this.props.books.filter((book) => book.title == title);
-    console.log(book);
+
     return (
       <div className="modal fade" id="myModal" role="dialog">
         <div className="modal-dialog">

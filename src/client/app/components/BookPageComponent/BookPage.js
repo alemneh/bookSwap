@@ -83,12 +83,30 @@ class BookPage extends Component {
     })
   }
 
+  makeTradeRequest(requesterBook, requesteeBook) {
+    console.log(localStorage.token);
+    axios.post(process.env.URL + '/users/' + requesterBook._owner + '/trades',
+      {
+        requesteeId: requesteeBook._owner,
+        requesteeBook: requesteeBook._id,
+        requesterBook: requesterBook._id
+      },
+      {headers: {'token': localStorage.token }})
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+  }
+
   render() {
     return (
       <div>
         { this.renderBooks() }
         <TradeRequest requesteeBook={ this.state.requesteeBook[0]}
-                      userBooks={ this.state.userBooks }/>
+                      userBooks={ this.state.userBooks }
+                      makeTradeRequest={ this.makeTradeRequest }/>
       </div>
     )
   }

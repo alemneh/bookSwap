@@ -5,7 +5,6 @@ class TradeRequest extends Component {
     super(props);
     this.state = {
       requesterBook: null,
-      requesteeBook: null,
       books: [
         {
           title: '48 laws of Power',
@@ -90,7 +89,9 @@ class TradeRequest extends Component {
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button type="button" className="btn btn-primary">Send</button>
+              <button type="button" className="btn btn-primary" data-dismiss="modal"
+                      onClick={() => this.props.makeTradeRequest(this.state.requesterBook, this.props.requesteeBook)}
+                      >Send</button>
             </div>
           </div>
         </div>
