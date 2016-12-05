@@ -27674,8 +27674,7 @@
 
 	    _this.state = {
 	      search: '',
-	      book2Remove: '',
-	      isLoading: true
+	      book2Remove: ''
 	    };
 	    _this.handleBookSearchChange = _this.handleBookSearchChange.bind(_this);
 	    _this.renderBookList = _this.renderBookList.bind(_this);
@@ -27698,7 +27697,7 @@
 	  }, {
 	    key: 'renderLoadingSpinner',
 	    value: function renderLoadingSpinner() {
-	      if (this.state.isLoading) {
+	      if (this.props.isLoading) {
 	        return _react2.default.createElement('i', { className: 'fa fa-spinner fa-spin', style: { fontSize: '24px', marginLeft: '50px' } });
 	      }
 	    }

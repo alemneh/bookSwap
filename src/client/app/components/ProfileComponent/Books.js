@@ -6,8 +6,7 @@ class Books extends Component {
     super(props);
     this.state = {
       search: '',
-      book2Remove: '',
-      isLoading: true
+      book2Remove: ''
     }
     this.handleBookSearchChange = this.handleBookSearchChange.bind(this);
     this.renderBookList = this.renderBookList.bind(this);
@@ -25,7 +24,7 @@ class Books extends Component {
   }
 
   renderLoadingSpinner() {
-    if(this.state.isLoading) {
+    if(this.props.isLoading) {
       return (
         <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px', marginLeft: '50px'}}></i>
       )
