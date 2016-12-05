@@ -21,9 +21,7 @@ require('./controllers/book-controller')(bookRouter, models);
 
 app.use(express.static(__dirname + '/src/client'));
 
-// app.get('*', function (request, response){
-//   response.sendFile(__dirname + '/src/client/index.html');
-// });
+
 
 app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
@@ -37,6 +35,10 @@ app.use((req, res, next) => {
 
 
 app.use('/', userRouter, loginRouter, bookRouter);
+
+app.get('*', function (request, response){
+  response.sendFile(__dirname + '/src/client/index.html');
+});
 
 
 app.listen(port, () => {console.log('port up on '+ port);});

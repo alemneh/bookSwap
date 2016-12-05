@@ -5,23 +5,7 @@ class TradeRequest extends Component {
     super(props);
     this.state = {
       requesterBook: null,
-      books: [
-        {
-          title: '48 laws of Power',
-          _owner: 'Alem',
-          imgUrl: "http://books.google.com/books/content?id=P_zMW3EHnTEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-        },
-        {
-          title: 'Economic Hitman',
-          _owner: 'Tesfu',
-          imgUrl: "http://books.google.com/books/content?id=nJFFrLX-924C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-        },
-        {
-          title: 'Power',
-          _owner: 'Shumye' ,
-          imgUrl: "http://books.google.com/books/content?id=OVfdq4O8fb8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-        }
-      ]
+      books: []
     }
     this.onBookSelect = this.onBookSelect.bind(this);
     this.changRequesterBook = this.changRequesterBook.bind(this);

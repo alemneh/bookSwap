@@ -33,7 +33,8 @@ module.exports = (userRouter, models) => {
     .get(jwtAuth,  (req, res) => { UserRoutes.getUserTrades(req, res); });
 
   userRouter.route('/users/:id/trades/:tradeId')
-    .put(jwtAuth, (req, res) => { UserRoutes.acceptTrade(req, res); });
+    .put(jwtAuth, (req, res) => { UserRoutes.acceptTrade(req, res); })
+    .delete(jwtAuth, (req, res) => { UserRoutes.declineTrade(req, res); });
 
 
 

@@ -72,7 +72,7 @@ class BookPage extends Component {
   fetchAllBooks() {
     const user = localStorage.user ? JSON.parse(localStorage.user) : '';
     if(!user) return;
-    axios.get(process.env.URL + '/books', {
+    axios.get(process.env.URL + '/books4trade', {
       headers: {'token': localStorage.token }
     })
     .then((res) => {
@@ -84,12 +84,17 @@ class BookPage extends Component {
   }
 
   makeTradeRequest(requesterBook, requesteeBook) {
-    console.log(localStorage.token);
     axios.post(process.env.URL + '/users/' + requesterBook._owner + '/trades',
       {
         requesteeId: requesteeBook._owner,
         requesteeBook: requesteeBook._id,
-        requesterBook: requesterBook._id
+        requesterBook: requesterBook._id,
+        requesteeBookTitle: requesteeBook.title,
+        requesterBookTitle: requesterBook.title,
+        requesteeName: requesteeBook.owner,
+        requesterName: requesterBook.owner,
+        requesterImgUrl: requesterBook.imgUrl,
+        requesteeImgUrl: requesteeBook.imgUrl
       },
       {headers: {'token': localStorage.token }})
     .then((res) => {

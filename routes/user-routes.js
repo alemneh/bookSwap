@@ -143,12 +143,12 @@ let UserRoutes = {
     let newTrade = new Trade(req.body);
     User.findById(req.params.id).exec()
       .then((requesterUser) => {
-        requesterUser.pendingTrade.push(newTrade._id);
+        requesterUser.pendingTrades.push(newTrade._id);
         requesterUser.save();
         return User.findById(req.body.requesteeId).exec();
       })
       .then((requesteeUser) => {
-        requesteeUser.tradeRequest.push(newTrade._id);
+        requesteeUser.tradeRequests.push(newTrade._id);
         requesteeUser.save();
         newTrade.save();
         res.json({message: 'trade request sent!'});
@@ -160,38 +160,50 @@ let UserRoutes = {
 
   getUserTrades: function(req, res) {
     User.findById(req.params.id)
-      .populate('tradeRequest pendingTrade')
+      .populate('tradeRequests pendingTrades')
       .exec((err, user) => {
         if(err) throw err;
+        console.log(user);
         res.json({
-          tradeRequest: user.tradeRequest,
-          pendingTrade: user.pendingTrade
+          tradeRequests: user.tradeRequests,
+          pendingTrades: user.pendingTrades
         });
       });
   },
 
   acceptTrade: function(req, res) {
     var requesterId, requesteeId,
-      requesterBook, requesteeBook;
+      requesterBook, requesteeBook,
+      requesteeName, requesterName;
 
     Trade.findById(req.params.tradeId)
       .populate('requesterBook requesteeBook')
       .exec()
       .then((trade) => {
 
-        // store vars for book and user ids
+        // store vars for book and user ids and owner names
         requesterBook = trade.requesterBook[0],
         requesteeBook = trade.requesteeBook[0];
-        requesterId = requesterBook._owner[0];
-        requesteeId = requesteeBook._owner[0];
 
-        //swap owners of requesteebook
+        requesterId   = requesterBook._owner[0];
+        requesteeId   = requesteeBook._owner[0];
+
+        requesteeName = requesteeBook.owner;
+        requesterName = requesterBook.owner;
+
+        //swap owners ObjectIds of requesteebook
         requesteeBook._owner.pull(requesteeId);
         requesteeBook._owner.push(requesterId);
 
-        //swap owners of requesterbook
+        //swap owners ObjectIds of requesterbook
         requesterBook._owner.pull(requesterId);
         requesterBook._owner.push(requesteeId);
+
+        //swap owners names of requesteeBook
+        requesteeBook.owner = requesterName;
+
+        //swap owners names of requesterBook
+        requesterBook.owner = requesteeName;
 
         requesteeBook.save();
         requesterBook.save();
@@ -208,7 +220,7 @@ let UserRoutes = {
         requesterUser.books.push(requesteeBook._id);
 
         // remove tradeId
-        requesterUser.pendingTrade.pull(req.params.tradeId);
+        requesterUser.pendingTrades.pull(req.params.tradeId);
         requesterUser.save();
 
         return User.findById(requesteeId).exec();
@@ -220,9 +232,49 @@ let UserRoutes = {
         requesteeUser.books.push(requesterBook._id);
 
         // remove tradeId
-        requesteeUser.tradeRequest.pull(req.params.tradeId);
+        requesteeUser.tradeRequests.pull(req.params.tradeId);
         requesteeUser.save();
         res.json({message: 'trade successful!'});
+      })
+      .catch((err) => {
+        throw err;
+      });
+  },
+
+  declineTrade: function(req, res) {
+    var requesterId, requesteeId,
+      requesterBook, requesteeBook;
+
+    Trade.findById(req.params.tradeId)
+      .populate('requesterBook requesteeBook')
+      .exec()
+      .then((trade) => {
+
+        // store vars for book and user ids
+        requesterBook = trade.requesterBook[0],
+        requesteeBook = trade.requesteeBook[0];
+        requesterId = requesterBook._owner[0];
+        requesteeId = requesteeBook._owner[0];
+
+        //remove trade from db
+        trade.remove();
+
+        return User.findById(requesterId).exec();
+      })
+      .then((requesterUser) => {
+
+        // remove tradeId
+        requesterUser.pendingTrades.pull(req.params.tradeId);
+        requesterUser.save();
+
+        return User.findById(requesteeId).exec();
+      })
+      .then((requesteeUser) => {
+
+        // remove tradeId
+        requesteeUser.tradeRequests.pull(req.params.tradeId);
+        requesteeUser.save();
+        res.json({message: 'trade deleted!'});
       })
       .catch((err) => {
         throw err;

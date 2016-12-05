@@ -6,7 +6,8 @@ class Books extends Component {
     super(props);
     this.state = {
       search: '',
-      book2Remove: ''
+      book2Remove: '',
+      isLoading: true
     }
     this.handleBookSearchChange = this.handleBookSearchChange.bind(this);
     this.renderBookList = this.renderBookList.bind(this);
@@ -21,6 +22,14 @@ class Books extends Component {
 
   handleRemoveBook(e) {
     this.setState({book2Remove: e.target.alt})
+  }
+
+  renderLoadingSpinner() {
+    if(this.state.isLoading) {
+      return (
+        <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px', marginLeft: '50px'}}></i>
+      )
+    }
   }
 
   renderBookList() {
@@ -71,6 +80,7 @@ class Books extends Component {
           <h3>Add more books!</h3>
           <input type="text" onChange={ this.handleBookSearchChange } value={this.state.search} />
           <input type="button" value="Add"  onClick={ this.handleAddBook }/>
+          { this.renderLoadingSpinner() }
         </div>
         <hr />
         <div>

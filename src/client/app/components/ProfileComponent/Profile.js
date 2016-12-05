@@ -25,9 +25,13 @@ class ProfileComponent extends Component {
     this.state = {
       user: null,
       books: [],
-      trades: [],
-      success: null
+      pendingTrades: [],
+      tradeRequests: [],
+      isLoading: false
     }
+
+    this.handleAcceptTrade = this.handleAcceptTrade.bind(this);
+    this.handleDeclineTrade = this.handleDeclineTrade.bind(this);
   }
 
   componentWillMount() {
@@ -35,6 +39,7 @@ class ProfileComponent extends Component {
     this.setState({ user });
     this.getCurrentUser(user);
     this.fetchUserBooks(user);
+    this.fetchUserTrades(user);
 
   }
 
@@ -47,6 +52,25 @@ class ProfileComponent extends Component {
       console.log(res.data.data);
       this.setState({ user: res.data.data})
     })
+  }
+
+  fetchUserTrades(user) {
+    if(!user) return;
+    axios.get(process.env.URL + '/users/' + user._id + '/trades', {
+      headers: {'token': localStorage.token }
+    })
+    .then((res) => {
+      console.log(res);
+      this.setState({
+        pendingTrades: res.data.pendingTrades,
+        tradeRequests: res.data.tradeRequests
+      })
+      console.log(res.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+
   }
 
   render() {
@@ -66,11 +90,55 @@ class ProfileComponent extends Component {
             <Books books={ this.state.books }
                    _queryBook2Add={ this._queryBook2Add.bind(this) }
                    removeBookFromUserList={ this.removeBookFromUserList.bind(this) }
+                   isLoading={ this.state.isLoading }
                    />
-            <Trade trades={this.state.trades} />
+            <Trade pendingTrades={this.state.pendingTrades}
+                   tradeRequests={this.state.tradeRequests}
+                   handleAcceptTrade={this.handleAcceptTrade}
+                   handleDeclineTrade={this.handleDeclineTrade}
+                  />
           </div>
         </div>
     );
+  }
+
+  handleAcceptTrade(trade) {
+    const user = localStorage.user ? JSON.parse(localStorage.user) : null;
+    if(!user) return;
+    let tradeRequests = this.state.tradeRequests.filter((t) => t._id != trade._id);
+    let pendingTrades = this.state.pendingTrades.filter((t) => t._id != trade._id);
+
+
+
+    axios.put(process.env.URL + '/users/' + user._id + '/trades/' + trade._id,
+    { trade },
+    { headers: {'token': localStorage.token }
+    })
+    .then((res) => {
+      this.setState({ tradeRequests, pendingTrades});
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  handleDeclineTrade(trade) {
+    const user = localStorage.user ? JSON.parse(localStorage.user) : null;
+    if(!user) return;
+    let tradeRequests = this.state.tradeRequests.filter((t) => t._id != trade._id);
+    let pendingTrades = this.state.pendingTrades.filter((t) => t._id != trade._id);
+
+    axios.delete(process.env.URL + '/users/' + user._id + '/trades/' + trade._id, {
+      headers: {'token': localStorage.token }
+    })
+    .then((res) => {
+      this.setState({ tradeRequests, pendingTrades});
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   }
 
   handleUpdateOnUser(user) {
@@ -111,7 +179,8 @@ class ProfileComponent extends Component {
 
   addBookToUser(book) {
     const user = this.state.user;
-    console.log(user);
+    this.setState({ isLoading: true});
+
     axios.post(process.env.URL + '/users/' + user._id + '/books',
       { title: book.title, imgUrl: book.imgUrl, owner: user.name },
       { headers: {'token': localStorage.token }})
@@ -122,7 +191,7 @@ class ProfileComponent extends Component {
       console.log(books);
       books.push(book);
       console.log(books);
-      this.setState({ books });
+      this.setState({ books, isLoading: false });
     })
     .catch((err) => {
       console.log(err);

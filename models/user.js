@@ -10,8 +10,8 @@ module.exports = function(mongoose, models) {
     city: String,
     state: String,
     books: [{ type: Schema.Types.ObjectId, ref:'Book'}],
-    tradeRequest: [{ type: Schema.Types.ObjectId, ref:'Trade'}],
-    pendingTrade: [{ type: Schema.Types.ObjectId, ref:'Trade'}],
+    tradeRequests: [{ type: Schema.Types.ObjectId, ref:'Trade'}],
+    pendingTrades: [{ type: Schema.Types.ObjectId, ref:'Trade'}],
     hookEnabled: {
       type: Boolean,
       require: false,

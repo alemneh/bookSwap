@@ -27168,9 +27168,13 @@
 	    _this.state = {
 	      user: null,
 	      books: [],
-	      trades: [],
-	      success: null
+	      pendingTrades: [],
+	      tradeRequests: [],
+	      isLoading: false
 	    };
+
+	    _this.handleAcceptTrade = _this.handleAcceptTrade.bind(_this);
+	    _this.handleDeclineTrade = _this.handleDeclineTrade.bind(_this);
 	    return _this;
 	  }
 
@@ -27181,6 +27185,7 @@
 	      this.setState({ user: user });
 	      this.getCurrentUser(user);
 	      this.fetchUserBooks(user);
+	      this.fetchUserTrades(user);
 	    }
 	  }, {
 	    key: 'getCurrentUser',
@@ -27193,6 +27198,25 @@
 	      }).then(function (res) {
 	        console.log(res.data.data);
 	        _this2.setState({ user: res.data.data });
+	      });
+	    }
+	  }, {
+	    key: 'fetchUserTrades',
+	    value: function fetchUserTrades(user) {
+	      var _this3 = this;
+
+	      if (!user) return;
+	      axios.get(("http://localhost:3000") + '/users/' + user._id + '/trades', {
+	        headers: { 'token': localStorage.token }
+	      }).then(function (res) {
+	        console.log(res);
+	        _this3.setState({
+	          pendingTrades: res.data.pendingTrades,
+	          tradeRequests: res.data.tradeRequests
+	        });
+	        console.log(res.data);
+	      }).catch(function (err) {
+	        console.log(err);
 	      });
 	    }
 	  }, {
@@ -27246,16 +27270,66 @@
 	          }),
 	          _react2.default.createElement(_Books2.default, { books: this.state.books,
 	            _queryBook2Add: this._queryBook2Add.bind(this),
-	            removeBookFromUserList: this.removeBookFromUserList.bind(this)
+	            removeBookFromUserList: this.removeBookFromUserList.bind(this),
+	            isLoading: this.state.isLoading
 	          }),
-	          _react2.default.createElement(_Trade2.default, { trades: this.state.trades })
+	          _react2.default.createElement(_Trade2.default, { pendingTrades: this.state.pendingTrades,
+	            tradeRequests: this.state.tradeRequests,
+	            handleAcceptTrade: this.handleAcceptTrade,
+	            handleDeclineTrade: this.handleDeclineTrade
+	          })
 	        )
 	      );
 	    }
 	  }, {
+	    key: 'handleAcceptTrade',
+	    value: function handleAcceptTrade(trade) {
+	      var _this4 = this;
+
+	      var user = localStorage.user ? JSON.parse(localStorage.user) : null;
+	      if (!user) return;
+	      var tradeRequests = this.state.tradeRequests.filter(function (t) {
+	        return t._id != trade._id;
+	      });
+	      var pendingTrades = this.state.pendingTrades.filter(function (t) {
+	        return t._id != trade._id;
+	      });
+
+	      axios.put(("http://localhost:3000") + '/users/' + user._id + '/trades/' + trade._id, { trade: trade }, { headers: { 'token': localStorage.token }
+	      }).then(function (res) {
+	        _this4.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades });
+	        console.log(res);
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'handleDeclineTrade',
+	    value: function handleDeclineTrade(trade) {
+	      var _this5 = this;
+
+	      var user = localStorage.user ? JSON.parse(localStorage.user) : null;
+	      if (!user) return;
+	      var tradeRequests = this.state.tradeRequests.filter(function (t) {
+	        return t._id != trade._id;
+	      });
+	      var pendingTrades = this.state.pendingTrades.filter(function (t) {
+	        return t._id != trade._id;
+	      });
+
+	      axios.delete(("http://localhost:3000") + '/users/' + user._id + '/trades/' + trade._id, {
+	        headers: { 'token': localStorage.token }
+	      }).then(function (res) {
+	        _this5.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades });
+	        console.log(res);
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
 	    key: 'handleUpdateOnUser',
 	    value: function handleUpdateOnUser(user) {
-	      var _this3 = this;
+	      var _this6 = this;
 
 	      var userId = this.state.user._id;
 	      var updatedUser = {
@@ -27270,7 +27344,7 @@
 	        state: user.state
 	      }, { headers: { 'token': localStorage.token } }).then(function (res) {
 	        console.log(res);
-	        _this3.setState({ success: res.data.message, user: updatedUser });
+	        _this6.setState({ success: res.data.message, user: updatedUser });
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -27278,11 +27352,11 @@
 	  }, {
 	    key: 'fetchUserBooks',
 	    value: function fetchUserBooks(user) {
-	      var _this4 = this;
+	      var _this7 = this;
 
 	      if (!user) return;
 	      axios.get(("http://localhost:3000") + '/users/' + user._id + '/books', { headers: { 'token': localStorage.token } }).then(function (res) {
-	        _this4.setState({ books: res.data.data });
+	        _this7.setState({ books: res.data.data });
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -27290,18 +27364,19 @@
 	  }, {
 	    key: 'addBookToUser',
 	    value: function addBookToUser(book) {
-	      var _this5 = this;
+	      var _this8 = this;
 
 	      var user = this.state.user;
-	      console.log(user);
+	      this.setState({ isLoading: true });
+
 	      axios.post(("http://localhost:3000") + '/users/' + user._id + '/books', { title: book.title, imgUrl: book.imgUrl, owner: user.name }, { headers: { 'token': localStorage.token } }).then(function (res) {
 	        console.log(res);
 	        console.log(book);
-	        var books = _this5.state.books;
+	        var books = _this8.state.books;
 	        console.log(books);
 	        books.push(book);
 	        console.log(books);
-	        _this5.setState({ books: books });
+	        _this8.setState({ books: books, isLoading: false });
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -27322,12 +27397,12 @@
 	  }, {
 	    key: '_deleteBook',
 	    value: function _deleteBook(book, books) {
-	      var _this6 = this;
+	      var _this9 = this;
 
 	      var user = this.state.user;
 	      axios.delete(("http://localhost:3000") + '/users/' + user._id + '/books/' + book._id, { headers: { 'token': localStorage.token } }).then(function (res) {
 	        console.log(res);
-	        _this6.setState({ books: books });
+	        _this9.setState({ books: books });
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -27335,12 +27410,12 @@
 	  }, {
 	    key: '_queryBook2Add',
 	    value: function _queryBook2Add(query) {
-	      var _this7 = this;
+	      var _this10 = this;
 
 	      _googleBooksSearch2.default.search(query, function (err, res) {
 	        if (!err) {
 	          var newBook = { title: res[0].title, imgUrl: res[0].thumbnail };
-	          _this7.addBookToUser(newBook);
+	          _this10.addBookToUser(newBook);
 	          console.log(res[0]);
 	        } else {
 	          console.log(err);
@@ -27599,7 +27674,8 @@
 
 	    _this.state = {
 	      search: '',
-	      book2Remove: ''
+	      book2Remove: '',
+	      isLoading: true
 	    };
 	    _this.handleBookSearchChange = _this.handleBookSearchChange.bind(_this);
 	    _this.renderBookList = _this.renderBookList.bind(_this);
@@ -27618,6 +27694,13 @@
 	    key: 'handleRemoveBook',
 	    value: function handleRemoveBook(e) {
 	      this.setState({ book2Remove: e.target.alt });
+	    }
+	  }, {
+	    key: 'renderLoadingSpinner',
+	    value: function renderLoadingSpinner() {
+	      if (this.state.isLoading) {
+	        return _react2.default.createElement('i', { className: 'fa fa-spinner fa-spin', style: { fontSize: '24px', marginLeft: '50px' } });
+	      }
 	    }
 	  }, {
 	    key: 'renderBookList',
@@ -27719,7 +27802,8 @@
 	            'Add more books!'
 	          ),
 	          _react2.default.createElement('input', { type: 'text', onChange: this.handleBookSearchChange, value: this.state.search }),
-	          _react2.default.createElement('input', { type: 'button', value: 'Add', onClick: this.handleAddBook })
+	          _react2.default.createElement('input', { type: 'button', value: 'Add', onClick: this.handleAddBook }),
+	          this.renderLoadingSpinner()
 	        ),
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(
@@ -52604,7 +52688,7 @@
 /* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -52633,7 +52717,8 @@
 	    var _this = _possibleConstructorReturn(this, (TradeComponent.__proto__ || Object.getPrototypeOf(TradeComponent)).call(this, props));
 
 	    _this.state = {
-	      viewTrade: false
+	      viewTrade: false,
+	      trade: ''
 	    };
 	    _this.viewTrade = _this.viewTrade.bind(_this);
 	    _this.handleAcceptTrade = _this.handleAcceptTrade.bind(_this);
@@ -52642,141 +52727,256 @@
 	  }
 
 	  _createClass(TradeComponent, [{
-	    key: "renderTrades",
-	    value: function renderTrades() {
-	      if (this.state.viewTrade) {
+	    key: 'renderPendingTrades',
+	    value: function renderPendingTrades() {
+	      var _this2 = this;
+
+	      var pendingTrades = this.props.pendingTrades;
+	      if (pendingTrades.length < 1) {
 	        return _react2.default.createElement(
-	          "div",
-	          { className: "container text-center" },
+	          'div',
+	          null,
+	          'No pending trades.'
+	        );
+	      }
+	      return this.props.pendingTrades.map(function (trade) {
+	        return _react2.default.createElement(
+	          'a',
+	          { href: '#', className: 'list-group-item',
+	            onClick: function onClick() {
+	              return _this2.viewTrade(trade);
+	            } },
 	          _react2.default.createElement(
-	            "div",
-	            { className: "row" },
+	            'i',
+	            null,
+	            trade.requesterBookTitle
+	          ),
+	          ' ',
+	          _react2.default.createElement(
+	            'b',
+	            { style: { margin: '0 5px' } },
+	            'For'
+	          ),
+	          _react2.default.createElement(
+	            'i',
+	            null,
+	            trade.requesteeBookTitle
+	          ),
+	          ' '
+	        );
+	      });
+	    }
+	  }, {
+	    key: 'renderTradeRequests',
+	    value: function renderTradeRequests() {
+	      var _this3 = this;
+
+	      var tradeRequests = this.props.tradeRequests;
+	      if (tradeRequests.length < 1) {
+	        return _react2.default.createElement(
+	          'div',
+	          null,
+	          'No pending trade requests.'
+	        );
+	      }
+	      return this.props.tradeRequests.map(function (trade) {
+	        return _react2.default.createElement(
+	          'a',
+	          { href: '#', className: 'list-group-item',
+	            onClick: function onClick() {
+	              return _this3.viewTrade(trade);
+	            } },
+	          _react2.default.createElement(
+	            'i',
+	            null,
+	            trade.requesteeBookTitle
+	          ),
+	          ' ',
+	          _react2.default.createElement(
+	            'b',
+	            { style: { margin: '0 5px' } },
+	            'For'
+	          ),
+	          _react2.default.createElement(
+	            'i',
+	            null,
+	            trade.requesterBookTitle
+	          ),
+	          ' '
+	        );
+	      });
+	    }
+	  }, {
+	    key: 'renderAcceptNDeclineBtns',
+	    value: function renderAcceptNDeclineBtns(user, trade) {
+	      var _this4 = this;
+
+	      if (trade.requesteeName == user.name) {
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'row' },
+	          _react2.default.createElement(
+	            'div',
+	            { style: { marginTop: '20px' }, className: 'col-md-6' },
 	            _react2.default.createElement(
-	              "div",
-	              { className: "col-md-6" },
-	              _react2.default.createElement(
-	                "h2",
-	                null,
-	                "48 Laws of Power"
-	              ),
-	              _react2.default.createElement("img", { src: "http://placehold.it/350x150" }),
-	              _react2.default.createElement(
-	                "p",
-	                null,
-	                "Owner: Tesfu"
-	              )
-	            ),
+	              'a',
+	              { href: '#', className: 'btn btn-default btn-lg btn-block btn-success',
+	                onClick: function onClick() {
+	                  return _this4.handleAcceptTrade(trade);
+	                } },
+	              'Accept Trade'
+	            )
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { style: { marginTop: '20px' }, className: 'col-md-6' },
 	            _react2.default.createElement(
-	              "div",
-	              { className: "col-md-6" },
-	              _react2.default.createElement(
-	                "h2",
-	                null,
-	                "Art of War"
-	              ),
-	              _react2.default.createElement("img", { src: "http://placehold.it/350x150" }),
-	              _react2.default.createElement(
-	                "p",
-	                null,
-	                "Owner: Alem"
-	              )
-	            ),
-	            _react2.default.createElement(
-	              "div",
-	              { style: { marginTop: '20px' }, className: "col-md-6" },
-	              _react2.default.createElement(
-	                "a",
-	                { href: "#", className: "btn btn-default btn-lg btn-block btn-success",
-	                  onClick: this.handleAcceptTrade },
-	                "Accept Trade"
-	              )
-	            ),
-	            _react2.default.createElement(
-	              "div",
-	              { style: { marginTop: '20px' }, className: "col-md-6" },
-	              _react2.default.createElement(
-	                "a",
-	                { href: "#", className: "btn btn-default btn-lg btn-block btn-danger",
-	                  onClick: this.handleDeclineTrade },
-	                "Decline Trade"
-	              )
+	              'a',
+	              { href: '#', className: 'btn btn-default btn-lg btn-block btn-danger',
+	                onClick: function onClick() {
+	                  return _this4.handleDeclineTrade(trade);
+	                } },
+	              'Decline Trade'
 	            )
 	          )
 	        );
 	      }
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "row", style: { marginTop: '20px' } },
+	        'div',
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          "div",
-	          { className: "col-md-6" },
+	          'div',
+	          { style: { marginTop: '20px' }, className: 'col-md-6' },
 	          _react2.default.createElement(
-	            "div",
-	            { className: "list-group" },
-	            _react2.default.createElement(
-	              "a",
-	              { href: "#", className: "list-group-item active" },
-	              "Pending Trades"
-	            ),
-	            _react2.default.createElement(
-	              "a",
-	              { href: "#", className: "list-group-item", onClick: this.viewTrade },
-	              "48 Laws of Power FOR Art of War"
-	            ),
-	            _react2.default.createElement(
-	              "a",
-	              { href: "#", className: "list-group-item" },
-	              "Magic FOR Junk Mail"
-	            )
+	            'button',
+	            { href: '#', className: 'btn btn-default btn-lg btn-block btn-success',
+	              onClick: function onClick() {
+	                return _this4.handleAcceptTrade(trade);
+	              }, disabled: true },
+	            'Accept Trade'
 	          )
 	        ),
 	        _react2.default.createElement(
-	          "div",
-	          { className: "col-md-6" },
+	          'div',
+	          { style: { marginTop: '20px' }, className: 'col-md-6' },
 	          _react2.default.createElement(
-	            "div",
-	            { "class": "list-group" },
-	            _react2.default.createElement(
-	              "a",
-	              { href: "#", className: "list-group-item active" },
-	              "Trade Requests"
-	            ),
-	            _react2.default.createElement(
-	              "a",
-	              { href: "#", className: "list-group-item" },
-	              "48 Laws of Power FOR Art of War"
-	            ),
-	            _react2.default.createElement(
-	              "a",
-	              { href: "#", className: "list-group-item" },
-	              "Magic FOR Junk Mail"
-	            )
+	            'a',
+	            { href: '#', className: 'btn btn-default btn-lg btn-block btn-danger',
+	              onClick: function onClick() {
+	                return _this4.handleDeclineTrade(trade);
+	              } },
+	            'Decline Trade'
 	          )
 	        )
 	      );
 	    }
 	  }, {
-	    key: "viewTrade",
-	    value: function viewTrade() {
-	      this.setState({ viewTrade: true });
+	    key: 'renderTrades',
+	    value: function renderTrades() {
+	      var user = localStorage.user ? JSON.parse(localStorage.user) : localStorage.user;
+	      if (this.state.viewTrade) {
+	        var trade = this.state.trade;
+	        console.log(trade);
+	        return _react2.default.createElement(
+	          'div',
+	          { className: 'container text-center' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'row' },
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-md-6' },
+	              _react2.default.createElement(
+	                'h2',
+	                null,
+	                trade.requesterBookTitle
+	              ),
+	              _react2.default.createElement('img', { src: trade.requesterImgUrl }),
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Owner: ',
+	                trade.requesterName
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'div',
+	              { className: 'col-md-6' },
+	              _react2.default.createElement(
+	                'h2',
+	                null,
+	                trade.requesteeBookTitle
+	              ),
+	              _react2.default.createElement('img', { src: trade.requesteeImgUrl }),
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                'Owner: ',
+	                trade.requesteeName
+	              )
+	            )
+	          ),
+	          this.renderAcceptNDeclineBtns(user, trade)
+	        );
+	      }
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row', style: { marginTop: '20px' } },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-6' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'list-group' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: '#', className: 'list-group-item active' },
+	              'Pending Trades'
+	            ),
+	            this.renderPendingTrades()
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-md-6' },
+	          _react2.default.createElement(
+	            'div',
+	            { 'class': 'list-group' },
+	            _react2.default.createElement(
+	              'a',
+	              { href: '#', className: 'list-group-item active' },
+	              'Trade Requests'
+	            ),
+	            this.renderTradeRequests()
+	          )
+	        )
+	      );
 	    }
 	  }, {
-	    key: "render",
+	    key: 'viewTrade',
+	    value: function viewTrade(trade) {
+	      this.setState({ viewTrade: true, trade: trade });
+	    }
+	  }, {
+	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        "div",
-	        { className: "tab-pane fade", id: "trades" },
+	        'div',
+	        { className: 'tab-pane fade', id: 'trades' },
 	        this.renderTrades()
 	      );
 	    }
 	  }, {
-	    key: "handleAcceptTrade",
-	    value: function handleAcceptTrade() {
+	    key: 'handleAcceptTrade',
+	    value: function handleAcceptTrade(tradeId) {
+	      this.props.handleAcceptTrade(tradeId);
 	      this.setState({ viewTrade: false });
 	    }
 	  }, {
-	    key: "handleDeclineTrade",
-	    value: function handleDeclineTrade() {
+	    key: 'handleDeclineTrade',
+	    value: function handleDeclineTrade(tradeId) {
+	      this.props.handleDeclineTrade(tradeId);
 	      this.setState({ viewTrade: false });
 	    }
 	  }]);
@@ -53116,7 +53316,7 @@
 
 	      var user = localStorage.user ? JSON.parse(localStorage.user) : '';
 	      if (!user) return;
-	      axios.get(("http://localhost:3000") + '/books', {
+	      axios.get(("http://localhost:3000") + '/books4trade', {
 	        headers: { 'token': localStorage.token }
 	      }).then(function (res) {
 	        _this4.setState({ books: res.data.books });
@@ -53127,11 +53327,16 @@
 	  }, {
 	    key: 'makeTradeRequest',
 	    value: function makeTradeRequest(requesterBook, requesteeBook) {
-	      console.log(localStorage.token);
 	      axios.post(("http://localhost:3000") + '/users/' + requesterBook._owner + '/trades', {
 	        requesteeId: requesteeBook._owner,
 	        requesteeBook: requesteeBook._id,
-	        requesterBook: requesterBook._id
+	        requesterBook: requesterBook._id,
+	        requesteeBookTitle: requesteeBook.title,
+	        requesterBookTitle: requesterBook.title,
+	        requesteeName: requesteeBook.owner,
+	        requesterName: requesterBook.owner,
+	        requesterImgUrl: requesterBook.imgUrl,
+	        requesteeImgUrl: requesteeBook.imgUrl
 	      }, { headers: { 'token': localStorage.token } }).then(function (res) {
 	        console.log(res);
 	      }).catch(function (err) {
@@ -53161,7 +53366,7 @@
 /* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
@@ -53191,19 +53396,7 @@
 
 	    _this.state = {
 	      requesterBook: null,
-	      books: [{
-	        title: '48 laws of Power',
-	        _owner: 'Alem',
-	        imgUrl: "http://books.google.com/books/content?id=P_zMW3EHnTEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-	      }, {
-	        title: 'Economic Hitman',
-	        _owner: 'Tesfu',
-	        imgUrl: "http://books.google.com/books/content?id=nJFFrLX-924C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-	      }, {
-	        title: 'Power',
-	        _owner: 'Shumye',
-	        imgUrl: "http://books.google.com/books/content?id=OVfdq4O8fb8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-	      }]
+	      books: []
 	    };
 	    _this.onBookSelect = _this.onBookSelect.bind(_this);
 	    _this.changRequesterBook = _this.changRequesterBook.bind(_this);
@@ -53211,7 +53404,7 @@
 	  }
 
 	  _createClass(TradeRequest, [{
-	    key: 'onBookSelect',
+	    key: "onBookSelect",
 	    value: function onBookSelect(e) {
 	      var book = this.props.userBooks.filter(function (book) {
 	        return book.title == e.target.value;
@@ -53219,70 +53412,70 @@
 	      this.setState({ requesterBook: book[0] });
 	    }
 	  }, {
-	    key: 'renderRequesteeBook',
+	    key: "renderRequesteeBook",
 	    value: function renderRequesteeBook() {
 	      if (!this.props.requesteeBook) return;
 	      return _react2.default.createElement(
-	        'div',
+	        "div",
 	        null,
 	        _react2.default.createElement(
-	          'p',
+	          "p",
 	          null,
 	          _react2.default.createElement(
-	            'b',
+	            "b",
 	            null,
-	            'Owner:'
+	            "Owner:"
 	          ),
-	          ' ',
+	          " ",
 	          this.props.requesteeBook.owner
 	        ),
-	        _react2.default.createElement('img', { src: this.props.requesteeBook.imgUrl })
+	        _react2.default.createElement("img", { src: this.props.requesteeBook.imgUrl })
 	      );
 	    }
 	  }, {
-	    key: 'changRequesterBook',
+	    key: "changRequesterBook",
 	    value: function changRequesterBook() {
 	      this.setState({ requesterBook: null });
 	    }
 	  }, {
-	    key: 'renderBook2Trade',
+	    key: "renderBook2Trade",
 	    value: function renderBook2Trade() {
 	      var book = this.state.requesterBook;
 	      if (book) {
 	        return _react2.default.createElement(
-	          'div',
+	          "div",
 	          null,
 	          _react2.default.createElement(
-	            'p',
+	            "p",
 	            null,
 	            _react2.default.createElement(
-	              'b',
+	              "b",
 	              null,
-	              'Owner:'
+	              "Owner:"
 	            ),
-	            ' ',
+	            " ",
 	            book.owner
 	          ),
-	          _react2.default.createElement('img', { src: book.imgUrl }),
-	          _react2.default.createElement('br', null),
+	          _react2.default.createElement("img", { src: book.imgUrl }),
+	          _react2.default.createElement("br", null),
 	          _react2.default.createElement(
-	            'a',
-	            { href: '#', onClick: this.changRequesterBook, className: 'btn btn-link' },
-	            'Change'
+	            "a",
+	            { href: "#", onClick: this.changRequesterBook, className: "btn btn-link" },
+	            "Change"
 	          )
 	        );
 	      }
 	      return _react2.default.createElement(
-	        'select',
-	        { onChange: this.onBookSelect, style: { marginTop: '40%', width: '100%' }, className: 'custom-select' },
+	        "select",
+	        { onChange: this.onBookSelect, style: { marginTop: '40%', width: '100%' }, className: "custom-select" },
 	        _react2.default.createElement(
-	          'option',
+	          "option",
 	          null,
-	          'Select a book to trade'
+	          "Select a book to trade"
 	        ),
 	        this.props.userBooks.map(function (book, index) {
 	          return _react2.default.createElement(
-	            'option',
+	            "option",
 	            { value: book.title, key: index },
 	            book.title
 	          );
@@ -53290,68 +53483,68 @@
 	      );
 	    }
 	  }, {
-	    key: 'render',
+	    key: "render",
 	    value: function render() {
 	      var _this2 = this;
 
 	      console.log(this.props.userBooks);
 	      return _react2.default.createElement(
-	        'div',
-	        { className: 'modal fade', id: 'myModal', role: 'dialog' },
+	        "div",
+	        { className: "modal fade", id: "myModal", role: "dialog" },
 	        _react2.default.createElement(
-	          'div',
-	          { className: 'modal-dialog' },
+	          "div",
+	          { className: "modal-dialog" },
 	          _react2.default.createElement(
-	            'div',
-	            { className: 'modal-content' },
+	            "div",
+	            { className: "modal-content" },
 	            _react2.default.createElement(
-	              'div',
-	              { className: 'modal-header' },
+	              "div",
+	              { className: "modal-header" },
 	              _react2.default.createElement(
-	                'button',
-	                { type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
-	                '\xD7'
+	                "button",
+	                { type: "button", className: "close", "data-dismiss": "modal", "aria-hidden": "true" },
+	                "\xD7"
 	              ),
 	              _react2.default.createElement(
-	                'h4',
-	                { className: 'modal-title' },
-	                'Trade Request'
+	                "h4",
+	                { className: "modal-title" },
+	                "Trade Request"
 	              )
 	            ),
 	            _react2.default.createElement(
-	              'div',
-	              { className: 'modal-body' },
+	              "div",
+	              { className: "modal-body" },
 	              _react2.default.createElement(
-	                'div',
-	                { className: 'row text-center' },
+	                "div",
+	                { className: "row text-center" },
 	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'col-xs-6' },
+	                  "div",
+	                  { className: "col-xs-6" },
 	                  this.renderBook2Trade()
 	                ),
 	                _react2.default.createElement(
-	                  'div',
-	                  { className: 'col-xs-6' },
+	                  "div",
+	                  { className: "col-xs-6" },
 	                  this.renderRequesteeBook()
 	                )
 	              )
 	            ),
 	            _react2.default.createElement(
-	              'div',
-	              { className: 'modal-footer' },
+	              "div",
+	              { className: "modal-footer" },
 	              _react2.default.createElement(
-	                'button',
-	                { type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-	                'Cancel'
+	                "button",
+	                { type: "button", className: "btn btn-default", "data-dismiss": "modal" },
+	                "Cancel"
 	              ),
 	              _react2.default.createElement(
-	                'button',
-	                { type: 'button', className: 'btn btn-primary', 'data-dismiss': 'modal',
+	                "button",
+	                { type: "button", className: "btn btn-primary", "data-dismiss": "modal",
 	                  onClick: function onClick() {
 	                    return _this2.props.makeTradeRequest(_this2.state.requesterBook, _this2.props.requesteeBook);
 	                  }
 	                },
-	                'Send'
+	                "Send"
 	              )
 	            )
 	          )
