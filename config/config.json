@@ -11,10 +11,6 @@
   },
   "production": {
     "database": "MONGO_URI",
-    "host": "https://bar-hop-bar.herokuapp.com",
-    "CONSUMER_KEY": "CONSUMER_KEY",
-    "CONSUMER_SECRET": "CONSUMER_SECRET",
-    "TOKEN": "TOKEN",
-    "TOKEN_SECRET": "TOKEN_SECRET"
+    "host": " https://book-swap-meet.herokuapp.com"
   }
 }
