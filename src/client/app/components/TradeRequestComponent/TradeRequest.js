@@ -82,6 +82,7 @@ class TradeRequest extends Component {
       </div>
     )
   }
+  
 }
 
 export default TradeRequest;

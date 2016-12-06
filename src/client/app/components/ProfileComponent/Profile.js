@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Info from './Info';
-import Books from './Books';
+import Info  from '../UserInfoComponent/UserInfo';
+import Books from '../UserBooksComponent/UserBooks';
 import Trade from '../TradeComponent/Trade';
 import books from 'google-books-search';
 
@@ -27,7 +27,9 @@ class ProfileComponent extends Component {
       books: [],
       pendingTrades: [],
       tradeRequests: [],
-      isLoading: false
+      isLoading: false,
+      error: null,
+      success: null
     }
 
     this.handleAcceptTrade = this.handleAcceptTrade.bind(this);
@@ -52,6 +54,10 @@ class ProfileComponent extends Component {
       console.log(res.data.data);
       this.setState({ user: res.data.data})
     })
+    .catch((err) => {
+      this.setState({ error: err.message });
+      console.log(err);
+    })
   }
 
   fetchUserTrades(user) {
@@ -68,39 +74,26 @@ class ProfileComponent extends Component {
       console.log(res.data);
     })
     .catch((err) => {
+      this.setState({ error: err.message });
       console.log(err);
     })
 
   }
 
-  render() {
-    return (
-        <div>
-          <h2>Profile</h2>
-          <hr />
-          <ul className="nav nav-tabs">
-            <li className="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
-            <li className=""><a href="#books" data-toggle="tab" aria-expanded="false">Books</a></li>
-            <li className=""><a href="#trades" data-toggle="tab" aria-expanded="false">Trades</a></li>
-          </ul>
-          <div id="myTabContent" className="tab-content">
-            <Info user={this.state.user}
-                  handleUpdateOnUser={this.handleUpdateOnUser.bind(this)}
-                  />
-            <Books books={ this.state.books }
-                   _queryBook2Add={ this._queryBook2Add.bind(this) }
-                   removeBookFromUserList={ this.removeBookFromUserList.bind(this) }
-                   isLoading={ this.state.isLoading }
-                   />
-            <Trade pendingTrades={this.state.pendingTrades}
-                   tradeRequests={this.state.tradeRequests}
-                   handleAcceptTrade={this.handleAcceptTrade}
-                   handleDeclineTrade={this.handleDeclineTrade}
-                  />
-          </div>
-        </div>
-    );
+  renderError() {
+    if(!this.state.error) { return null;}
+
+    window.setTimeout(() => {
+      this.setState({ error: null});
+    }, 2000)
+
+    return <div className="alert alert-dismissible alert-danger">
+             <button type="button" className="close" data-dismiss="alert">&times;</button>
+             {this.state.error}
+           </div>
   }
+
+
 
   handleAcceptTrade(trade) {
     const user = localStorage.user ? JSON.parse(localStorage.user) : null;
@@ -232,6 +225,50 @@ class ProfileComponent extends Component {
       }
     })
   }
+
+  renderSuccess() {
+    if(!this.state.success) { return null }
+
+    window.setTimeout(() => {
+      this.setState({ success: null});
+    }, 2000)
+
+    return <div className="alert alert-dismissible alert-success">
+             <button type="button" className="close" data-dismiss="alert">&times;</button>
+             {this.state.success}
+           </div>
+  }
+
+  render() {
+    return (
+        <div>
+          { this.renderSuccess() }
+          <h2>{this.state.user.name}'s Profile</h2>
+          <hr />
+          <ul className="nav nav-tabs">
+            <li className="active"><a href="#info" data-toggle="tab" aria-expanded="true">Info</a></li>
+            <li className=""><a href="#books" data-toggle="tab" aria-expanded="false">Books</a></li>
+            <li className=""><a href="#trades" data-toggle="tab" aria-expanded="false">Trades</a></li>
+          </ul>
+          <div id="myTabContent" className="tab-content">
+            <Info user={this.state.user}
+                  handleUpdateOnUser={this.handleUpdateOnUser.bind(this)}
+                  />
+            <Books books={ this.state.books }
+                   _queryBook2Add={ this._queryBook2Add.bind(this) }
+                   removeBookFromUserList={ this.removeBookFromUserList.bind(this) }
+                   isLoading={ this.state.isLoading }
+                   />
+            <Trade pendingTrades={this.state.pendingTrades}
+                   tradeRequests={this.state.tradeRequests}
+                   handleAcceptTrade={this.handleAcceptTrade}
+                   handleDeclineTrade={this.handleDeclineTrade}
+                  />
+          </div>
+        </div>
+    );
+  }
+
 }
 
 export default ProfileComponent;

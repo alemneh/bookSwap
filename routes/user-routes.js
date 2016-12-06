@@ -140,7 +140,12 @@ let UserRoutes = {
   },
 
   requestATrade: function(req, res) {
-    let newTrade = new Trade(req.body);
+    let newTrade, requesteeBookId, requesterBookId;
+
+    newTrade        = new Trade(req.body);
+    requesteeBookId = newTrade.requesteeBook[0];
+    requesterBookId = newTrade.requesterBook[0];
+
     User.findById(req.params.id).exec()
       .then((requesterUser) => {
         requesterUser.pendingTrades.push(newTrade._id);
@@ -151,6 +156,14 @@ let UserRoutes = {
         requesteeUser.tradeRequests.push(newTrade._id);
         requesteeUser.save();
         newTrade.save();
+        return Book.findByIdAndUpdate(requesterBookId, {$set: { isPendingTrade: true }}).exec();
+      })
+      .then((book) => {
+        console.log(book);
+        return Book.findByIdAndUpdate(requesteeBookId, {$set: { isPendingTrade: true }}).exec();
+      })
+      .then((book) => {
+        console.log(book);
         res.json({message: 'trade request sent!'});
       })
       .catch((err) => {
@@ -163,7 +176,6 @@ let UserRoutes = {
       .populate('tradeRequests pendingTrades')
       .exec((err, user) => {
         if(err) throw err;
-        console.log(user);
         res.json({
           tradeRequests: user.tradeRequests,
           pendingTrades: user.pendingTrades
@@ -205,6 +217,11 @@ let UserRoutes = {
         //swap owners names of requesterBook
         requesterBook.owner = requesteeName;
 
+        //set books isPendingTrade to false
+        requesteeBook.isPendingTrade = false;
+        requesterBook.isPendingTrade = false;
+
+        //save book changes
         requesteeBook.save();
         requesterBook.save();
 
@@ -256,8 +273,16 @@ let UserRoutes = {
         requesterId = requesterBook._owner[0];
         requesteeId = requesteeBook._owner[0];
 
+        // set isPendingTrade to false
+        requesteeBook.isPendingTrade = false;
+        requesterBook.isPendingTrade = false;
+
         //remove trade from db
         trade.remove();
+
+        // save books changRequesterBook
+        requesterBook.save();
+        requesteeBook.save();
 
         return User.findById(requesterId).exec();
       })

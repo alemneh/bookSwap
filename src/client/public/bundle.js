@@ -26907,28 +26907,20 @@
 	              'form',
 	              { className: 'navbar-form navbar-right', role: 'search' },
 	              _react2.default.createElement(
-	                'button',
-	                { type: 'button', disabled: true },
+	                'a',
+	                { herf: '#' },
 	                'Welcome, ',
 	                user.name
 	              ),
 	              _react2.default.createElement(
-	                'button',
-	                { type: 'submit', className: 'btn btn-default' },
-	                _react2.default.createElement(
-	                  _reactRouter.Link,
-	                  { to: '/profile' },
-	                  'Profile'
-	                )
+	                _reactRouter.Link,
+	                { className: 'btn btn-default', to: '/profile' },
+	                'Profile'
 	              ),
 	              _react2.default.createElement(
-	                'button',
-	                { type: 'submit', className: 'btn btn-default' },
-	                _react2.default.createElement(
-	                  _reactRouter.Link,
-	                  { to: '/books' },
-	                  'Browse Books'
-	                )
+	                _reactRouter.Link,
+	                { className: 'btn btn-default', to: '/books' },
+	                'Browse Books'
 	              ),
 	              _react2.default.createElement(
 	                'button',
@@ -27019,6 +27011,20 @@
 	        return null;
 	      }
 	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'nav',
+	          { className: 'navbar navbar-default' },
+	          this.renderNavBar()
+	        ),
+	        this.renderError()
+	      );
+	    }
 	  }]);
 
 	  return NavComponent;
@@ -27093,6 +27099,44 @@
 	              )
 	            )
 	          )
+	        ),
+	        _react2.default.createElement(
+	          'blockquote',
+	          null,
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'Wow, this is a great app I was able to find a trade for a book that would of cost a fortune.'
+	          ),
+	          _react2.default.createElement(
+	            'small',
+	            null,
+	            'Someone famous in ',
+	            _react2.default.createElement(
+	              'cite',
+	              { title: 'Source Title' },
+	              'Source Title'
+	            )
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'blockquote',
+	          { className: 'blockquote-reverse' },
+	          _react2.default.createElement(
+	            'p',
+	            null,
+	            'So many good books that are available for trade!.'
+	          ),
+	          _react2.default.createElement(
+	            'small',
+	            null,
+	            'Someone famous in ',
+	            _react2.default.createElement(
+	              'cite',
+	              { title: 'Source Title' },
+	              'Source Title'
+	            )
+	          )
 	        )
 	      );
 	    }
@@ -27119,13 +27163,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Info = __webpack_require__(244);
+	var _UserInfo = __webpack_require__(244);
 
-	var _Info2 = _interopRequireDefault(_Info);
+	var _UserInfo2 = _interopRequireDefault(_UserInfo);
 
-	var _Books = __webpack_require__(245);
+	var _UserBooks = __webpack_require__(245);
 
-	var _Books2 = _interopRequireDefault(_Books);
+	var _UserBooks2 = _interopRequireDefault(_UserBooks);
 
 	var _Trade = __webpack_require__(288);
 
@@ -27170,7 +27214,9 @@
 	      books: [],
 	      pendingTrades: [],
 	      tradeRequests: [],
-	      isLoading: false
+	      isLoading: false,
+	      error: null,
+	      success: null
 	    };
 
 	    _this.handleAcceptTrade = _this.handleAcceptTrade.bind(_this);
@@ -27198,6 +27244,9 @@
 	      }).then(function (res) {
 	        console.log(res.data.data);
 	        _this2.setState({ user: res.data.data });
+	      }).catch(function (err) {
+	        _this2.setState({ error: err.message });
+	        console.log(err);
 	      });
 	    }
 	  }, {
@@ -27216,8 +27265,198 @@
 	        });
 	        console.log(res.data);
 	      }).catch(function (err) {
+	        _this3.setState({ error: err.message });
 	        console.log(err);
 	      });
+	    }
+	  }, {
+	    key: 'renderError',
+	    value: function renderError() {
+	      var _this4 = this;
+
+	      if (!this.state.error) {
+	        return null;
+	      }
+
+	      window.setTimeout(function () {
+	        _this4.setState({ error: null });
+	      }, 2000);
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-dismissible alert-danger' },
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'button', className: 'close', 'data-dismiss': 'alert' },
+	          '\xD7'
+	        ),
+	        this.state.error
+	      );
+	    }
+	  }, {
+	    key: 'handleAcceptTrade',
+	    value: function handleAcceptTrade(trade) {
+	      var _this5 = this;
+
+	      var user = localStorage.user ? JSON.parse(localStorage.user) : null;
+	      if (!user) return;
+	      var tradeRequests = this.state.tradeRequests.filter(function (t) {
+	        return t._id != trade._id;
+	      });
+	      var pendingTrades = this.state.pendingTrades.filter(function (t) {
+	        return t._id != trade._id;
+	      });
+
+	      axios.put(("http://localhost:3000") + '/users/' + user._id + '/trades/' + trade._id, { trade: trade }, { headers: { 'token': localStorage.token }
+	      }).then(function (res) {
+	        _this5.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades });
+	        console.log(res);
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'handleDeclineTrade',
+	    value: function handleDeclineTrade(trade) {
+	      var _this6 = this;
+
+	      var user = localStorage.user ? JSON.parse(localStorage.user) : null;
+	      if (!user) return;
+	      var tradeRequests = this.state.tradeRequests.filter(function (t) {
+	        return t._id != trade._id;
+	      });
+	      var pendingTrades = this.state.pendingTrades.filter(function (t) {
+	        return t._id != trade._id;
+	      });
+
+	      axios.delete(("http://localhost:3000") + '/users/' + user._id + '/trades/' + trade._id, {
+	        headers: { 'token': localStorage.token }
+	      }).then(function (res) {
+	        _this6.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades });
+	        console.log(res);
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'handleUpdateOnUser',
+	    value: function handleUpdateOnUser(user) {
+	      var _this7 = this;
+
+	      var userId = this.state.user._id;
+	      var updatedUser = {
+	        _id: this.state.user._id,
+	        name: user.name,
+	        city: user.city,
+	        state: user.state
+	      };
+	      axios.put(("http://localhost:3000") + '/users/' + userId, {
+	        name: user.name,
+	        city: user.city,
+	        state: user.state
+	      }, { headers: { 'token': localStorage.token } }).then(function (res) {
+	        console.log(res);
+	        _this7.setState({ success: res.data.message, user: updatedUser });
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'fetchUserBooks',
+	    value: function fetchUserBooks(user) {
+	      var _this8 = this;
+
+	      if (!user) return;
+	      axios.get(("http://localhost:3000") + '/users/' + user._id + '/books', { headers: { 'token': localStorage.token } }).then(function (res) {
+	        _this8.setState({ books: res.data.data });
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'addBookToUser',
+	    value: function addBookToUser(book) {
+	      var _this9 = this;
+
+	      var user = this.state.user;
+	      this.setState({ isLoading: true });
+
+	      axios.post(("http://localhost:3000") + '/users/' + user._id + '/books', { title: book.title, imgUrl: book.imgUrl, owner: user.name }, { headers: { 'token': localStorage.token } }).then(function (res) {
+	        console.log(res);
+	        console.log(book);
+	        var books = _this9.state.books;
+	        console.log(books);
+	        books.push(book);
+	        console.log(books);
+	        _this9.setState({ books: books, isLoading: false });
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: 'removeBookFromUserList',
+	    value: function removeBookFromUserList(title) {
+	      var books = this.state.books;
+	      console.log(books);
+	      var book = books.filter(function (book) {
+	        return book.title == title;
+	      });
+	      books = books.filter(function (book) {
+	        return book.title != title;
+	      });
+	      this._deleteBook(book[0], books);
+	    }
+	  }, {
+	    key: '_deleteBook',
+	    value: function _deleteBook(book, books) {
+	      var _this10 = this;
+
+	      var user = this.state.user;
+	      axios.delete(("http://localhost:3000") + '/users/' + user._id + '/books/' + book._id, { headers: { 'token': localStorage.token } }).then(function (res) {
+	        console.log(res);
+	        _this10.setState({ books: books });
+	      }).catch(function (err) {
+	        console.log(err);
+	      });
+	    }
+	  }, {
+	    key: '_queryBook2Add',
+	    value: function _queryBook2Add(query) {
+	      var _this11 = this;
+
+	      _googleBooksSearch2.default.search(query, function (err, res) {
+	        if (!err) {
+	          var newBook = { title: res[0].title, imgUrl: res[0].thumbnail };
+	          _this11.addBookToUser(newBook);
+	          console.log(res[0]);
+	        } else {
+	          console.log(err);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'renderSuccess',
+	    value: function renderSuccess() {
+	      var _this12 = this;
+
+	      if (!this.state.success) {
+	        return null;
+	      }
+
+	      window.setTimeout(function () {
+	        _this12.setState({ success: null });
+	      }, 2000);
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-dismissible alert-success' },
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'button', className: 'close', 'data-dismiss': 'alert' },
+	          '\xD7'
+	        ),
+	        this.state.success
+	      );
 	    }
 	  }, {
 	    key: 'render',
@@ -27225,10 +27464,12 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        this.renderSuccess(),
 	        _react2.default.createElement(
 	          'h2',
 	          null,
-	          'Profile'
+	          this.state.user.name,
+	          '\'s Profile'
 	        ),
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(
@@ -27265,10 +27506,10 @@
 	        _react2.default.createElement(
 	          'div',
 	          { id: 'myTabContent', className: 'tab-content' },
-	          _react2.default.createElement(_Info2.default, { user: this.state.user,
+	          _react2.default.createElement(_UserInfo2.default, { user: this.state.user,
 	            handleUpdateOnUser: this.handleUpdateOnUser.bind(this)
 	          }),
-	          _react2.default.createElement(_Books2.default, { books: this.state.books,
+	          _react2.default.createElement(_UserBooks2.default, { books: this.state.books,
 	            _queryBook2Add: this._queryBook2Add.bind(this),
 	            removeBookFromUserList: this.removeBookFromUserList.bind(this),
 	            isLoading: this.state.isLoading
@@ -27280,147 +27521,6 @@
 	          })
 	        )
 	      );
-	    }
-	  }, {
-	    key: 'handleAcceptTrade',
-	    value: function handleAcceptTrade(trade) {
-	      var _this4 = this;
-
-	      var user = localStorage.user ? JSON.parse(localStorage.user) : null;
-	      if (!user) return;
-	      var tradeRequests = this.state.tradeRequests.filter(function (t) {
-	        return t._id != trade._id;
-	      });
-	      var pendingTrades = this.state.pendingTrades.filter(function (t) {
-	        return t._id != trade._id;
-	      });
-
-	      axios.put(("http://localhost:3000") + '/users/' + user._id + '/trades/' + trade._id, { trade: trade }, { headers: { 'token': localStorage.token }
-	      }).then(function (res) {
-	        _this4.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades });
-	        console.log(res);
-	      }).catch(function (err) {
-	        console.log(err);
-	      });
-	    }
-	  }, {
-	    key: 'handleDeclineTrade',
-	    value: function handleDeclineTrade(trade) {
-	      var _this5 = this;
-
-	      var user = localStorage.user ? JSON.parse(localStorage.user) : null;
-	      if (!user) return;
-	      var tradeRequests = this.state.tradeRequests.filter(function (t) {
-	        return t._id != trade._id;
-	      });
-	      var pendingTrades = this.state.pendingTrades.filter(function (t) {
-	        return t._id != trade._id;
-	      });
-
-	      axios.delete(("http://localhost:3000") + '/users/' + user._id + '/trades/' + trade._id, {
-	        headers: { 'token': localStorage.token }
-	      }).then(function (res) {
-	        _this5.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades });
-	        console.log(res);
-	      }).catch(function (err) {
-	        console.log(err);
-	      });
-	    }
-	  }, {
-	    key: 'handleUpdateOnUser',
-	    value: function handleUpdateOnUser(user) {
-	      var _this6 = this;
-
-	      var userId = this.state.user._id;
-	      var updatedUser = {
-	        _id: this.state.user._id,
-	        name: user.name,
-	        city: user.city,
-	        state: user.state
-	      };
-	      axios.put(("http://localhost:3000") + '/users/' + userId, {
-	        name: user.name,
-	        city: user.city,
-	        state: user.state
-	      }, { headers: { 'token': localStorage.token } }).then(function (res) {
-	        console.log(res);
-	        _this6.setState({ success: res.data.message, user: updatedUser });
-	      }).catch(function (err) {
-	        console.log(err);
-	      });
-	    }
-	  }, {
-	    key: 'fetchUserBooks',
-	    value: function fetchUserBooks(user) {
-	      var _this7 = this;
-
-	      if (!user) return;
-	      axios.get(("http://localhost:3000") + '/users/' + user._id + '/books', { headers: { 'token': localStorage.token } }).then(function (res) {
-	        _this7.setState({ books: res.data.data });
-	      }).catch(function (err) {
-	        console.log(err);
-	      });
-	    }
-	  }, {
-	    key: 'addBookToUser',
-	    value: function addBookToUser(book) {
-	      var _this8 = this;
-
-	      var user = this.state.user;
-	      this.setState({ isLoading: true });
-
-	      axios.post(("http://localhost:3000") + '/users/' + user._id + '/books', { title: book.title, imgUrl: book.imgUrl, owner: user.name }, { headers: { 'token': localStorage.token } }).then(function (res) {
-	        console.log(res);
-	        console.log(book);
-	        var books = _this8.state.books;
-	        console.log(books);
-	        books.push(book);
-	        console.log(books);
-	        _this8.setState({ books: books, isLoading: false });
-	      }).catch(function (err) {
-	        console.log(err);
-	      });
-	    }
-	  }, {
-	    key: 'removeBookFromUserList',
-	    value: function removeBookFromUserList(title) {
-	      var books = this.state.books;
-	      console.log(books);
-	      var book = books.filter(function (book) {
-	        return book.title == title;
-	      });
-	      books = books.filter(function (book) {
-	        return book.title != title;
-	      });
-	      this._deleteBook(book[0], books);
-	    }
-	  }, {
-	    key: '_deleteBook',
-	    value: function _deleteBook(book, books) {
-	      var _this9 = this;
-
-	      var user = this.state.user;
-	      axios.delete(("http://localhost:3000") + '/users/' + user._id + '/books/' + book._id, { headers: { 'token': localStorage.token } }).then(function (res) {
-	        console.log(res);
-	        _this9.setState({ books: books });
-	      }).catch(function (err) {
-	        console.log(err);
-	      });
-	    }
-	  }, {
-	    key: '_queryBook2Add',
-	    value: function _queryBook2Add(query) {
-	      var _this10 = this;
-
-	      _googleBooksSearch2.default.search(query, function (err, res) {
-	        if (!err) {
-	          var newBook = { title: res[0].title, imgUrl: res[0].thumbnail };
-	          _this10.addBookToUser(newBook);
-	          console.log(res[0]);
-	        } else {
-	          console.log(err);
-	        }
-	      });
 	    }
 	  }]);
 
@@ -27599,15 +27699,6 @@
 	    key: '_handelUserUpdates',
 	    value: function _handelUserUpdates(updatedUser) {}
 	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'tab-pane fade active in', id: 'info' },
-	        this.renderInfoSection()
-	      );
-	    }
-	  }, {
 	    key: 'onEditClick',
 	    value: function onEditClick() {
 	      this.setState({ isEditing: true });
@@ -27628,6 +27719,15 @@
 	      };
 	      this.props.handleUpdateOnUser(updatedUser);
 	      this.setState({ isEditing: false });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'tab-pane fade active in', id: 'info' },
+	        this.renderInfoSection()
+	      );
 	    }
 	  }]);
 
@@ -27787,6 +27887,14 @@
 	      );
 	    }
 	  }, {
+	    key: 'handleAddBook',
+	    value: function handleAddBook(e) {
+	      e.preventDefault();
+	      this.props._queryBook2Add(this.state.search);
+	      console.log(this.state.search);
+	      this.setState({ search: '' });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
@@ -27812,14 +27920,6 @@
 	        ),
 	        this.renderBookDeleteModal()
 	      );
-	    }
-	  }, {
-	    key: 'handleAddBook',
-	    value: function handleAddBook(e) {
-	      e.preventDefault();
-	      this.props._queryBook2Add(this.state.search);
-	      console.log(this.state.search);
-	      this.setState({ search: '' });
 	    }
 	  }]);
 
@@ -52958,15 +53058,6 @@
 	      this.setState({ viewTrade: true, trade: trade });
 	    }
 	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'tab-pane fade', id: 'trades' },
-	        this.renderTrades()
-	      );
-	    }
-	  }, {
 	    key: 'handleAcceptTrade',
 	    value: function handleAcceptTrade(tradeId) {
 	      this.props.handleAcceptTrade(tradeId);
@@ -52977,6 +53068,15 @@
 	    value: function handleDeclineTrade(tradeId) {
 	      this.props.handleDeclineTrade(tradeId);
 	      this.setState({ viewTrade: false });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'tab-pane fade', id: 'trades' },
+	        this.renderTrades()
+	      );
 	    }
 	  }]);
 
@@ -53023,7 +53123,8 @@
 	      username: '',
 	      password: '',
 	      city: '',
-	      state: ''
+	      state: '',
+	      error: null
 	    };
 
 	    _this.handleUsernameChange = _this.handleUsernameChange.bind(_this);
@@ -53071,12 +53172,20 @@
 	      var _this2 = this;
 
 	      e.preventDefault();
-	      var newUser = [{
-	        name: this.state.username,
-	        password: this.state.password,
-	        city: this.state.city,
-	        state: this.state.state
-	      }];
+
+	      console.log(this.state);
+
+	      var username = this.state.username;
+	      var password = this.state.password;
+	      var city = this.state.city;
+	      var state = this.state.state;
+
+	      var validateLoginInput = this.validateLoginInput(username, password, city, state);
+
+	      if (validateLoginInput) {
+	        this.setState({ error: validateLoginInput });
+	        return;
+	      }
 
 	      axios.post(("http://localhost:3000") + '/signup', {
 	        name: this.state.username,
@@ -53096,11 +53205,51 @@
 	      });
 	    }
 	  }, {
+	    key: 'renderError',
+	    value: function renderError() {
+	      var _this3 = this;
+
+	      if (!this.state.error) {
+	        return null;
+	      }
+
+	      window.setTimeout(function () {
+	        _this3.setState({ error: null });
+	      }, 2000);
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-dismissible alert-danger' },
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'button', className: 'close', 'data-dismiss': 'alert' },
+	          '\xD7'
+	        ),
+	        this.state.error
+	      );
+	    }
+	  }, {
+	    key: 'validateLoginInput',
+	    value: function validateLoginInput(username, password, city, state) {
+	      if (!username) {
+	        return 'Please enter username';
+	      } else if (!password) {
+	        return 'Please enter password';
+	      } else if (!city) {
+	        return 'Please enter city';
+	      } else if (!state) {
+	        return 'Please enter state';
+	      } else {
+	        return null;
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'form',
 	        { className: 'form-horizontal' },
+	        this.renderError(),
 	        _react2.default.createElement(
 	          'fieldset',
 	          null,
@@ -53250,13 +53399,11 @@
 	    _this.state = {
 	      books: [],
 	      userBooks: [],
-	      requesteeBook: [{
-	        title: '48 laws of Power',
-	        _owner: 'Alem',
-	        imgUrl: "http://books.google.com/books/content?id=P_zMW3EHnTEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-	      }]
+	      requesteeBook: [],
+	      success: null
 	    };
 	    _this.onRequesteeBookClick = _this.onRequesteeBookClick.bind(_this);
+	    _this.makeTradeRequest = _this.makeTradeRequest.bind(_this);
 	    return _this;
 	  }
 
@@ -53293,7 +53440,7 @@
 	      var _this3 = this;
 
 	      var books = this.state.books.filter(function (book) {
-	        return !searchByValue(book.title, 'title', _this3.state.userBooks);
+	        return !searchByValue(book.title, 'title', _this3.state.userBooks) && !book.isPendingTrade;
 	      });
 	      if (books.length < 1) {
 	        return _react2.default.createElement(
@@ -53326,6 +53473,15 @@
 	  }, {
 	    key: 'makeTradeRequest',
 	    value: function makeTradeRequest(requesterBook, requesteeBook) {
+	      var _this5 = this;
+
+	      var books = this.state.books.map(function (book) {
+	        if (requesteeBook.title == book.title) {
+	          book.isPendingTrade = true;
+	        }
+	        return book;
+	      });
+
 	      axios.post(("http://localhost:3000") + '/users/' + requesterBook._owner + '/trades', {
 	        requesteeId: requesteeBook._owner,
 	        requesteeBook: requesteeBook._id,
@@ -53337,10 +53493,36 @@
 	        requesterImgUrl: requesterBook.imgUrl,
 	        requesteeImgUrl: requesteeBook.imgUrl
 	      }, { headers: { 'token': localStorage.token } }).then(function (res) {
+	        console.log(books);
+	        _this5.setState({ success: res.data.message, books: books });
 	        console.log(res);
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
+	    }
+	  }, {
+	    key: 'renderSuccess',
+	    value: function renderSuccess() {
+	      var _this6 = this;
+
+	      if (!this.state.success) {
+	        return null;
+	      }
+
+	      window.setTimeout(function () {
+	        _this6.setState({ success: null });
+	      }, 2000);
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'alert alert-dismissible alert-success' },
+	        _react2.default.createElement(
+	          'button',
+	          { type: 'button', className: 'close', 'data-dismiss': 'alert' },
+	          '\xD7'
+	        ),
+	        this.state.success
+	      );
 	    }
 	  }, {
 	    key: 'render',
@@ -53348,6 +53530,13 @@
 	      return _react2.default.createElement(
 	        'div',
 	        null,
+	        this.renderSuccess(),
+	        _react2.default.createElement(
+	          'h1',
+	          null,
+	          'Books Available for Trade'
+	        ),
+	        _react2.default.createElement('hr', null),
 	        this.renderBooks(),
 	        _react2.default.createElement(_TradeRequest2.default, { requesteeBook: this.state.requesteeBook[0],
 	          userBooks: this.state.userBooks,

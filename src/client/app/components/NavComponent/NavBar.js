@@ -123,9 +123,9 @@ class NavComponent extends Component {
             <div className="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true">
 
               <form className="navbar-form navbar-right" role="search">
-                <button type="button" disabled>Welcome, { user.name }</button>
-                <button type="submit" className="btn btn-default"><Link to="/profile">Profile</Link></button>
-                <button type="submit" className="btn btn-default"><Link to="/books">Browse Books</Link></button>
+                <a herf="#" >Welcome, { user.name }</a>
+                <Link className="btn btn-default" to="/profile">Profile</Link>
+                <Link className="btn btn-default" to="/books">Browse Books</Link>
                 <button type="submit" className="btn btn-default" onClick={this.handleLogout}>Logout</button>
               </form>
             </div>
@@ -182,6 +182,19 @@ class NavComponent extends Component {
       return null;
     }
   }
+
+  render() {
+    return (
+      <div>
+        <nav className="navbar navbar-default">
+          { this.renderNavBar() }
+        </nav>
+        { this.renderError() }
+      </div>
+
+    )
+  }
+  
 }
 
 export default NavComponent;

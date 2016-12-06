@@ -62,13 +62,6 @@ class Info extends Component {
   _handelUserUpdates(updatedUser) {
 
   }
-  render() {
-    return (
-      <div className="tab-pane fade active in" id="info">
-        { this.renderInfoSection() }
-      </div>
-    )
-  }
 
   onEditClick() {
     this.setState( { isEditing: true});
@@ -87,6 +80,14 @@ class Info extends Component {
     }
     this.props.handleUpdateOnUser(updatedUser);
     this.setState({ isEditing: false });
+  }
+
+  render() {
+    return (
+      <div className="tab-pane fade active in" id="info">
+        { this.renderInfoSection() }
+      </div>
+    )
   }
 }
 

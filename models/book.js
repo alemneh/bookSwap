@@ -6,7 +6,8 @@ module.exports = (mongoose, models) => {
     _owner: [{type: Schema.Types.ObjectId, ref: 'User'}],
     title: String,
     imgUrl: String,
-    owner: String
+    owner: String,
+    isPendingTrade: { type: Boolean, default: false }
   });
 
   const Book = mongoose.model('Book', bookSchema);

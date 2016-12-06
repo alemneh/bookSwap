@@ -10,7 +10,8 @@ class SignUpComponent extends Component {
       username: '',
       password: '',
       city: '',
-      state: ''
+      state: '',
+      error: null
     }
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -48,14 +49,21 @@ class SignUpComponent extends Component {
 
   handleSignUp(e) {
     e.preventDefault();
-    let newUser = [
-      {
-        name: this.state.username,
-        password: this.state.password,
-        city: this.state.city,
-        state: this.state.state
-      }
-    ]
+
+    console.log(this.state);
+
+    const username = this.state.username;
+    const password = this.state.password;
+    const city     = this.state.city;
+    const state    = this.state.state;
+
+    const validateLoginInput = this.validateLoginInput(username, password, city, state);
+
+    if(validateLoginInput) {
+      this.setState({ error: validateLoginInput })
+      return;
+    }
+
 
     axios.post(process.env.URL + '/signup', {
         name: this.state.username,
@@ -77,9 +85,38 @@ class SignUpComponent extends Component {
     })
   }
 
+  renderError() {
+    if(!this.state.error) { return null;}
+
+    window.setTimeout(() => {
+      this.setState({ error: null});
+    }, 2000)
+
+    return <div className="alert alert-dismissible alert-danger">
+             <button type="button" className="close" data-dismiss="alert">&times;</button>
+             {this.state.error}
+           </div>
+  }
+
+
+  validateLoginInput(username, password, city, state) {
+    if(!username) {
+      return 'Please enter username';
+    } else if(!password) {
+      return 'Please enter password';
+    } else if(!city) {
+      return 'Please enter city'
+    } else if(!state) {
+      return 'Please enter state'
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <form className="form-horizontal">
+      { this.renderError() }
         <fieldset>
           <legend>Register</legend>
           <div className="form-group">
@@ -120,6 +157,9 @@ class SignUpComponent extends Component {
       </form>
     );
   }
+
+
 }
+
 
 export default SignUpComponent;

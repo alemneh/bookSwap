@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import TradeRequest from './TradeRequest';
+import TradeRequest from '../TradeRequestComponent/TradeRequest';
 
 
  //Helper function to filter usersBooks from allBooks
@@ -22,13 +22,11 @@ class BookPage extends Component {
     this.state = {
       books: [],
       userBooks: [],
-      requesteeBook: [{
-        title: '48 laws of Power',
-        _owner: 'Alem',
-        imgUrl: "http://books.google.com/books/content?id=P_zMW3EHnTEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
-      }]
+      requesteeBook: [],
+      success: null
     }
     this.onRequesteeBookClick = this.onRequesteeBookClick.bind(this);
+    this.makeTradeRequest     = this.makeTradeRequest.bind(this);
   }
   componentWillMount() {
     this.fetchUserBooks();
@@ -55,7 +53,7 @@ class BookPage extends Component {
 
   renderBooks() {
     const books = this.state.books.filter((book) => {
-      return !(searchByValue(book.title, 'title', this.state.userBooks));
+      return !(searchByValue(book.title, 'title', this.state.userBooks)) && !book.isPendingTrade;
     });
     if(books.length < 1) {
       return (
@@ -84,6 +82,13 @@ class BookPage extends Component {
   }
 
   makeTradeRequest(requesterBook, requesteeBook) {
+    const books = this.state.books.map((book) => {
+      if( requesteeBook.title == book.title) {
+        book.isPendingTrade = true;
+      }
+      return book;
+    });
+
     axios.post(process.env.URL + '/users/' + requesterBook._owner + '/trades',
       {
         requesteeId: requesteeBook._owner,
@@ -98,16 +103,36 @@ class BookPage extends Component {
       },
       {headers: {'token': localStorage.token }})
     .then((res) => {
+      console.log(books);
+      this.setState({ success: res.data.message, books});
       console.log(res);
+
     })
     .catch((err) => {
       console.log(err);
     })
   }
 
+
+  renderSuccess() {
+    if(!this.state.success) { return null }
+
+    window.setTimeout(() => {
+      this.setState({ success: null});
+    }, 2000)
+
+    return <div className="alert alert-dismissible alert-success">
+             <button type="button" className="close" data-dismiss="alert">&times;</button>
+             {this.state.success}
+           </div>
+  }
+
   render() {
     return (
       <div>
+        { this.renderSuccess() }
+        <h1>Books Available for Trade</h1>
+        <hr />
         { this.renderBooks() }
         <TradeRequest requesteeBook={ this.state.requesteeBook[0]}
                       userBooks={ this.state.userBooks }
@@ -115,6 +140,7 @@ class BookPage extends Component {
       </div>
     )
   }
+
 }
 
 export default BookPage;

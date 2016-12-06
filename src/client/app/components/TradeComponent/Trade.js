@@ -114,13 +114,6 @@ class TradeComponent extends Component {
     this.setState( { viewTrade: true,  trade} );
   }
 
-  render() {
-    return (
-      <div className="tab-pane fade" id="trades">
-        {this.renderTrades()}
-      </div>
-    )
-  }
 
   handleAcceptTrade(tradeId) {
     this.props.handleAcceptTrade(tradeId);
@@ -130,6 +123,14 @@ class TradeComponent extends Component {
   handleDeclineTrade(tradeId) {
     this.props.handleDeclineTrade(tradeId);
     this.setState({ viewTrade: false });
+  }
+
+  render() {
+    return (
+      <div className="tab-pane fade" id="trades">
+        {this.renderTrades()}
+      </div>
+    )
   }
 }
 

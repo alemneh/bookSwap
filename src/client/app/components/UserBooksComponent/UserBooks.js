@@ -72,6 +72,13 @@ class Books extends Component {
     )
   }
 
+  handleAddBook(e) {
+    e.preventDefault()
+    this.props._queryBook2Add(this.state.search);
+    console.log(this.state.search);
+    this.setState({ search: ''});
+  }
+
   render() {
     return (
       <div className="tab-pane fade" id="books">
@@ -88,13 +95,6 @@ class Books extends Component {
         { this.renderBookDeleteModal() }
       </div>
     )
-  }
-
-  handleAddBook(e) {
-    e.preventDefault()
-    this.props._queryBook2Add(this.state.search);
-    console.log(this.state.search);
-    this.setState({ search: ''});
   }
 }
 
