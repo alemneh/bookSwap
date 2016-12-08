@@ -82,13 +82,18 @@ class BookPage extends Component {
   }
 
   makeTradeRequest(requesterBook, requesteeBook) {
+
+    if(!requesterBook) {
+      this.setState({ success: 'You must select a book from you list to make trade request.'})
+      return;
+    }
+
     const books = this.state.books.map((book) => {
       if( requesteeBook.title == book.title) {
         book.isPendingTrade = true;
       }
       return book;
     });
-
     axios.post(process.env.URL + '/users/' + requesterBook._owner + '/trades',
       {
         requesteeId: requesteeBook._owner,
@@ -103,10 +108,7 @@ class BookPage extends Component {
       },
       {headers: {'token': localStorage.token }})
     .then((res) => {
-      console.log(books);
       this.setState({ success: res.data.message, books});
-      console.log(res);
-
     })
     .catch((err) => {
       console.log(err);
@@ -129,7 +131,7 @@ class BookPage extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ overflow: 'hidden' }}>
         { this.renderSuccess() }
         <h1>Books Available for Trade</h1>
         <hr />

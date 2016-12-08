@@ -23,7 +23,6 @@ let LoginController = {
         res.json({status: 'failure', message: 'Wrong password'});
       } else {
         user.password = undefined;
-        console.log(user);
         res.json({
           data: user,
           token: user.generateToken()

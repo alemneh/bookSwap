@@ -75,7 +75,6 @@ class Books extends Component {
   handleAddBook(e) {
     e.preventDefault()
     this.props._queryBook2Add(this.state.search);
-    console.log(this.state.search);
     this.setState({ search: ''});
   }
 
@@ -89,7 +88,7 @@ class Books extends Component {
           { this.renderLoadingSpinner() }
         </div>
         <hr />
-        <div>
+        <div style={{ overflow: 'hidden'}}>
           {this.renderBookList()}
         </div>
         { this.renderBookDeleteModal() }

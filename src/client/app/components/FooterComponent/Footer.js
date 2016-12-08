@@ -3,7 +3,11 @@ import React, { Component } from 'react';
 class Footer extends Component {
   render() {
     return (
-      <small style={{marginLeft: '40%', marginBottom: '5%'}}>Powered by Google Books API</small>
+      <footer style={{clear: 'both', marginTop: '120px'}} className="footer text-center">
+        <div className="container">
+          <p className="text-muted">Powered by Google Books API.</p>
+        </div>
+      </footer>
     )
   }
 

@@ -50,7 +50,6 @@ class SignUpComponent extends Component {
   handleSignUp(e) {
     e.preventDefault();
 
-    console.log(this.state);
 
     const username = this.state.username;
     const password = this.state.password;
@@ -77,7 +76,6 @@ class SignUpComponent extends Component {
         this.setState({ error: res.data.message })
       } else {
         browserHistory.push('/');
-        console.log(res);
       }
     })
     .catch((err) => {

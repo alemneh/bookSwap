@@ -26773,7 +26773,6 @@
 	    _this.handlePasswordChange = _this.handlePasswordChange.bind(_this);
 	    _this.handleLogin = _this.handleLogin.bind(_this);
 	    _this.handleLogout = _this.handleLogout.bind(_this);
-	    // this.handleSignUp = this.handleSignUp.bind(this);
 	    return _this;
 	  }
 
@@ -27074,9 +27073,17 @@
 	    key: 'render',
 	    value: function render() {
 	      return _react2.default.createElement(
-	        'small',
-	        { style: { marginLeft: '40%', marginBottom: '5%' } },
-	        'Powered by Google Books API'
+	        'footer',
+	        { style: { clear: 'both', marginTop: '120px' }, className: 'footer text-center' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'container' },
+	          _react2.default.createElement(
+	            'p',
+	            { className: 'text-muted' },
+	            'Powered by Google Books API.'
+	          )
+	        )
 	      );
 	    }
 	  }]);
@@ -27296,7 +27303,6 @@
 	      axios.get((" https://book-swap-meet.herokuapp.com") + '/users/' + user._id, {
 	        headers: { 'token': localStorage.token }
 	      }).then(function (res) {
-	        console.log(res.data.data);
 	        _this2.setState({ user: res.data.data });
 	      }).catch(function (err) {
 	        _this2.setState({ error: err.message });
@@ -27312,12 +27318,10 @@
 	      axios.get((" https://book-swap-meet.herokuapp.com") + '/users/' + user._id + '/trades', {
 	        headers: { 'token': localStorage.token }
 	      }).then(function (res) {
-	        console.log(res);
 	        _this3.setState({
 	          pendingTrades: res.data.pendingTrades,
 	          tradeRequests: res.data.tradeRequests
 	        });
-	        console.log(res.data);
 	      }).catch(function (err) {
 	        _this3.setState({ error: err.message });
 	        console.log(err);
@@ -27363,8 +27367,7 @@
 
 	      axios.put((" https://book-swap-meet.herokuapp.com") + '/users/' + user._id + '/trades/' + trade._id, { trade: trade }, { headers: { 'token': localStorage.token }
 	      }).then(function (res) {
-	        _this5.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades });
-	        console.log(res);
+	        _this5.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades, success: res.data.message });
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -27386,8 +27389,7 @@
 	      axios.delete((" https://book-swap-meet.herokuapp.com") + '/users/' + user._id + '/trades/' + trade._id, {
 	        headers: { 'token': localStorage.token }
 	      }).then(function (res) {
-	        _this6.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades });
-	        console.log(res);
+	        _this6.setState({ tradeRequests: tradeRequests, pendingTrades: pendingTrades, success: res.data.message });
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -27409,7 +27411,6 @@
 	        city: user.city,
 	        state: user.state
 	      }, { headers: { 'token': localStorage.token } }).then(function (res) {
-	        console.log(res);
 	        _this7.setState({ success: res.data.message, user: updatedUser });
 	      }).catch(function (err) {
 	        console.log(err);
@@ -27436,12 +27437,8 @@
 	      this.setState({ isLoading: true });
 
 	      axios.post((" https://book-swap-meet.herokuapp.com") + '/users/' + user._id + '/books', { title: book.title, imgUrl: book.imgUrl, owner: user.name }, { headers: { 'token': localStorage.token } }).then(function (res) {
-	        console.log(res);
-	        console.log(book);
 	        var books = _this9.state.books;
-	        console.log(books);
 	        books.push(book);
-	        console.log(books);
 	        _this9.setState({ books: books, isLoading: false });
 	      }).catch(function (err) {
 	        console.log(err);
@@ -27451,7 +27448,6 @@
 	    key: 'removeBookFromUserList',
 	    value: function removeBookFromUserList(title) {
 	      var books = this.state.books;
-	      console.log(books);
 	      var book = books.filter(function (book) {
 	        return book.title == title;
 	      });
@@ -27467,7 +27463,6 @@
 
 	      var user = this.state.user;
 	      axios.delete((" https://book-swap-meet.herokuapp.com") + '/users/' + user._id + '/books/' + book._id, { headers: { 'token': localStorage.token } }).then(function (res) {
-	        console.log(res);
 	        _this10.setState({ books: books });
 	      }).catch(function (err) {
 	        console.log(err);
@@ -27482,7 +27477,6 @@
 	        if (!err) {
 	          var newBook = { title: res[0].title, imgUrl: res[0].thumbnail };
 	          _this11.addBookToUser(newBook);
-	          console.log(res[0]);
 	        } else {
 	          console.log(err);
 	        }
@@ -27945,7 +27939,6 @@
 	    value: function handleAddBook(e) {
 	      e.preventDefault();
 	      this.props._queryBook2Add(this.state.search);
-	      console.log(this.state.search);
 	      this.setState({ search: '' });
 	    }
 	  }, {
@@ -27969,7 +27962,7 @@
 	        _react2.default.createElement('hr', null),
 	        _react2.default.createElement(
 	          'div',
-	          null,
+	          { style: { overflow: 'hidden' } },
 	          this.renderBookList()
 	        ),
 	        this.renderBookDeleteModal()
@@ -53029,7 +53022,6 @@
 	      var user = localStorage.user ? JSON.parse(localStorage.user) : localStorage.user;
 	      if (this.state.viewTrade) {
 	        var trade = this.state.trade;
-	        console.log(trade);
 	        return _react2.default.createElement(
 	          'div',
 	          { className: 'container text-center' },
@@ -53227,8 +53219,6 @@
 
 	      e.preventDefault();
 
-	      console.log(this.state);
-
 	      var username = this.state.username;
 	      var password = this.state.password;
 	      var city = this.state.city;
@@ -53252,7 +53242,6 @@
 	          _this2.setState({ error: res.data.message });
 	        } else {
 	          _reactRouter.browserHistory.push('/');
-	          console.log(res);
 	        }
 	      }).catch(function (err) {
 	        console.log(err);
@@ -53529,13 +53518,17 @@
 	    value: function makeTradeRequest(requesterBook, requesteeBook) {
 	      var _this5 = this;
 
+	      if (!requesterBook) {
+	        this.setState({ success: 'You must select a book from you list to make trade request.' });
+	        return;
+	      }
+
 	      var books = this.state.books.map(function (book) {
 	        if (requesteeBook.title == book.title) {
 	          book.isPendingTrade = true;
 	        }
 	        return book;
 	      });
-
 	      axios.post((" https://book-swap-meet.herokuapp.com") + '/users/' + requesterBook._owner + '/trades', {
 	        requesteeId: requesteeBook._owner,
 	        requesteeBook: requesteeBook._id,
@@ -53547,9 +53540,7 @@
 	        requesterImgUrl: requesterBook.imgUrl,
 	        requesteeImgUrl: requesteeBook.imgUrl
 	      }, { headers: { 'token': localStorage.token } }).then(function (res) {
-	        console.log(books);
 	        _this5.setState({ success: res.data.message, books: books });
-	        console.log(res);
 	      }).catch(function (err) {
 	        console.log(err);
 	      });
@@ -53583,7 +53574,7 @@
 	    value: function render() {
 	      return _react2.default.createElement(
 	        'div',
-	        null,
+	        { style: { overflow: 'hidden' } },
 	        this.renderSuccess(),
 	        _react2.default.createElement(
 	          'h1',
@@ -53729,7 +53720,6 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      console.log(this.props.userBooks);
 	      return _react2.default.createElement(
 	        "div",
 	        { className: "modal fade", id: "myModal", role: "dialog" },

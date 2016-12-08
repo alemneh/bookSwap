@@ -52,7 +52,6 @@ class TradeRequest extends Component {
   }
 
   render() {
-    console.log(this.props.userBooks);
     return (
       <div className="modal fade" id="myModal" role="dialog">
         <div className="modal-dialog">
@@ -82,7 +81,7 @@ class TradeRequest extends Component {
       </div>
     )
   }
-  
+
 }
 
 export default TradeRequest;

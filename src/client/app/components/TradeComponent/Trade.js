@@ -72,7 +72,6 @@ class TradeComponent extends Component {
       const user = localStorage.user ? JSON.parse(localStorage.user) :  localStorage.user;
       if(this.state.viewTrade) {
         const trade = this.state.trade
-        console.log(trade);
         return (
           <div className="container text-center">
             <div className="row">

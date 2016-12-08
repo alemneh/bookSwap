@@ -19,7 +19,6 @@ class NavComponent extends Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
-    // this.handleSignUp = this.handleSignUp.bind(this);
   }
 
   renderError() {
@@ -194,7 +193,7 @@ class NavComponent extends Component {
 
     )
   }
-  
+
 }
 
 export default NavComponent;

@@ -159,12 +159,10 @@ let UserRoutes = {
         return Book.findByIdAndUpdate(requesterBookId, {$set: { isPendingTrade: true }}).exec();
       })
       .then((book) => {
-        console.log(book);
         return Book.findByIdAndUpdate(requesteeBookId, {$set: { isPendingTrade: true }}).exec();
       })
       .then((book) => {
-        console.log(book);
-        res.json({message: 'trade request sent!'});
+        res.json({message: 'Trade Request Sent!'});
       })
       .catch((err) => {
         throw err;
@@ -251,7 +249,7 @@ let UserRoutes = {
         // remove tradeId
         requesteeUser.tradeRequests.pull(req.params.tradeId);
         requesteeUser.save();
-        res.json({message: 'trade successful!'});
+        res.json({message: 'Trade Successful!'});
       })
       .catch((err) => {
         throw err;
@@ -299,7 +297,7 @@ let UserRoutes = {
         // remove tradeId
         requesteeUser.tradeRequests.pull(req.params.tradeId);
         requesteeUser.save();
-        res.json({message: 'trade deleted!'});
+        res.json({message: 'Trade Deleted!'});
       })
       .catch((err) => {
         throw err;

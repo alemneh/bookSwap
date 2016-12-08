@@ -51,7 +51,6 @@ class ProfileComponent extends Component {
       headers: {'token': localStorage.token }
     })
     .then((res) => {
-      console.log(res.data.data);
       this.setState({ user: res.data.data})
     })
     .catch((err) => {
@@ -66,12 +65,10 @@ class ProfileComponent extends Component {
       headers: {'token': localStorage.token }
     })
     .then((res) => {
-      console.log(res);
       this.setState({
         pendingTrades: res.data.pendingTrades,
         tradeRequests: res.data.tradeRequests
       })
-      console.log(res.data);
     })
     .catch((err) => {
       this.setState({ error: err.message });
@@ -108,8 +105,7 @@ class ProfileComponent extends Component {
     { headers: {'token': localStorage.token }
     })
     .then((res) => {
-      this.setState({ tradeRequests, pendingTrades});
-      console.log(res);
+      this.setState({ tradeRequests, pendingTrades, success: res.data.message});
     })
     .catch((err) => {
       console.log(err);
@@ -126,8 +122,7 @@ class ProfileComponent extends Component {
       headers: {'token': localStorage.token }
     })
     .then((res) => {
-      this.setState({ tradeRequests, pendingTrades});
-      console.log(res);
+      this.setState({ tradeRequests, pendingTrades, success: res.data.message});
     })
     .catch((err) => {
       console.log(err);
@@ -150,7 +145,6 @@ class ProfileComponent extends Component {
       },
       { headers: {'token': localStorage.token }})
     .then((res) => {
-      console.log(res);
       this.setState({ success: res.data.message, user: updatedUser });
     })
     .catch((err) => {
@@ -178,12 +172,8 @@ class ProfileComponent extends Component {
       { title: book.title, imgUrl: book.imgUrl, owner: user.name },
       { headers: {'token': localStorage.token }})
     .then((res) => {
-      console.log(res);
-      console.log(book);
       let books = this.state.books;
-      console.log(books);
       books.push(book);
-      console.log(books);
       this.setState({ books, isLoading: false });
     })
     .catch((err) => {
@@ -193,7 +183,6 @@ class ProfileComponent extends Component {
 
   removeBookFromUserList(title) {
     let books = this.state.books;
-    console.log(books);
     const book  = books.filter((book) => book.title == title);
     books = books.filter((book) => book.title != title);
     this._deleteBook(book[0], books);
@@ -205,7 +194,6 @@ class ProfileComponent extends Component {
     axios.delete(process.env.URL + '/users/' + user._id + '/books/' + book._id,
       { headers: {'token': localStorage.token }})
       .then((res) => {
-        console.log(res);
         this.setState({ books });
       })
       .catch((err) => {
@@ -218,7 +206,6 @@ class ProfileComponent extends Component {
       if(!err) {
         const newBook = {title: res[0].title, imgUrl: res[0].thumbnail};
         this.addBookToUser(newBook);
-        console.log(res[0]);
 
       } else {
         console.log(err);
