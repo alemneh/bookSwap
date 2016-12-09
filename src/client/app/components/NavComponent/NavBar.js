@@ -122,7 +122,7 @@ class NavComponent extends Component {
             <div className="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true">
 
               <form className="navbar-form navbar-right" role="search">
-                <a herf="#" >Welcome, { user.name }</a>
+                <a href="#" >Welcome, { user.name }</a>
                 <Link className="btn btn-default" to="/profile">Profile</Link>
                 <Link className="btn btn-default" to="/books">Browse Books</Link>
                 <button type="submit" className="btn btn-default" onClick={this.handleLogout}>Logout</button>

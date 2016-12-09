@@ -14,10 +14,34 @@
     <div id="app">
 
     </div>
-  <script src="./vendor/js/axios.min.js"></script>
+  <script type="text/javascript">
+      var files = [
+        './vendor/js/axios.min.js', 'https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js',
+        ''
+    ]
+      function downloadJSAtOnload() {
+        var element1 = document.createElement("script");
+        var element2 = document.createElement("script");
+        var element3 = document.createElement("script");
+        element1.src = "./vendor/js/axios.min.js";
+        element2.src = "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js";
+        element3.src = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js";
+        document3.setAttribute("integrity", "sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa");
+        document3.setAttribute("crossorigin", "anonymous");
+        document.body.insertBefore(element1, document.body.lastChild);
+        document.body.appendChild(element2);
+        document.body.appendChild(element3);
+      }
+      if (window.addEventListener)
+        window.addEventListener("load", downloadJSAtOnload, false);
+      else if (window.attachEvent)
+        window.attachEvent("onload", downloadJSAtOnload);
+      else window.onload = downloadJSAtOnload;
+  </script>
+  <!-- <script src="./vendor/js/axios.min.js"></script> -->
   <script src="./public/bundle.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
   <!-- Latest compiled and minified JavaScript -->
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
   </body>
 </html>
