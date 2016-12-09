@@ -1,4 +1,5 @@
 'use strict';
+const compression   = require('compression');
 const express       = require('express');
 const app           = express();
 const bodyParser    = require('body-parser');
@@ -18,7 +19,7 @@ require('./controllers/user-controller')(userRouter, models);
 require('./controllers/login-controller')(loginRouter, models);
 require('./controllers/book-controller')(bookRouter, models);
 
-
+app.use(compression());
 app.use(express.static(__dirname + '/src/client'));
 
 
