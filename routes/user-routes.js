@@ -156,10 +156,12 @@ let UserRoutes = {
         requesteeUser.tradeRequests.push(newTrade._id);
         requesteeUser.save();
         newTrade.save();
-        return Book.findByIdAndUpdate(requesterBookId, {$set: { isPendingTrade: true }}).exec();
+        return Book.findByIdAndUpdate(requesterBookId,
+               {$set: { isPendingTrade: true }}).exec();
       })
       .then((book) => {
-        return Book.findByIdAndUpdate(requesteeBookId, {$set: { isPendingTrade: true }}).exec();
+        return Book.findByIdAndUpdate(requesteeBookId,
+               {$set: { isPendingTrade: true }}).exec();
       })
       .then((book) => {
         res.json({message: 'Trade Request Sent!'});

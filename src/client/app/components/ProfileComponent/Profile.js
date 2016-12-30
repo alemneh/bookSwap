@@ -3,6 +3,7 @@ import Info  from '../UserInfoComponent/UserInfo';
 import Books from '../UserBooksComponent/UserBooks';
 import Trade from '../TradeComponent/Trade';
 import books from 'google-books-search';
+import axios from 'axios';
 
 //Helper function to find book in array
 function searchByValue(value, property, array){

@@ -1,7 +1,7 @@
 {
   "name": "book-swap",
   "version": "1.0.0",
-  "description": "",
+  "description": "Book trading app.",
   "main": "server.js",
   "scripts": {
     "test": "mocha -w test/helpers/browser.js test/*.spec.js",
@@ -9,9 +9,10 @@
     "dev": "webpack-dev-server --port 3000 --devtool eval --progress --colors --hot --content-base src/client",
     "build": "webpack"
   },
-  "author": "",
+  "author": "Alumneh Asefa",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.15.3",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",

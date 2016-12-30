@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
+import axios from 'axios';
 
 
 class NavComponent extends Component {
@@ -122,7 +123,7 @@ class NavComponent extends Component {
             <div className="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true">
 
               <form className="navbar-form navbar-right" role="search">
-                <a href="#" >Welcome, { user.name }</a>
+                <a  >Welcome, { user.name }</a>
                 <Link className="btn btn-default" to="/profile">Profile</Link>
                 <Link className="btn btn-default" to="/books">Browse Books</Link>
                 <button type="submit" className="btn btn-default" onClick={this.handleLogout}>Logout</button>

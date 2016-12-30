@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import TradeRequest from '../TradeRequestComponent/TradeRequest';
+import axios from 'axios';
 
 
  //Helper function to filter usersBooks from allBooks
