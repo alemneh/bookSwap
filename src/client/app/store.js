@@ -1,25 +1,10 @@
-import React from 'react';
-import { Route, IndexRoute } from 'react-router';
-import App from '.App';
-import HomePage from './containers/HomePageContainer/HomePage';
-import Profile from './containers/ProfileContainer/Profile';
-import SignUp from './containers/SignUpContainer/SignUp';
-import Trade from './containers/TradeContainer/Trade';
-import BookPage from './containers/BookPageContainer/BookPage';
+import { applyMiddleware, createStore } from 'redux';
 
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
 
+import reducer from './reducers';
 
+const middleware = applyMiddleware(thunk, logger());
 
-
-
-const routes = (
-  <Route path="/" component={App}>
-    <IndexRoute component={HomePage} />
-    <Route path="/profile" component={Profile} />
-    <Route path="/signup"  component={SignUp}  />
-    <Route path="/trade"   component={Trade}   />
-    <Route path="/books"   component={BookPage} />
-  </Route>
-);
-
-export default routes;
+export default createStore(reducer, middleware);

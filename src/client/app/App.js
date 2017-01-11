@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import NavBar from './components/NavComponent/NavBar';
 import Footer from './components/FooterComponent/Footer';
+import { handleLogin } from './actions/loginActions';
 
 
 class App extends Component {

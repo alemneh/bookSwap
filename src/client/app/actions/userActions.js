@@ -1,7 +1,7 @@
 import * as types from '../ActionConstants';
 import axios from 'axios';
 
-export function fetchCurrentUser(user) {
+export function fetchCurrentUser(user, token) {
   return function(dispatch) {
     dispatch({ type: types.FETCH_USER })
     axios.get(process.env.URL + '/users/' + user._id, {
@@ -16,7 +16,7 @@ export function fetchCurrentUser(user) {
   };
 }
 
-export function fetchUserTrades(user) {
+export function fetchUserTrades(user, token) {
   return function(dispatch) {
     dispatch({ type: types.FETCH_USER_TRADES });
     axios.get(process.env.URL + '/users/' + user._id + '/trades', {
@@ -68,15 +68,15 @@ export function addBookToUser(book, user, token) {
 
 export function removeBookFromUser(book, userId) {
   return function(dispatch) {
-    dispatch({ type: types.REMOVE_BOOK })
+    dispatch({ type: types.REMOVE_BOOK_FROM_USER })
     axios.delete(process.env.URL + '/users/' + userId + '/books/' + book._id, {
       headers: { 'token': token }
     })
     .then((res) => {
-      dispatch({ type: types.REMOVE_BOOK_FULFILLED, payload: res.data.book })
+      dispatch({ type: types.REMOVE_BOOK_FROM_USER_FULFILLED, payload: res.data.book })
     })
     .catch((err) => {
-      dispatch({ type: types.REMOVE_BOOK_REJECTED, payload: err })
+      dispatch({ type: types.REMOVE_BOOK_FROM_USER_REJECTED, payload: err })
     })
   }
 }
