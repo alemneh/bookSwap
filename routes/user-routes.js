@@ -41,9 +41,9 @@ let UserRoutes = {
   },
 
   updateUser: function(req, res) {
-    User.findByIdAndUpdate(req.params.id, req.body, (err) => {
+    User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, user) => {
       if(err) throw err;
-      res.json({message: 'Update successful!'});
+      res.json({ message: 'Update successful!', user });
     });
   },
 
@@ -99,7 +99,7 @@ let UserRoutes = {
           user.books.push(newBook._id);
           user.hookEnabled = false;
           user.save();
-          res.json({message: 'book added!'});
+          res.json({ message: 'book added!', newBook });
         }
       })
       .catch((err) => {
@@ -127,7 +127,7 @@ let UserRoutes = {
        }
      })
      .then((book) => {
-       res.json({message: 'book removed!'});
+       res.json({ message: 'book removed!', book });
      })
      .catch((err) => {
        if(err.message == 'book does not exist') {

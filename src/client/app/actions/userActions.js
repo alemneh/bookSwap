@@ -58,7 +58,7 @@ export function addBookToUser(book, user, token) {
       headers: { 'token': token }
     })
     .then((res) => {
-      dispatch({ type: types.ADD_BOOK_TO_USER_FULFILLED, payload: res.data.message })
+      dispatch({ type: types.ADD_BOOK_TO_USER_FULFILLED, payload: res.data.newBook })
     })
     .catch((err) => {
       dispatch({ type: types.ADD_BOOK_TO_USER_REJECTED, payload: err });
@@ -73,7 +73,7 @@ export function removeBookFromUser(book, userId) {
       headers: { 'token': token }
     })
     .then((res) => {
-      dispatch({ type: types.REMOVE_BOOK_FULFILLED, payload: res.data.message })
+      dispatch({ type: types.REMOVE_BOOK_FULFILLED, payload: res.data.book })
     })
     .catch((err) => {
       dispatch({ type: types.REMOVE_BOOK_REJECTED, payload: err })
@@ -88,10 +88,31 @@ export function updateUserInfo(user) {
       headers: { 'token': token }
     })
     .then((res) => {
-      dispatch({type: types.UPDATE_USER_FULFILLED, payload: res.data.message });
+      dispatch({type: types.UPDATE_USER_FULFILLED, payload: res.data.user });
     })
     .catch((err) => {
       dispatch({type: types.UPDATE_USER_REJECTED, payload: res.data.message });
     });
+  }
+}
+
+export function copyUserNameInput(val) {
+  return {
+    type: types.USERNAME_CHANGED,
+    payload: val
+  }
+}
+
+export function copyCityInput(val) {
+  return {
+    type: types.CITY_CHANGED,
+    payload: val
+  }
+}
+
+export function copyStateInput(val) {
+  return {
+    type: types.STATE_CHANGED,
+    payload: val
   }
 }
