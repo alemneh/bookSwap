@@ -5,13 +5,13 @@ import HomePage from './components/HomePageComponent/HomePage';
 import Profile  from './components/ProfileComponent/Profile';
 import SignUp   from './components/SignUpComponent/SignUp';
 import Trade    from './components/TradeComponent/Trade';
-import BookPage from './components/BookPageComponent/BookPage';
+// import BookPage from './components/BookPageComponent/BookPage';
 // import App from '.App';
 // import HomePage from './containers/HomePageContainer/HomePage';
 // import Profile from './containers/ProfileContainer/Profile';
 // import SignUp from './containers/SignUpContainer/SignUp';
 // import Trade from './containers/TradeContainer/Trade';
-// import BookPage from './containers/BookPageContainer/BookPage';
+import BookPage from './containers/BookPageContainer/BookPage';
 
 
 

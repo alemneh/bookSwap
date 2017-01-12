@@ -33,6 +33,8 @@ export default function(state=initialState, action) {
     }
     case types.MAKE_TRADE_REQUEST_FULFILLED: {
       const requesteeBookId = action.payload;
+      const books = state.books.filter((book) => book._id != requesteeBookId);
+
       return {
         ...state,
         fetching: false,
@@ -40,5 +42,15 @@ export default function(state=initialState, action) {
         books
       }
     }
+    case types.SET_REQUESTER_BOOK: {
+      return {...state, requesterBook: action.payload}
+    }
+    case types.SET_REQUESTEE_BOOK: {
+      return {...state, requesteeBook: action.payload}
+    }
+    case types.CANCEL_REQUESTER_BOOK: {
+      return {...state, requesterBook: null}
+    }
   }
+  return state;
 }
