@@ -19,7 +19,7 @@ export default function(state=initialState, action) {
     case types.FETCH_USER: {
       return {...state, fetching: true}
     }
-    case type.FETCH_USER_REJECTED: {
+    case types.FETCH_USER_REJECTED: {
       return {...state, fetching: false, error: action.payload}
     }
     case types.FETCH_USER_FULFILLED: {

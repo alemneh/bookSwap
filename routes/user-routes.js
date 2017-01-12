@@ -41,9 +41,9 @@ let UserRoutes = {
   },
 
   updateUser: function(req, res) {
-    User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, user) => {
+    User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, us) => {
       if(err) throw err;
-      res.json({ message: 'Update successful!', user });
+      res.json({message: 'Update successful!'});
     });
   },
 

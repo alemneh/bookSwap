@@ -97,6 +97,7 @@ class BookPage extends Component {
     });
     axios.post(process.env.URL + '/users/' + requesterBook._owner + '/trades',
       {
+        requesterId: requesterId._owner,
         requesteeId: requesteeBook._owner,
         requesteeBook: requesteeBook._id,
         requesterBook: requesterBook._id,

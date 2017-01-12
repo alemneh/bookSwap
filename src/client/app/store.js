@@ -7,4 +7,13 @@ import reducer from './reducers';
 
 const middleware = applyMiddleware(thunk, logger());
 
-export default createStore(reducer, middleware);
+const persistedState = localStorage.getItem('reduxState') ?
+                      JSON.parse(localStorage.getItem('reduxState')) : {};
+
+const store = createStore(reducer, persistedState, middleware);
+
+store.subscribe(() => {
+  localStorage.setItem('reduxState', JSON.stringify(store.getState()));
+});
+
+export default store

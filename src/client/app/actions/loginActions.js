@@ -6,8 +6,8 @@ export function handleLogin(username, password) {
     dispatch({type: types.LOGIN})
     axios.get(process.env.URL + '/login', {
       auth: {
-        username: 'Tesfu',
-        password: 'password'
+        username,
+        password
       }
     })
     .then((res) => {

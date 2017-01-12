@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import NavBar from './components/NavComponent/NavBar';
+import NavBar from './containers/NavBarContainer/NavBar';
 import Footer from './components/FooterComponent/Footer';
-import { handleLogin } from './actions/loginActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 
 class App extends Component {
+
   render() {
     return (
       <div className="container">
@@ -14,6 +16,8 @@ class App extends Component {
       </div>
     );
   }
+  
 }
+
 
 export default App;
