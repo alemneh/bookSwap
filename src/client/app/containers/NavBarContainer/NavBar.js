@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import NavBar from '../../components/NavComponent/NavBar';
-import { handleLogin } from '../../actions/loginActions';
+import { handleLogin, handleLogout } from '../../actions/loginActions';
 
 
 class NavContainer extends Component {
@@ -27,7 +27,6 @@ class NavContainer extends Component {
 
   handleLogin(e) {
       e.preventDefault();
-      console.log(this);
       const { username, password } = this.state;
       const validateLoginInput = this.validateLoginInput(username, password);
 
@@ -41,9 +40,7 @@ class NavContainer extends Component {
 
   handleLogout(e) {
       e.preventDefault();
-      localStorage.removeItem('reduxState');
 
-      browserHistory.push('/');
   }
 
 
@@ -59,13 +56,13 @@ class NavContainer extends Component {
   }
 
   render() {
-    const { user, token} = this.props;
+    const { user, token, handleLogout } = this.props;
     return(
       <div>
         <NavBar token={token}
                 user={user}
                 handleLogin={this.handleLogin.bind(this)}
-                handleLogout={this.handleLogout}
+                handleLogout={handleLogout}
                 handlePasswordChange={this.handlePasswordChange}
                 handleUsernameChange={this.handleUsernameChange}/>
       </div>
@@ -81,7 +78,7 @@ function mapPropsToState(state) {
 }
 
 function matchDispatchToProps(dispatch) {
-  return bindActionCreators({ handleLogin }, dispatch)
+  return bindActionCreators({ handleLogin, handleLogout }, dispatch)
 }
 
 export default connect(mapPropsToState, matchDispatchToProps)(NavContainer);

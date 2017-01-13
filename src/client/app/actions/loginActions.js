@@ -19,3 +19,9 @@ export function handleLogin(username, password) {
     });
   };
 }
+
+export function handleLogout() {
+  return {
+    type: types.LOGOUT
+  }
+}

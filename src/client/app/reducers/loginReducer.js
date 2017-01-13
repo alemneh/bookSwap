@@ -27,6 +27,9 @@ export default function(state=initialState, action) {
         user
       }
     }
+    case types.LOGOUT: {
+      return {}
+    }
   }
   return state;
 }

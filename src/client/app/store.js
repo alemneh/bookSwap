@@ -1,11 +1,7 @@
-import { applyMiddleware, createStore } from 'redux';
+import { createStore } from 'redux';
 
-import logger from 'redux-logger';
-import thunk from 'redux-thunk';
-
+import middleware from './middleware';
 import reducer from './reducers';
-
-const middleware = applyMiddleware(thunk, logger());
 
 const persistedState = localStorage.getItem('reduxState') ?
                       JSON.parse(localStorage.getItem('reduxState')) : {};

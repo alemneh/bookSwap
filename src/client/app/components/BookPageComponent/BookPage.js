@@ -29,7 +29,6 @@ class BookPage extends Component {
 
 
   renderBooks() {
-    console.log(this.props);
     const books = this.props.allBooks.filter((book) => {
       return !(searchByValue(book.title, 'title', this.props.userBooks)) && !book.isPendingTrade;
     });
@@ -41,7 +40,7 @@ class BookPage extends Component {
     return books.map((book, index) => {
       return <img src={book.imgUrl} alt={book.title}  key={index} style={ {float: 'left', margin: '10px'} }
               data-toggle="modal" data-target="#myModal"
-              onClick={ this.props.setRequesteeBook(book) }/>
+              onClick={() => { this.props.setRequesteeBook(book) }}/>
     })
   }
 
@@ -52,16 +51,26 @@ class BookPage extends Component {
   }
 
   render() {
-    const { handleTradeRequest, requesteeBook, userBooks } = this.props;
+    const {
+      cancelRequesterBook,
+      handleTradeRequest,
+      setRequesterBook,
+      requesteeBook,
+      requesterBook,
+      userBooks
+    } = this.props;
     return (
       <div style={{ overflow: 'hidden' }}>
         { this.renderSuccess() }
         <h1>Books Available for Trade</h1>
         <hr />
         { this.renderBooks() }
-        <TradeRequest requesteeBook={ requesteeBook}
+        <TradeRequest requesteeBook={ requesteeBook }
+                      requesterBook={ requesterBook }
+                      setRequesterBook={ setRequesterBook }
                       userBooks={ userBooks }
-                      handleTradeRequest={ handleTradeRequest }/>
+                      handleTradeRequest={ handleTradeRequest }
+                      cancelRequesterBook={ cancelRequesterBook }/>
       </div>
     )
   }

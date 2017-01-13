@@ -3,48 +3,42 @@ import React, { Component } from 'react';
 class TradeRequest extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      requesterBook: null,
-      books: []
-    }
     this.onBookSelect = this.onBookSelect.bind(this);
-    this.changRequesterBook = this.changRequesterBook.bind(this);
   }
 
   onBookSelect(e) {
-    const book = this.props.userBooks.filter((book) => book.title == e.target.value);
-    this.setState({ requesterBook: book[0] });
+    const { userBooks, setRequesterBook } = props;
+    const book = userBooks.filter((book) => book.title == e.target.value)[0];
+    setRequesterBook(book);
   }
 
   renderRequesteeBook() {
-    if(!this.props.requesteeBook) return;
+    const { requesteeBook } = this.props;
+    if(!requesteeBook) return;
     return (
       <div>
-        <p><b>Owner:</b> { this.props.requesteeBook.owner }</p>
-        <img src={ this.props.requesteeBook.imgUrl } />
+        <p><b>Owner:</b> { requesteeBook.owner }</p>
+        <img src={ requesteeBook.imgUrl } />
       </div>
     )
   }
 
-  changRequesterBook() {
-    this.setState({ requesterBook: null });
-  }
 
   renderBook2Trade() {
-    const book = this.state.requesterBook;
-    if(book) {
+    const { requesterBook, cancelRequesterBook, userBooks } = this.props;
+    if(requesterBook) {
       return (
         <div>
-          <p><b>Owner:</b> {book.owner}</p>
-          <img src={book.imgUrl} /><br />
-          <a href="#" onClick={ this.changRequesterBook } className="btn btn-link">Change</a>
+          <p><b>Owner:</b> {requesterBook.owner}</p>
+          <img src={requesterBook.imgUrl} /><br />
+          <a href="#" onClick={ cancelRequesterBook } className="btn btn-link">Change</a>
         </div>
       )
     }
     return (
         <select onChange={ this.onBookSelect } style={{ marginTop: '40%', width: '100%'}} className="custom-select">
            <option>Select a book to trade</option>
-           {this.props.userBooks.map((book, index) => {
+           { userBooks.map((book, index) => {
              return <option value={book.title} key={index}>{book.title}</option>
            })}
          </select>
@@ -73,7 +67,7 @@ class TradeRequest extends Component {
             <div className="modal-footer">
               <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
               <button type="button" className="btn btn-primary" data-dismiss="modal"
-                      onClick={() => this.props.makeTradeRequest(this.state.requesterBook, this.props.requesteeBook)}
+                      onClick={ this.props.handleTradeRequest }
                       >Send</button>
             </div>
           </div>

@@ -6,6 +6,9 @@ import { bindActionCreators } from 'redux';
 
 
 class App extends Component {
+  componentWillMount() {
+    console.log('hit');
+  }
 
   render() {
     return (
@@ -16,7 +19,7 @@ class App extends Component {
       </div>
     );
   }
-  
+
 }
 
 

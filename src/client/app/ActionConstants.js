@@ -29,6 +29,7 @@ export const STATE_CHANGED = 'STATE_CHANGED';
 export const LOGIN = 'LOGIN';
 export const LOGIN_REJECTED = 'LOGIN_REJECTED';
 export const LOGIN_FULFILLED = 'LOGIN_FULFILLED';
+export const LOGOUT = 'LOGOUT';
 
 export const FETCH_ALL_BOOKS = 'FETCH_ALL_BOOKS';
 export const FETCH_ALL_BOOKS_REJECTED = 'FETCH_ALL_BOOKS_REJECTED';
