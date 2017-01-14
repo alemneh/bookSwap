@@ -3,14 +3,9 @@ import React, { Component } from 'react';
 class TradeRequest extends Component {
   constructor(props) {
     super(props);
-    this.onBookSelect = this.onBookSelect.bind(this);
   }
 
-  onBookSelect(e) {
-    const { userBooks, setRequesterBook } = props;
-    const book = userBooks.filter((book) => book.title == e.target.value)[0];
-    setRequesterBook(book);
-  }
+
 
   renderRequesteeBook() {
     const { requesteeBook } = this.props;
@@ -25,7 +20,7 @@ class TradeRequest extends Component {
 
 
   renderBook2Trade() {
-    const { requesterBook, cancelRequesterBook, userBooks } = this.props;
+    const { onBookSelect, requesterBook, cancelRequesterBook, userBooks } = this.props;
     if(requesterBook) {
       return (
         <div>
@@ -36,7 +31,7 @@ class TradeRequest extends Component {
       )
     }
     return (
-        <select onChange={ this.onBookSelect } style={{ marginTop: '40%', width: '100%'}} className="custom-select">
+        <select onChange={ onBookSelect } style={{ marginTop: '40%', width: '100%'}} className="custom-select">
            <option>Select a book to trade</option>
            { userBooks.map((book, index) => {
              return <option value={book.title} key={index}>{book.title}</option>

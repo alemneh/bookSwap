@@ -7,11 +7,22 @@ import BookPage from '../../components/BookPageComponent/BookPage';
 class BookPageContainer extends Component {
   constructor(props) {
     super(props);
+
+    this.onBookSelect = this.onBookSelect.bind(this);
+    this.handleTradeRequest = this.handleTradeRequest.bind(this);
+
   }
 
   componentWillMount() {
     const { fetchAllBooks, token } = this.props;
     fetchAllBooks(token);
+  }
+
+  onBookSelect(e) {
+    e.preventDefault()
+    const { userBooks, setRequesterBook } = this.props;
+    const book = userBooks.filter((book) => book.title == e.target.value)[0];
+    setRequesterBook(book);
   }
 
   handleTradeRequest() {
@@ -38,6 +49,7 @@ class BookPageContainer extends Component {
       allBooks,
       userBooks,
       requesteeBook,
+      requesterBook,
       setRequesteeBook,
       setRequesterBook,
       cancelRequesterBook
@@ -48,8 +60,9 @@ class BookPageContainer extends Component {
         <BookPage allBooks={ allBooks }
                   userBooks={ userBooks }
                   requesteeBook={ requesteeBook }
+                  requesterBook={ requesterBook }
                   setRequesteeBook={ setRequesteeBook }
-                  setRequesterBook={ setRequesterBook }
+                  onBookSelect={ this.onBookSelect }
                   cancelRequesterBook={ cancelRequesterBook }
                   handleTradeRequest= {this.handleTradeRequest}
                   />

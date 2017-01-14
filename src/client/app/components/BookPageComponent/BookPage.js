@@ -56,6 +56,7 @@ class BookPage extends Component {
       handleTradeRequest,
       setRequesterBook,
       requesteeBook,
+      onBookSelect,
       requesterBook,
       userBooks
     } = this.props;
@@ -67,7 +68,7 @@ class BookPage extends Component {
         { this.renderBooks() }
         <TradeRequest requesteeBook={ requesteeBook }
                       requesterBook={ requesterBook }
-                      setRequesterBook={ setRequesterBook }
+                      onBookSelect={ onBookSelect }
                       userBooks={ userBooks }
                       handleTradeRequest={ handleTradeRequest }
                       cancelRequesterBook={ cancelRequesterBook }/>

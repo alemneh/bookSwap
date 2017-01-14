@@ -4,24 +4,12 @@ import books from 'google-books-search';
 class Books extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      search: '',
-      book2Remove: ''
-    }
-    this.handleBookSearchChange = this.handleBookSearchChange.bind(this);
+
     this.renderBookList = this.renderBookList.bind(this);
-    this.handleAddBook = this.handleAddBook.bind(this);
-    this.handleRemoveBook = this.handleRemoveBook.bind(this);
     this.renderBookDeleteModal = this.renderBookDeleteModal.bind(this);
   }
 
-  handleBookSearchChange(e) {
-    this.setState({ search: e.target.value });
-  }
 
-  handleRemoveBook(e) {
-    this.setState({book2Remove: e.target.alt})
-  }
 
   renderLoadingSpinner() {
     if(this.props.isLoading) {
@@ -32,22 +20,23 @@ class Books extends Component {
   }
 
   renderBookList() {
-    if(this.props.books.length < 1) {
+    console.log(this.props);
+    const {userBooks, handleRemoveBook } = this.props;
+    if(userBooks.length < 1) {
       return (
         <div>No books added!</div>
       )
     }
-    return this.props.books.map((book, index) => {
+    return userBooks.map((book, index) => {
       return <img src={book.imgUrl} key={index} style={ {float: 'left', margin: '10px'} }
                   alt={ book.title }
-                  data-toggle="modal" data-target="#myModal" onClick={ this.handleRemoveBook }/>
+                  data-toggle="modal" data-target="#myModal" onClick={handleRemoveBook }/>
     })
   }
 
   renderBookDeleteModal() {
-    const title = this.state.book2Remove;
-    if(!title) return;
-    const book = this.props.books.filter((book) => book.title == title);
+    const { book2Remove, userBooks, _removeBookFromUser} = this.props;
+    if(!book2Remove) return;
 
     return (
       <div className="modal fade" id="myModal" role="dialog">
@@ -59,12 +48,12 @@ class Books extends Component {
             </div>
             <div className="modal-body">
               <div className="row text-center">
-                <div className="col-xs-12"><img src={book[0] ? book[0].imgUrl : ''} /></div>
+                <div className="col-xs-12"><img src={book2Remove ? book2Remove.imgUrl : ''} /></div>
               </div>
             </div>
             <div className="modal-footer">
               <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => this.props.removeBookFromUserList(title)}>Delete</button>
+              <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={() => _removeBookFromUser(book2Remove)}>Delete</button>
             </div>
           </div>
         </div>
@@ -72,19 +61,16 @@ class Books extends Component {
     )
   }
 
-  handleAddBook(e) {
-    e.preventDefault()
-    this.props._queryBook2Add(this.state.search);
-    this.setState({ search: ''});
-  }
+
 
   render() {
+    const { search, _queryBook2Add, handleBookSearchChange } = this.props;
     return (
       <div className="tab-pane fade" id="books">
         <div>
           <h3>Add more books!</h3>
-          <input type="text" onChange={ this.handleBookSearchChange } value={this.state.search} />
-          <input type="button" value="Add"  onClick={ this.handleAddBook }/>
+          <input type="text" onChange={ handleBookSearchChange } value={search} />
+          <input type="button" value="Add"  onClick={ _queryBook2Add }/>
           { this.renderLoadingSpinner() }
         </div>
         <hr />

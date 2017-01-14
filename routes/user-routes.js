@@ -41,9 +41,9 @@ let UserRoutes = {
   },
 
   updateUser: function(req, res) {
-    User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, us) => {
+    User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, user) => {
       if(err) throw err;
-      res.json({message: 'Update successful!'});
+      res.json({message: 'Update successful!', user });
     });
   },
 
@@ -127,7 +127,7 @@ let UserRoutes = {
        }
      })
      .then((book) => {
-       res.json({ message: 'book removed!', book });
+       res.json({ message: 'book removed!'});
      })
      .catch((err) => {
        if(err.message == 'book does not exist') {
@@ -140,6 +140,7 @@ let UserRoutes = {
   },
 
   requestATrade: function(req, res) {
+    console.log(req.body.trade);
     let newTrade, requesteeBookId, requesterBookId;
 
     newTrade        = new Trade(req.body);
@@ -150,7 +151,7 @@ let UserRoutes = {
       .then((requesterUser) => {
         requesterUser.pendingTrades.push(newTrade._id);
         requesterUser.save();
-        return User.findById(req.body.requesteeId).exec();
+        return User.findById(req.body.trade.requesteeId).exec();
       })
       .then((requesteeUser) => {
         requesteeUser.tradeRequests.push(newTrade._id);

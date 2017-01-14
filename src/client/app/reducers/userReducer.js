@@ -11,7 +11,12 @@ const initialState = {
   error: null,
   newUserName: '',
   newState: '',
-  newCity: ''
+  newCity: '',
+  search: '',
+  trade: null,
+  viewTrade: false,
+  book2Remove: null,
+  isEditing: false
 };
 
 export default function(state=initialState, action) {
@@ -73,18 +78,21 @@ export default function(state=initialState, action) {
         ...state,
         fetching: false,
         fetched: true,
+        search: '',
         books: newBooks
       }
     }
-    case types.REMOVE_BOOK: {
+    case types.REMOVE_BOOK_FROM_USER: {
       return {...state, fetching: true}
     }
-    case types.REMOVE_BOOK_REJECTED: {
+    case types.REMOVE_BOOK_FROM_USER_REJECTED: {
       return {...state, fetching: false, error: err}
     }
-    case types.REMOVE_BOOK_FULFILLED: {
+    case types.REMOVE_BOOK_FROM_USER_FULFILLED: {
       const removeBook = action.payload;
-      let newBooks = [...state.books].filter(book => book._id != newBook._id);
+      console.log(removeBook);
+      let newBooks = [...state.books].filter(book => book._id != removeBook._id);
+      console.log(newBooks);
       return {
         ...state,
         fetching: false,
@@ -106,6 +114,12 @@ export default function(state=initialState, action) {
         user: action.payload
       }
     }
+    case types.EDIT_BTN_CLICK: {
+      return {...state, isEditing: true}
+    }
+    case types.CANCEL_BTN_CLICK: {
+      return {...state, isEditing: false}
+    }
     case types.USERNAME_CHANGED: {
       return {...state, newUserName: action.payload}
     }
@@ -114,6 +128,14 @@ export default function(state=initialState, action) {
     }
     case types.STATE_CHANGED: {
       return {...state, newState: action.payload}
+    }
+    case types.SEARCH_INPUT_CHANGE: {
+      return {...state, search: action.payload}
+    }
+    case types.SET_BOOK_TO_REMOVE: {
+      const title = action.payload;
+      const book2Remove = [...state.books].filter(book => book.title === title)[0]
+      return {...state, book2Remove}
     }
   }
   return state;

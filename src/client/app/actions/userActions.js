@@ -35,7 +35,7 @@ export function fetchUserTrades(user, token) {
   }
 }
 
-export function fetchUserBooks(user) {
+export function fetchUserBooks(user, token) {
   return function(dispatch) {
     dispatch({ type: types.FETCH_USER_BOOKS })
     axios.get(process.env.URL + '/users/' + user._id + '/books', {
@@ -66,14 +66,14 @@ export function addBookToUser(book, user, token) {
   }
 }
 
-export function removeBookFromUser(book, userId) {
+export function removeBookFromUser(book, token) {
   return function(dispatch) {
     dispatch({ type: types.REMOVE_BOOK_FROM_USER })
-    axios.delete(process.env.URL + '/users/' + userId + '/books/' + book._id, {
+    axios.delete(process.env.URL + '/users/' + book._owner + '/books/' + book._id, {
       headers: { 'token': token }
     })
     .then((res) => {
-      dispatch({ type: types.REMOVE_BOOK_FROM_USER_FULFILLED, payload: res.data.book })
+      dispatch({ type: types.REMOVE_BOOK_FROM_USER_FULFILLED, payload: book })
     })
     .catch((err) => {
       dispatch({ type: types.REMOVE_BOOK_FROM_USER_REJECTED, payload: err })
@@ -81,10 +81,10 @@ export function removeBookFromUser(book, userId) {
   }
 }
 
-export function updateUserInfo(user) {
+export function updateUserInfo(updatedUser, userId, token) {
   return function(dispatch) {
     dispatch({ type: types.UPDATE_USER });
-    axios.put(process.env.URL + '/users/' + user._id, user, {
+    axios.put(process.env.URL + '/users/' + userId, updatedUser, {
       headers: { 'token': token }
     })
     .then((res) => {
@@ -93,6 +93,32 @@ export function updateUserInfo(user) {
     .catch((err) => {
       dispatch({type: types.UPDATE_USER_REJECTED, payload: res.data.message });
     });
+  }
+}
+
+export function onEditClick() {
+  return {
+    type: types.EDIT_BTN_CLICK
+  }
+}
+
+export function setBook2Remove(val) {
+  return {
+    type: types.SET_BOOK_TO_REMOVE,
+    payload: val
+  }
+}
+
+export function copySearchInput(val) {
+  return {
+    type: types.SEARCH_INPUT_CHANGE,
+    payload: val
+  }
+}
+
+export function onCancelClick() {
+  return {
+    type: types.CANCEL_BTN_CLICK
   }
 }
 

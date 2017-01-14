@@ -10,6 +10,7 @@ const store = createStore(reducer, persistedState, middleware);
 
 store.subscribe(() => {
   localStorage.setItem('reduxState', JSON.stringify(store.getState()));
+  console.log(store.getState());
 });
 
 export default store
