@@ -1,7 +1,6 @@
 language: node_js
 node_js:
-  - "4.3.1"
-
+- 4.3.1
 env:
 - CXX=g++-4.8
 addons:
@@ -10,8 +9,10 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
-
 deploy:
- provider: heroku
- api-key: 'HEROKU_API'
- app: book-swap-meet
+  provider: heroku
+  api-key:
+    secure: HEROKU_API
+  app: book-swap-meet
+  api_key:
+    secure: V/e7NWDqUE8VAyGOa+8rfZh3j5vmCA/JBlh3hoYlxN97uCQErIZ5dtnCccm9Kk7C5qBfuWf0/+WhjbXR85+0vc58cfVZmKuiQMOD5bpSuUt+vZJDDA6sueATsBtoCptCUo/TovK7ZXuha/MuNuzvVoVfHXej3nne1Fchqj1PY7jihBju4kfIfrDNicgwKiZAC99qJedah/dlrnHrl2xUdghzBDOd4qPRmdd4DScXsVEEB7qyIrpfzik6+6OthXmhbkYoBcqyNIO26S8WmhZRIuRCyijQyCfrQz1wEE2UX+TdXO+3L2pghjr43hYveh1oOJSmxBTPjUbxII780lZubkcBZ7eEVl6jSBm+FwG2MYM7KeQdUAVXuObfKtR9C7Vtl7HSh32gDT95OCr3MJaeKl2aa8BeRdYW7KiOxOT1MfOzrlP53xX2XhqUysiql7p1zhdX/oXjdWKBKijeEsu0uSfeS47iCnEQns4fENC17Mkv5hYtHvyRjCTPsGQkUTKNG8rsWrvxmXmpf43UEkMEdFNbNpe7+MAzQNk8UdVqDxV0Bu2ED2JQkZpzMBedC/ujzAJw4IkEukWMssnlGw26nY+/c/75J65b1pn0zP3fHXxg2q6qczV3IY5vhayPiQCYHJyBuyM1bKRGhxXjP9Uw8COS1VrLLyoh+D6nlKbPhAs=
