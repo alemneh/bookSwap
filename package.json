@@ -4,7 +4,7 @@
   "description": "Book trading app.",
   "main": "server.js",
   "scripts": {
-    "test": "mocha -w test/helpers/browser.js test/*.spec.js",
+    "test": "mocha test/helpers/browser.js test/*.spec.js",
     "test:watch": "npm test -- --watch",
     "dev": "webpack-dev-server --port 3000 --devtool eval --progress --colors --hot --content-base src/client",
     "build": "webpack"
