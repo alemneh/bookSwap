@@ -19,6 +19,7 @@ const initialState = {
   isEditing: false
 };
 
+
 export default function(state=initialState, action) {
   switch(action.type) {
     case types.FETCH_USER: {
@@ -36,7 +37,7 @@ export default function(state=initialState, action) {
       }
     }
     case types.FETCH_USER_TRADES: {
-      return {...state, fething: true}
+      return {...state, fetching: true}
     }
     case types.FETCH_USER_TRADES_REJECTED: {
       return {...state, fetching: false, error: action.payload}
@@ -90,9 +91,7 @@ export default function(state=initialState, action) {
     }
     case types.REMOVE_BOOK_FROM_USER_FULFILLED: {
       const removeBook = action.payload;
-      console.log(removeBook);
       let newBooks = [...state.books].filter(book => book._id != removeBook._id);
-      console.log(newBooks);
       return {
         ...state,
         fetching: false,
@@ -111,7 +110,61 @@ export default function(state=initialState, action) {
         ...state,
         fetching: false,
         fetched: true,
+        isEditing: false,
         user: action.payload
+      }
+    }
+    case types.ACCEPT_TRADE: {
+      return {...state, fetching: true}
+    }
+    case types.ACCEPT_TRADE_REJECTED: {
+      return {...state, fetching: false, error: action.payload}
+    }
+    case types.ACCEPT_TRADE_FULFILLED: {
+      const {trade, userId} = action.payload
+      const newBook = {
+        _owner: userId,
+        title: trade.requesterBookTitle,
+        imgUrl: trade.requesterImgUrl,
+        owner: trade.requesteeName,
+        isPendingTrade: false
+      }
+
+      const newBooks = [...state.books].filter(book => book._id != trade.requesteeBook)
+                                       .concat(newBook);
+      const newTradeRequests = [...state.tradeRequests].filter(t => t._id != trade._id)
+      const newPendingTrades = [...state.pendingTrades].filter(t => t._id != trade._id)
+
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        viewTrade: false,
+        trade: null,
+        books: newBooks,
+        tradeRequests: newTradeRequests,
+        pendingTrades: newPendingTrades
+      }
+    }
+    case types.DECLINE_TRADE: {
+      return {...state, fetching: true}
+    }
+    case types.DECLINE_TRADE_REJECTED: {
+      return {...state, fetching: false, error: action.payload}
+    }
+    case types.DECLINE_TRADE_FULFILLED: {
+      const trade = action.payload
+      const newTradeRequests = [...state.tradeRequests].filter(t => t._id != trade._id)
+      const newPendingTrades = [...state.pendingTrades].filter(t => t._id != trade._id)
+
+      return {
+        ...state,
+        fetching: false,
+        fetched: true,
+        viewTrade: false,
+        trade: null,
+        tradeRequests: newTradeRequests,
+        pendingTrades: newPendingTrades
       }
     }
     case types.EDIT_BTN_CLICK: {
@@ -136,6 +189,12 @@ export default function(state=initialState, action) {
       const title = action.payload;
       const book2Remove = [...state.books].filter(book => book.title === title)[0]
       return {...state, book2Remove}
+    }
+    case types.VIEW_TRADE: {
+      return {...state, viewTrade: true, trade: action.payload}
+    }
+    case types.LOGOUT:{
+      return initialState
     }
   }
   return state;

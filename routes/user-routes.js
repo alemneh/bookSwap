@@ -143,7 +143,7 @@ let UserRoutes = {
     console.log(req.body.trade);
     let newTrade, requesteeBookId, requesterBookId;
 
-    newTrade        = new Trade(req.body);
+    newTrade        = new Trade(req.body.trade);
     requesteeBookId = newTrade.requesteeBook[0];
     requesterBookId = newTrade.requesterBook[0];
 
@@ -165,7 +165,7 @@ let UserRoutes = {
                {$set: { isPendingTrade: true }}).exec();
       })
       .then((book) => {
-        res.json({message: 'Trade Request Sent!'});
+        res.json({message: 'Trade Request Sent!', newTrade});
       })
       .catch((err) => {
         throw err;
@@ -189,6 +189,7 @@ let UserRoutes = {
       requesterBook, requesteeBook,
       requesteeName, requesterName;
 
+      console.log(req.params);
     Trade.findById(req.params.tradeId)
       .populate('requesterBook requesteeBook')
       .exec()
@@ -252,7 +253,7 @@ let UserRoutes = {
         // remove tradeId
         requesteeUser.tradeRequests.pull(req.params.tradeId);
         requesteeUser.save();
-        res.json({message: 'Trade Successful!'});
+        res.json({message: 'Trade Successful!', data: requesteeId});
       })
       .catch((err) => {
         throw err;

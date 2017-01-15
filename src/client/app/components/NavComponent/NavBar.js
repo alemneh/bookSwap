@@ -13,8 +13,16 @@ class NavComponent extends Component {
   }
 
   renderNavBar() {
-    if(this.props.token) {
-      const user = this.props.user;
+    const {
+      user,
+      token,
+      handleLogin,
+      handleLogout,
+      handleUsernameChange,
+      handlePasswordChange
+    } = this.props;
+
+    if(token) {
       return(
           <div className="container-fluid">
             <div className="navbar-header">
@@ -35,7 +43,7 @@ class NavComponent extends Component {
                 <a  >Welcome, { user.name }</a>
                 <Link className="btn btn-default" to="/profile">Profile</Link>
                 <Link className="btn btn-default" to="/books">Browse Books</Link>
-                <button type="submit" className="btn btn-default" onClick={this.props.handleLogout}>Logout</button>
+                <button type="submit" className="btn btn-default" onClick={handleLogout}>Logout</button>
                 </div>
               </form>
             </div>
@@ -59,13 +67,13 @@ class NavComponent extends Component {
               <div>
               <div className="form-group">
                 <input type="text" className="form-control"
-                      placeholder="Username..."  onChange={ this.props.handleUsernameChange }/>
+                      placeholder="Username..."  onChange={ handleUsernameChange }/>
               </div>
               <div className="form-group">
                 <input type="password" className="form-control"
-                      placeholder="Password..." onChange={ this.props.handlePasswordChange }/>
+                      placeholder="Password..." onChange={ handlePasswordChange }/>
               </div>
-              <button type="submit" className="btn btn-default" onClick={this.props.handleLogin }>Login</button>
+              <button type="submit" className="btn btn-default" onClick={ handleLogin }>Login</button>
               </div>
             </form>
           </div>

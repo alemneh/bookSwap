@@ -51,6 +51,9 @@ export default function(state=initialState, action) {
     case types.CANCEL_REQUESTER_BOOK: {
       return {...state, requesterBook: null}
     }
+    case types.LOGOUT:{
+      return initialState
+    }
   }
   return state;
 }

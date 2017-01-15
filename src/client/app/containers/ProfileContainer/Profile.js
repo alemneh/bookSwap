@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { browserHistory } from 'react-router';
 import books from 'google-books-search';
 import Profile from '../../components/ProfileComponent/Profile';
-import { declineTrade, acceptTrade } from '../../actions/tradeActions';
 import {
   fetchUserBooks,
   fetchUserTrades,
@@ -16,7 +16,10 @@ import {
   onEditClick,
   onCancelClick,
   setBook2Remove,
-  copySearchInput
+  copySearchInput,
+  declineTrade,
+  acceptTrade,
+  viewTrade
 } from '../../actions/userActions';
 
 class ProfileContainer extends Component {
@@ -31,10 +34,13 @@ class ProfileContainer extends Component {
     this._queryBook2Add = this._queryBook2Add.bind(this);
     this._removeBookFromUser = this._removeBookFromUser.bind(this);
     this.handleRemoveBook = this.handleRemoveBook.bind(this);
+    this.handleAcceptTrade = this.handleAcceptTrade.bind(this);
+    this.handleDeclineTrade = this.handleDeclineTrade.bind(this);
   }
 
   componentWillMount() {
     const {fetchUserBooks, fetchUserTrades, user, token} = this.props;
+    if(!user) return browserHistory.push('/');
     fetchUserBooks(user, token);
     fetchUserTrades(user, token);
   }
@@ -73,20 +79,16 @@ class ProfileContainer extends Component {
   }
 
   handleDeclineTrade(trade) {
-    const { user, token, tradeRequests, pendingTrades } = this.props;
+    const { user, token, tradeRequests, pendingTrades, declineTrade } = this.props;
     if(!user) return;
-    // tradeRequests = tradeRequests.filter((t) => t._id != trade._id);
-    // pendingTrades = pendingTrades.filter((t) => t._id != trade._id);
 
     declineTrade(trade, user._id, token);
   }
 
 
   handleAcceptTrade(trade) {
-    const { user, token, tradeRequests, pendingTrades } = this.props;
+    const { user, token, tradeRequests, pendingTrades, acceptTrade } = this.props;
     if(!user) return;
-    // tradeRequests = tradeRequests.filter((t) => t._id != trade._id);
-    // pendingTrades = pendingTrades.filter((t) => t._id != trade._id);
 
     acceptTrade(trade, user._id, token);
   }
@@ -96,7 +98,6 @@ class ProfileContainer extends Component {
   }
 
   handleRemoveBook(e) {
-    console.log(e.target.alt);
     this.props.setBook2Remove(e.target.alt)
   }
 
@@ -113,7 +114,6 @@ class ProfileContainer extends Component {
   }
 
   onSaveClick(e) {
-    console.log('hellooooo!');
     e.preventDefault();
     const {
       updateUserInfo,
@@ -140,7 +140,9 @@ class ProfileContainer extends Component {
       isEditing,
       userBooks,
       book2Remove,
+      viewTrade,
       search,
+      trade,
       pendingTrades,
       tradeRequests,
       onEditClick,
@@ -151,8 +153,10 @@ class ProfileContainer extends Component {
         <Profile  user={ user }
                   book2Remove={ book2Remove }
                   search={ search }
+                  trade={ trade }
                   userBooks={ userBooks }
                   isEditing={ isEditing }
+                  viewTrade={ viewTrade }
                   pendingTrades={ pendingTrades }
                   tradeRequests={ tradeRequests }
                   onEditClick={ onEditClick }
@@ -182,6 +186,7 @@ function mapPropsToState(state) {
     newState: state.user.newState,
     newCity: state.user.newCity,
     search: state.user.search,
+    trade: state.user.trade,
     book2Remove: state.user.book2Remove,
     newUserName: state.user.newUserName,
     pendingTrades: state.user.pendingTrades,
@@ -204,7 +209,8 @@ function matchDispatchToProps(dispatch) {
     onEditClick,
     onCancelClick,
     setBook2Remove,
-    copySearchInput
+    copySearchInput,
+    viewTrade
   }, dispatch)
 }
 

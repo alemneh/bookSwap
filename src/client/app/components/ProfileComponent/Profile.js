@@ -34,6 +34,8 @@ class ProfileComponent extends Component {
       pendingTrades,
       tradeRequests,
       _queryBook2Add,
+      viewTrade,
+      trade,
       _removeBookFromUser,
       onEditClick,
       onCancelClick,
@@ -76,6 +78,9 @@ class ProfileComponent extends Component {
                    />
             <Trade pendingTrades={ pendingTrades }
                    tradeRequests={ tradeRequests }
+                   viewTrade={ viewTrade }
+                   trade={ trade }
+                   user={ user }
                    handleAcceptTrade={ handleAcceptTrade }
                    handleDeclineTrade={ handleDeclineTrade }
                   />

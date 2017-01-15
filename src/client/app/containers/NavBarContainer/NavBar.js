@@ -15,6 +15,8 @@ class NavContainer extends Component {
     }
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
   }
 
   handleUsernameChange(e) {
@@ -41,6 +43,7 @@ class NavContainer extends Component {
   handleLogout(e) {
       e.preventDefault();
 
+      this.props.handleLogout();
   }
 
 
@@ -56,13 +59,13 @@ class NavContainer extends Component {
   }
 
   render() {
-    const { user, token, handleLogout } = this.props;
+    const { user, token} = this.props;
     return(
       <div>
         <NavBar token={token}
                 user={user}
-                handleLogin={this.handleLogin.bind(this)}
-                handleLogout={handleLogout}
+                handleLogin={this.handleLogin}
+                handleLogout={this.handleLogout}
                 handlePasswordChange={this.handlePasswordChange}
                 handleUsernameChange={this.handleUsernameChange}/>
       </div>
