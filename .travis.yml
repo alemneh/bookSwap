@@ -10,3 +10,9 @@ addons:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.8
+
+deploy:
+ provider: heroku
+ api-key:
+  secure: $HEROKU_API
+ app: book-swap-meet

@@ -9,7 +9,7 @@ const HomePage = () => {
       <div className="jumbotron">
         <h1>Book Swap Meet</h1>
         <p>Register and list the books you own and then search for other books to trade!</p>
-        <p><Link to="/signup"><a className="btn btn-primary btn-lg">Join</a></Link></p>
+        <p><Link to="/signup"><a className="btn btn-primary btn-lg">Worked!</a></Link></p>
       </div>
       <blockquote>
         <p>Wow, this is a great app I was able to find a trade for a book that would of cost a fortune.</p>
