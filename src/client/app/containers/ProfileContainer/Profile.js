@@ -66,18 +66,6 @@ class ProfileContainer extends Component {
     removeBookFromUser(book, token);
   }
 
-  handleUpdateOnUser(user) {
-    const userId = this.state.user._id;
-    const updatedUser = {
-      _id: this.state.user._id,
-      name: user.name,
-      city: user.city,
-      state: user.state
-    }
-
-    updateUserInfo(updatedUser, token)
-  }
-
   handleDeclineTrade(trade) {
     const { user, token, tradeRequests, pendingTrades, declineTrade } = this.props;
     if(!user) return;

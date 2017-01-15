@@ -1,24 +1,19 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 
-class Info extends Component {
-  constructor(props) {
-    super(props);
+const Info = ({
+  user,
+  isEditing,
+  handleCityChange,
+  handleStateChange,
+  handleUsernameChange,
+  onCancelClick,
+  onSaveClick,
+  onEditClick
+}) => {
 
-  }
 
 
-  renderInfoSection() {
-    const {
-      user,
-      isEditing,
-      handleCityChange,
-      handleStateChange,
-      handleUsernameChange,
-      onCancelClick,
-      onSaveClick,
-      onEditClick
-    } = this.props;
-
+  const renderInfoSection = () => {
     if(isEditing) {
       return (
         <div>
@@ -53,14 +48,23 @@ class Info extends Component {
   }
 
 
+  return (
+    <div className="tab-pane fade active in" id="info">
+      { renderInfoSection() }
+    </div>
+  )
 
-  render() {
-    return (
-      <div className="tab-pane fade active in" id="info">
-        { this.renderInfoSection() }
-      </div>
-    )
-  }
+}
+
+Info.propTypes = {
+  user: PropTypes.object.isRequired,
+  isEditing: PropTypes.bool.isRequired,
+  handleCityChange: PropTypes.func.isRequired,
+  handleStateChange: PropTypes.func.isRequired,
+  handleUsernameChange: PropTypes.func.isRequired,
+  onCancelClick: PropTypes.func.isRequired,
+  onSaveClick: PropTypes.func.isRequired,
+  onEditClick: PropTypes.func.isRequired
 }
 
 export default Info;

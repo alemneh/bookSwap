@@ -23,7 +23,7 @@ export function makeTradeRequest(trade, token) {
       headers: { token }
     })
     .then((res) => {
-      dispatch({type: types.MAKE_TRADE_REQUEST_FULFILLED, payload: res.data.newTrade});
+      dispatch({type: types.MAKE_TRADE_REQUEST_FULFILLED, payload: trade.requesteeBook});
     })
     .catch((err) => {
       dispatch({type: types.MAKE_TRADE_REQUEST_REJECTED, payload: err});

@@ -1,27 +1,17 @@
-import React, { Component } from 'react';
-import books from 'google-books-search';
+import React, { PropTypes } from 'react';
 
-class Books extends Component {
-  constructor(props) {
-    super(props);
+const Books = ({
+  search,
+  userBooks,
+  book2Remove,
+  _queryBook2Add,
+  handleRemoveBook,
+  _removeBookFromUser,
+  handleBookSearchChange
+}) => {
 
-    this.renderBookList = this.renderBookList.bind(this);
-    this.renderBookDeleteModal = this.renderBookDeleteModal.bind(this);
-  }
 
-
-
-  renderLoadingSpinner() {
-    if(this.props.isLoading) {
-      return (
-        <i className="fa fa-spinner fa-spin" style={{ fontSize: '24px', marginLeft: '50px'}}></i>
-      )
-    }
-  }
-
-  renderBookList() {
-    console.log(this.props);
-    const {userBooks, handleRemoveBook } = this.props;
+  const renderBookList = () => {
     if(userBooks.length < 1) {
       return (
         <div>No books added!</div>
@@ -34,8 +24,7 @@ class Books extends Component {
     })
   }
 
-  renderBookDeleteModal() {
-    const { book2Remove, userBooks, _removeBookFromUser} = this.props;
+  const renderBookDeleteModal = () => {
     if(!book2Remove) return;
 
     return (
@@ -63,24 +52,31 @@ class Books extends Component {
 
 
 
-  render() {
-    const { search, _queryBook2Add, handleBookSearchChange } = this.props;
-    return (
-      <div className="tab-pane fade" id="books">
-        <div>
-          <h3>Add more books!</h3>
-          <input type="text" onChange={ handleBookSearchChange } value={search} />
-          <input type="button" value="Add"  onClick={ _queryBook2Add }/>
-          { this.renderLoadingSpinner() }
-        </div>
-        <hr />
-        <div style={{ overflow: 'hidden'}}>
-          {this.renderBookList()}
-        </div>
-        { this.renderBookDeleteModal() }
+  return (
+    <div className="tab-pane fade" id="books">
+      <div>
+        <h3>Add more books!</h3>
+        <input type="text" onChange={ handleBookSearchChange } value={search} />
+        <input type="button" value="Add"  onClick={ _queryBook2Add }/>
       </div>
-    )
-  }
+      <hr />
+      <div style={{ overflow: 'hidden'}}>
+        { renderBookList()}
+      </div>
+      { renderBookDeleteModal() }
+    </div>
+  )
+
+}
+
+Books.propTypes = {
+  search: PropTypes.string.isRequired,
+  userBooks: PropTypes.array.isRequired,
+  book2Remove: PropTypes.object,
+  _queryBook2Add: PropTypes.func.isRequired,
+  handleRemoveBook: PropTypes.func.isRequired,
+  _removeBookFromUser: PropTypes.func.isRequired,
+  handleBookSearchChange: PropTypes.func.isRequired
 }
 
 export default Books;

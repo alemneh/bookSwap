@@ -1,12 +1,17 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 
-class TradeComponent extends Component {
-  constructor(props) {
-    super(props);
-  }
+const TradeComponent = ({
+  pendingTrades,
+  viewTrade,
+  tradeRequests,
+  user,
+  trade,
+  handleAcceptTrade,
+  handleDeclineTrade
+}) => {
 
-  renderPendingTrades() {
-    const { pendingTrades, viewTrade } = this.props;
+
+  const renderPendingTrades = () => {
     if(pendingTrades.length < 1) {
       return <div>No pending trades.</div>;
     }
@@ -19,8 +24,7 @@ class TradeComponent extends Component {
     })
   }
 
-  renderTradeRequests() {
-    const { tradeRequests, viewTrade } = this.props;
+  const renderTradeRequests = () => {
     if(tradeRequests.length < 1) {
       return <div>No pending trade requests.</div>;
     }
@@ -33,7 +37,7 @@ class TradeComponent extends Component {
     })
   }
 
-  renderAcceptNDeclineBtns(user, trade, handleAcceptTrade, handleDeclineTrade) {
+  const renderAcceptNDeclineBtns = (user, trade, handleAcceptTrade, handleDeclineTrade) => {
     if(trade.requesteeName == user.name) {
     return (
       <div className="row">
@@ -63,15 +67,7 @@ class TradeComponent extends Component {
   }
 
 
-  renderTrades() {
-      const {
-        user,
-        viewTrade,
-        trade,
-        handleAcceptTrade,
-        handleDeclineTrade
-      } = this.props;
-
+  const renderTrades = () => {
       if(trade) {
         return (
           <div className="container text-center">
@@ -87,7 +83,7 @@ class TradeComponent extends Component {
                 <p>Owner: { trade.requesteeName}</p>
               </div>
             </div>
-            { this.renderAcceptNDeclineBtns(user, trade,
+            { renderAcceptNDeclineBtns(user, trade,
                                             handleAcceptTrade,
                                             handleDeclineTrade) }
           </div>
@@ -99,13 +95,13 @@ class TradeComponent extends Component {
           <div className="col-md-6">
           <div className="list-group">
             <a href="#" className="list-group-item active">Pending Trades</a>
-            { this.renderPendingTrades() }
+            { renderPendingTrades() }
           </div>
           </div>
           <div className="col-md-6">
-            <div class="list-group">
+            <div className="list-group">
               <a href="#" className="list-group-item active">Trade Requests</a>
-              { this.renderTradeRequests() }
+              { renderTradeRequests() }
             </div>
           </div>
         </div>
@@ -115,13 +111,22 @@ class TradeComponent extends Component {
 
 
 
-  render() {
-    return (
-      <div className="tab-pane fade" id="trades">
-        {this.renderTrades()}
-      </div>
-    )
-  }
+  return (
+    <div className="tab-pane fade" id="trades">
+      { renderTrades() }
+    </div>
+  )
+
+}
+
+TradeComponent.propTypes = {
+  pendingTrades: PropTypes.array.isRequired,
+  viewTrade: PropTypes.func.isRequired,
+  tradeRequests: PropTypes.array.isRequired,
+  user: PropTypes.object.isRequired,
+  trade: PropTypes.object,
+  handleAcceptTrade: PropTypes.func.isRequired,
+  handleDeclineTrade: PropTypes.func.isRequired
 }
 
 export default TradeComponent;

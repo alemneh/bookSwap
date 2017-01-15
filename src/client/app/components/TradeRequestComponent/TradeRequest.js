@@ -1,14 +1,18 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 
-class TradeRequest extends Component {
-  constructor(props) {
-    super(props);
-  }
+const TradeRequest = ({
+  userBooks,
+  requesteeBook,
+  onBookSelect,
+  requesterBook,
+  cancelRequesterBook,
+  handleTradeRequest
+}) => {
 
 
 
-  renderRequesteeBook() {
-    const { requesteeBook } = this.props;
+
+  const renderRequesteeBook = () => {
     if(!requesteeBook) return;
     return (
       <div>
@@ -19,8 +23,7 @@ class TradeRequest extends Component {
   }
 
 
-  renderBook2Trade() {
-    const { onBookSelect, requesterBook, cancelRequesterBook, userBooks } = this.props;
+  const renderBook2Trade = () => {
     if(requesterBook) {
       return (
         <div>
@@ -40,37 +43,44 @@ class TradeRequest extends Component {
     )
   }
 
-  render() {
-    return (
-      <div className="modal fade" id="myModal" role="dialog">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 className="modal-title">Trade Request</h4>
-            </div>
-            <div className="modal-body">
-              <div className="row text-center">
-                <div className="col-xs-6">
-                  { this.renderBook2Trade() }
-                </div>
-                <div className="col-xs-6">
-                  { this.renderRequesteeBook() }
-                </div>
+  return (
+    <div className="modal fade" id="myModal" role="dialog">
+      <div className="modal-dialog">
+        <div className="modal-content">
+          <div className="modal-header">
+            <button type="button" className="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 className="modal-title">Trade Request</h4>
+          </div>
+          <div className="modal-body">
+            <div className="row text-center">
+              <div className="col-xs-6">
+                { renderBook2Trade() }
+              </div>
+              <div className="col-xs-6">
+                { renderRequesteeBook() }
               </div>
             </div>
-            <div className="modal-footer">
-              <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
-              <button type="button" className="btn btn-primary" data-dismiss="modal"
-                      onClick={ this.props.handleTradeRequest }
-                      >Send</button>
-            </div>
+          </div>
+          <div className="modal-footer">
+            <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
+            <button type="button" className="btn btn-primary" data-dismiss="modal"
+                    onClick={ handleTradeRequest }
+                    >Send</button>
           </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 
+}
+
+TradeRequest.propTypes = {
+  userBooks: PropTypes.array.isRequired,
+  requesteeBook: PropTypes.object,
+  onBookSelect: PropTypes.func.isRequired,
+  requesterBook: PropTypes.object,
+  cancelRequesterBook: PropTypes.func.isRequired,
+  handleTradeRequest: PropTypes.func.isRequired
 }
 
 export default TradeRequest;

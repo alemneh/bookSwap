@@ -6,10 +6,6 @@ import { bindActionCreators } from 'redux';
 
 
 class App extends Component {
-  componentWillMount() {
-    console.log('hit');
-  }
-
   render() {
     return (
       <div className="container">

@@ -9,7 +9,6 @@ const Trade = models.Trade;
 let UserRoutes = {
 
   signUp: function(req, res) {
-    console.log(req.body);
     User.findOne({name: req.body.name}, (err, user) => {
       if(err) throw err;
       if(!user) {
@@ -140,7 +139,6 @@ let UserRoutes = {
   },
 
   requestATrade: function(req, res) {
-    console.log(req.body.trade);
     let newTrade, requesteeBookId, requesterBookId;
 
     newTrade        = new Trade(req.body.trade);
@@ -189,7 +187,6 @@ let UserRoutes = {
       requesterBook, requesteeBook,
       requesteeName, requesterName;
 
-      console.log(req.params);
     Trade.findById(req.params.tradeId)
       .populate('requesterBook requesteeBook')
       .exec()

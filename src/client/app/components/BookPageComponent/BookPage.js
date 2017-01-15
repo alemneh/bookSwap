@@ -1,6 +1,5 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import TradeRequest from '../TradeRequestComponent/TradeRequest';
-import axios from 'axios';
 
 
  //Helper function to filter usersBooks from allBooks
@@ -17,20 +16,21 @@ function searchByValue(value, property, array){
     return false;
 }
 
-class BookPage extends Component {
-  constructor(props) {
-    super(props)
+const BookPage = ({
+  userBooks,
+  allBooks,
+  setRequesteeBook,
+  cancelRequesterBook,
+  handleTradeRequest,
+  requesteeBook,
+  onBookSelect,
+  requesterBook
+}) => {
 
-  }
 
-
-
-
-
-
-  renderBooks() {
-    const books = this.props.allBooks.filter((book) => {
-      return !(searchByValue(book.title, 'title', this.props.userBooks)) && !book.isPendingTrade;
+  const renderBooks = () => {
+    const books = allBooks.filter((book) => {
+      return !(searchByValue(book.title, 'title', userBooks)) && !book.isPendingTrade;
     });
     if(books.length < 1) {
       return (
@@ -40,42 +40,36 @@ class BookPage extends Component {
     return books.map((book, index) => {
       return <img src={book.imgUrl} alt={book.title}  key={index} style={ {float: 'left', margin: '10px'} }
               data-toggle="modal" data-target="#myModal"
-              onClick={() => { this.props.setRequesteeBook(book) }}/>
+              onClick={() => { setRequesteeBook(book) }}/>
     })
   }
 
 
+  return (
+    <div style={{ overflow: 'hidden' }}>
+      <h1>Books Available for Trade</h1>
+      <hr />
+      { renderBooks() }
+      <TradeRequest requesteeBook={ requesteeBook }
+                    requesterBook={ requesterBook }
+                    onBookSelect={ onBookSelect }
+                    userBooks={ userBooks }
+                    handleTradeRequest={ handleTradeRequest }
+                    cancelRequesterBook={ cancelRequesterBook }/>
+    </div>
+  )
 
-  renderSuccess() {
+}
 
-  }
-
-  render() {
-    const {
-      cancelRequesterBook,
-      handleTradeRequest,
-      setRequesterBook,
-      requesteeBook,
-      onBookSelect,
-      requesterBook,
-      userBooks
-    } = this.props;
-    return (
-      <div style={{ overflow: 'hidden' }}>
-        { this.renderSuccess() }
-        <h1>Books Available for Trade</h1>
-        <hr />
-        { this.renderBooks() }
-        <TradeRequest requesteeBook={ requesteeBook }
-                      requesterBook={ requesterBook }
-                      onBookSelect={ onBookSelect }
-                      userBooks={ userBooks }
-                      handleTradeRequest={ handleTradeRequest }
-                      cancelRequesterBook={ cancelRequesterBook }/>
-      </div>
-    )
-  }
-
+BookPage.propTypes = {
+  userBooks: PropTypes.array.isRequired,
+  allBooks: PropTypes.array.isRequired,
+  setRequesteeBook: PropTypes.func.isRequired,
+  cancelRequesterBook: PropTypes.func.isRequired,
+  handleTradeRequest: PropTypes.func.isRequired,
+  requesteeBook: PropTypes.object,
+  onBookSelect: PropTypes.func.isRequired,
+  requesterBook: PropTypes.object
 }
 
 export default BookPage;

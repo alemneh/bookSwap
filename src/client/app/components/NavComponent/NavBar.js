@@ -1,27 +1,17 @@
-import React, { Component } from 'react';
-import { Link, browserHistory } from 'react-router';
-import axios from 'axios';
+import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
 
 
-class NavComponent extends Component {
-  constructor(props) {
-    super(props);
-  }
+const NavComponent = ({
+  user,
+  token,
+  handleLogin,
+  handleLogout,
+  handleUsernameChange,
+  handlePasswordChange
+}) => {
 
-  renderError() {
-
-  }
-
-  renderNavBar() {
-    const {
-      user,
-      token,
-      handleLogin,
-      handleLogout,
-      handleUsernameChange,
-      handlePasswordChange
-    } = this.props;
-
+  const renderNavBar = () => {
     if(token) {
       return(
           <div className="container-fluid">
@@ -32,7 +22,7 @@ class NavComponent extends Component {
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <Link to="/"><a className="navbar-brand" href="#">BK</a></Link>
+              <Link href="#" className="navbar-brand" to="/">BK</Link>
 
             </div>
 
@@ -59,7 +49,7 @@ class NavComponent extends Component {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <Link to="/"><a className="navbar-brand" href="#">BK</a></Link>
+            <Link to="/" className="navbar-brand" href="#">BK</Link>
           </div>
 
           <div className="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true">
@@ -81,18 +71,24 @@ class NavComponent extends Component {
     )
   }
 
-  render() {
-    return (
-      <div>
-        <nav className="navbar navbar-default">
-          { this.renderNavBar() }
-        </nav>
-        { this.renderError() }
-      </div>
+  return (
+    <div>
+      <nav className="navbar navbar-default">
+        { renderNavBar() }
+      </nav>
+    </div>
 
-    )
-  }
+  )
 
+}
+
+NavComponent.propTypes = {
+  user: PropTypes.object,
+  token: PropTypes.string,
+  handleLogin: PropTypes.func.isRequired,
+  handleLogout: PropTypes.func.isRequired,
+  handleUsernameChange: PropTypes.func.isRequired,
+  handlePasswordChange: PropTypes.func.isRequired
 }
 
 export default NavComponent;
