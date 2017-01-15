@@ -13,5 +13,5 @@ addons:
 
 deploy:
  provider: heroku
- api-key: $HEROKU_API
+ api-key: HEROKU_API
  app: book-swap-meet
