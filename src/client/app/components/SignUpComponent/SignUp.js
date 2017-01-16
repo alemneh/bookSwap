@@ -4,13 +4,10 @@ import React from 'react';
 const SignUpComponent = ({
   handleUsernameChange,
   handlePasswordChange,
+  handleSignUp,
   handleCityChange,
   handleStateChange,
-  onCancelClick,
-  password,
-  state,
-  city,
-  name
+  onCancelClick
 }) => {
 
   return (

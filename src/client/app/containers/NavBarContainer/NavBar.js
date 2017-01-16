@@ -29,12 +29,12 @@ class NavContainer extends Component {
   handlePasswordChange(e) {
     this.setState( { password: e.target.value});
 
-    this.props.copyPasswordInput(e.target.value})
+    this.props.copyPasswordInput(e.target.value)
   }
 
   handleLogin(e) {
       e.preventDefault();
-      const { username, password } = this.state;
+      const { username, password } = this.props;
       const validateLoginInput = this.validateLoginInput(username, password);
 
       if(validateLoginInput) {
@@ -81,7 +81,7 @@ class NavContainer extends Component {
 function mapPropsToState(state) {
   return {
     token: state.login.token,
-    user: state.login.user
+    user: state.login.user,
     username: state.user.newUserName,
     password: state.user.newPassword
   }

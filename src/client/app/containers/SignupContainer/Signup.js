@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import Signup from '../../components/SignUpComponent/Signup';
-import { signUp } from ''
+import Signup from '../../components/SignUpComponent/SignUp';
+import { signUp } from '../../actions/loginActions';
 import {
-  handleUsernameChange,
-  handlePasswordChange,
-  handleCityChange,
-  handleStateChange,
+  copyUserNameInput,
+  copyPasswordInput,
+  copyCityInput,
+  copyStateInput,
   onCancelClick
 } from '../../actions/userActions';
 
@@ -20,28 +20,27 @@ class SignUpContianer extends Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleCityChange = this.handleCityChange.bind(this);
     this.handleStateChange = this.handleStateChange.bind(this);
-    this.onCancelClick = this.onCancelClick.bind(this);
     this.handleSignUp = this.handleSignUp.bind(this);
   }
 
   handleUsernameChange(e) {
 
-      this.props.handleUsernameChange(e.target.value)
+      this.props.copyUserNameInput(e.target.value)
   }
 
   handleCityChange(e) {
 
-    this.props.handleCityChange(e.target.value);
+    this.props.copyCityInput(e.target.value);
   }
 
   handleStateChange(e) {
 
-    this.props.handleStateChange(e.target.value);
+    this.props.copyStateInput(e.target.value);
   }
 
   handlePasswordChange(e) {
 
-    this.props.handlePasswordChange(e.target.value);
+    this.props.copyPasswordInput(e.target.value);
   }
 
 
@@ -85,9 +84,15 @@ class SignUpContianer extends Component {
   }
 
   render() {
+    console.log(this.props);
     return (
       <div className='container'>
-        <Signup {...this.props}/>
+        <Signup handleSignUp={ this.handleSignUp }
+                handleUsernameChange={ this.handleUsernameChange }
+                handleCityChange={ this.handleCityChange }
+                handleStateChange={ this.handleStateChange }
+                onCancelClick={ this.props.onCancelClick }
+                handlePasswordChange={ this.handlePasswordChange }/>
       </div>
     )
   }
@@ -106,10 +111,11 @@ function mapPropsToState(state) {
 
 function matchDispatchToProps(dispatch) {
   return bindActionCreators({
-    handleUsernameChange,
-    handlePasswordChange,
-    handleCityChange,
-    handleStateChange,
+    copyUserNameInput,
+    copyPasswordInput,
+    copyCityInput,
+    signUp,
+    copyStateInput,
     onCancelClick
   }, dispatch)
 }

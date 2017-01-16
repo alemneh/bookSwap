@@ -49,7 +49,12 @@ class ProfileContainer extends Component {
     const { user, token, addBookToUser, search } = this.props;
     books.search(search, (err, res) => {
       if(!err) {
-        const newBook = {title: res[0].title, imgUrl: res[0].thumbnail};
+        const newBook = {
+          title: res[0].title,
+          imgUrl: res[0].thumbnail,
+          owner: user.name
+        };
+        console.log(newBook);
 
         addBookToUser(newBook, user, token);
 
