@@ -2,14 +2,8 @@ import React from 'react';
 import { Route, IndexRoute } from 'react-router';
 import App from './App';
 import HomePage from './components/HomePageComponent/HomePage';
-import SignUp   from './components/SignUpComponent/SignUp';
-import Trade    from './components/TradeComponent/Trade';
-// import BookPage from './components/BookPageComponent/BookPage';
-// import App from '.App';
-// import HomePage from './containers/HomePageContainer/HomePage';
 import Profile from './containers/ProfileContainer/Profile';
-// import SignUp from './containers/SignUpContainer/SignUp';
-// import Trade from './containers/TradeContainer/Trade';
+import SignUp from './containers/SignpContainer/SignUp';
 import BookPage from './containers/BookPageContainer/BookPage';
 
 

@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import NavBar from '../../components/NavComponent/NavBar';
 import { handleLogin, handleLogout } from '../../actions/loginActions';
+import { copyUserNameInput, copyPasswordInput } from '../../actions/userActions'
 
 
 class NavContainer extends Component {
@@ -21,10 +22,14 @@ class NavContainer extends Component {
 
   handleUsernameChange(e) {
     this.setState( {username: e.target.value});
+
+    this.props.copyUserNameInput(e.target.value)
   }
 
   handlePasswordChange(e) {
     this.setState( { password: e.target.value});
+
+    this.props.copyPasswordInput(e.target.value})
   }
 
   handleLogin(e) {
@@ -77,11 +82,18 @@ function mapPropsToState(state) {
   return {
     token: state.login.token,
     user: state.login.user
+    username: state.user.newUserName,
+    password: state.user.newPassword
   }
 }
 
 function matchDispatchToProps(dispatch) {
-  return bindActionCreators({ handleLogin, handleLogout }, dispatch)
+  return bindActionCreators({
+    handleLogin,
+    handleLogout,
+    copyUserNameInput,
+    copyPasswordInput
+   }, dispatch)
 }
 
 export default connect(mapPropsToState, matchDispatchToProps)(NavContainer);

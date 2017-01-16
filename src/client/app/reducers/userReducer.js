@@ -10,6 +10,7 @@ const initialState = {
   fetched: false,
   error: null,
   newUserName: '',
+  newPassword: '',
   newState: '',
   newCity: '',
   search: '',
@@ -171,10 +172,20 @@ export default function(state=initialState, action) {
       return {...state, isEditing: true}
     }
     case types.CANCEL_BTN_CLICK: {
-      return {...state, isEditing: false}
+      return {
+        ...state,
+        isEditing: false,
+        newUserName: '',
+        newPassword: '',
+        newState: '',
+        newCity: ''
+      }
     }
     case types.USERNAME_CHANGED: {
       return {...state, newUserName: action.payload}
+    }
+    case types.PASSWORD_CHANGED: {
+      return {...state, newPassword: action.payload}
     }
     case types.CITY_CHANGED: {
       return {...state, newCity: action.payload}

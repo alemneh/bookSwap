@@ -179,3 +179,10 @@ export function copyStateInput(val) {
     payload: val
   }
 }
+
+export function copyPasswordInput(val) {
+  return {
+    type: types.PASSWORD_CHANGED,
+    payload: val
+  }
+}
