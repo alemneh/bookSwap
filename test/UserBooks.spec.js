@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { expect } from 'chai';
 
 
-import UserBooks from '../src/client/app/components/UserBooksComponent/Userbooks'
+import UserBooks from '../src/client/app/components/UserBooksComponent/UserBooks'
 
 let wrapper, Props;
 const props = {
