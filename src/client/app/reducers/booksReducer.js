@@ -26,7 +26,7 @@ export default function(state=initialState, action) {
       }
     }
     case types.MAKE_TRADE_REQUEST: {
-      return {...state, fetching: false}
+      return {...state, fetching: true}
     }
     case types.MAKE_TRADE_REQUEST_REJECTED: {
       return {...state, fetching: false, error: action.payload}

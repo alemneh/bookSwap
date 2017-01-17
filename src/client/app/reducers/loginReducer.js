@@ -27,6 +27,15 @@ export default function(state=initialState, action) {
         user
       }
     }
+    case types.SIGN_UP: {
+      return {...state, fetching: true}
+    }
+    case types.SIGN_UP_REJECTED: {
+      return {...state, fetching: false, error: action.payload}
+    }
+    case types.SIGN_UP_FULFILLED: {
+      return {...state, fetching: false, fetched: true}
+    }
     case types.LOGOUT:{
       return initialState
     }

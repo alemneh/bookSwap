@@ -71,7 +71,7 @@ export default function(state=initialState, action) {
       return {...state, fetching: true}
     }
     case types.ADD_BOOK_TO_USER_REJECTED: {
-      return {...state, fetching: false, error: err}
+      return {...state, fetching: false, error: action.payload}
     }
     case types.ADD_BOOK_TO_USER_FULFILLED: {
       const newBook = action.payload;
@@ -88,7 +88,7 @@ export default function(state=initialState, action) {
       return {...state, fetching: true}
     }
     case types.REMOVE_BOOK_FROM_USER_REJECTED: {
-      return {...state, fetching: false, error: err}
+      return {...state, fetching: false, error: action.payload}
     }
     case types.REMOVE_BOOK_FROM_USER_FULFILLED: {
       const removeBook = action.payload;
@@ -134,7 +134,6 @@ export default function(state=initialState, action) {
       const newBooks = [...state.books].filter(book => book._id != trade.requesteeBook)
                                        .concat(newBook);
       const newTradeRequests = [...state.tradeRequests].filter(t => t._id != trade._id)
-      const newPendingTrades = [...state.pendingTrades].filter(t => t._id != trade._id)
 
       return {
         ...state,
@@ -143,8 +142,7 @@ export default function(state=initialState, action) {
         viewTrade: false,
         trade: null,
         books: newBooks,
-        tradeRequests: newTradeRequests,
-        pendingTrades: newPendingTrades
+        tradeRequests: newTradeRequests
       }
     }
     case types.DECLINE_TRADE: {
