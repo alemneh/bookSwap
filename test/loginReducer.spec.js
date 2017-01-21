@@ -11,6 +11,7 @@ describe('loginReducer', () => {
     initialState = {
       token: null,
       user: null,
+      success: null,
       fetching: false,
       fetched: false,
       error: null
@@ -19,6 +20,7 @@ describe('loginReducer', () => {
     expectedState = {
       token: null,
       user: null,
+      success: null,
       fetching: false,
       fetched: false,
       error: null

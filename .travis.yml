@@ -13,4 +13,4 @@ deploy:
   provider: heroku
   app: book-swap-meet
   api_key:
-    secure: $heroku_API
+    secure: '$heroku_API'
