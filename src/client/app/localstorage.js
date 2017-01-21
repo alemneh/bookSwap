@@ -4,7 +4,7 @@ export const loadState = () => {
     if(serializedState == null) {
       return undefined;
     }
-    return JSON.parse(serializedState);
+    return resetErrors(JSON.parse(serializedState));
   } catch (err) {
     return undefined;
   }
@@ -18,3 +18,15 @@ export const saveState = (state) => {
     console.log(err);
   }
 };
+
+function resetErrors(state) {
+  state.user.error = null;
+  state.login.error = null;
+  state.books.error = null;
+  state.alert.message = '';
+  state.alert.error = true;
+  state.user.newUserName = '';
+  state.user.newPassword = '';
+
+  return state;
+}

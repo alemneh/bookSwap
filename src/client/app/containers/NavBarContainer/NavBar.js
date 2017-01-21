@@ -3,8 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import NavBar from '../../components/NavComponent/NavBar';
+import Alert from '../../components/AlertComponent/Alert';
 import { handleLogin, handleLogout } from '../../actions/loginActions';
 import { copyUserNameInput, copyPasswordInput } from '../../actions/userActions'
+import { setAlertMessage } from '../../actions/alertActions.js';
 
 
 class NavContainer extends Component {
@@ -13,6 +15,7 @@ class NavContainer extends Component {
     this.state = {
       username: '',
       password: '',
+      inputError: null
     }
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -34,11 +37,10 @@ class NavContainer extends Component {
 
   handleLogin(e) {
       e.preventDefault();
-      const { username, password } = this.props;
+      const { username, password, setAlertMessage } = this.props;
       const validateLoginInput = this.validateLoginInput(username, password);
-
       if(validateLoginInput) {
-        this.setState({ error: validateLoginInput })
+        setAlertMessage(validateLoginInput);
         return;
       }
 
@@ -49,6 +51,32 @@ class NavContainer extends Component {
       e.preventDefault();
 
       this.props.handleLogout();
+  }
+
+  renderAlert() {
+
+    const { success, error, inputError, isError, setAlertMessage } = this.props;
+    if(success) {
+      setAlertMessage(success, isError);
+    } else if(error) {
+      setAlertMessage(error.response.data.message, isError);
+    } else if (inputError) {
+      setAlertMessage(inputError, isError);
+    } else {
+      return;
+    }
+
+    console.log('###################################');
+    console.log('Erorr: ' + error);
+    console.log('Success:' + success);
+    console.log('Input: ' + inputError);
+    console.log('###################################');
+    return (
+      <div>
+        <Alert message={inputError }
+               error={isError} />
+      </div>
+    )
   }
 
 
@@ -64,7 +92,7 @@ class NavContainer extends Component {
   }
 
   render() {
-    const { user, token} = this.props;
+    const { user, token, error} = this.props;
     return(
       <div>
         <NavBar token={token}
@@ -73,6 +101,8 @@ class NavContainer extends Component {
                 handleLogout={this.handleLogout}
                 handlePasswordChange={this.handlePasswordChange}
                 handleUsernameChange={this.handleUsernameChange}/>
+
+                { this.renderAlert() }
       </div>
     )
   }
@@ -83,7 +113,11 @@ function mapPropsToState(state) {
     token: state.login.token,
     user: state.login.user,
     username: state.user.newUserName,
-    password: state.user.newPassword
+    password: state.user.newPassword,
+    error: state.login.error,
+    success: state.login.success,
+    inputError: state.alert.message,
+    isError: state.alert.error
   }
 }
 
@@ -92,7 +126,8 @@ function matchDispatchToProps(dispatch) {
     handleLogin,
     handleLogout,
     copyUserNameInput,
-    copyPasswordInput
+    copyPasswordInput,
+    setAlertMessage
    }, dispatch)
 }
 

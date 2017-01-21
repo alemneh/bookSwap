@@ -15,12 +15,12 @@ let LoginController = {
     User.findOne({name:name}, (err, user) => {
       if(err) throw err;
       if(!user) {
-        return res.json({status: 'failure', message: 'Invalid User!'});
+        return res.status(403).json({status: 'failure', message: 'Invalid User!'});
       }
       const valid = user.compareHash(password);
 
       if(!valid) {
-        res.json({status: 'failure', message: 'Wrong password'});
+        res.status(403).json({status: 'failure', message: 'Wrong password'});
       } else {
         user.password = undefined;
         res.json({

@@ -10,7 +10,7 @@ const persistedState = loadState();
 const store = createStore(reducer, persistedState, middleware);
 
 store.subscribe(throttle(() => {
-  saveState(store.getState())
+  saveState(store.getState());
 }, 1000));
 
 export default store

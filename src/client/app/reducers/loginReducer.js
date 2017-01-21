@@ -6,7 +6,8 @@ const initialState = {
   user: null,
   fetching: false,
   fetched: false,
-  error: null
+  error: null,
+  success: null
 }
 
 export default function(state=initialState, action) {
@@ -15,6 +16,7 @@ export default function(state=initialState, action) {
       return {...state, fetching: true}
     }
     case types.LOGIN_REJECTED: {
+      console.log(action.payload);
       return {...state, fetching: false, error: action.payload}
     }
     case types.LOGIN_FULFILLED: {
@@ -37,7 +39,7 @@ export default function(state=initialState, action) {
       return {...state, fetching: false, fetched: true}
     }
     case types.LOGOUT:{
-      return initialState
+      return initialState;
     }
   }
   return state;

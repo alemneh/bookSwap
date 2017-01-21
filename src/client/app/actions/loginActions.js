@@ -11,8 +11,7 @@ export function handleLogin(username, password) {
       }
     })
     .then((res) => {
-      const { token, user} = res.data;
-      dispatch({type: types.LOGIN_FULFILLED, payload: {token, user} });
+      dispatch({type: types.LOGIN_FULFILLED, payload: res.data });
     })
     .catch((err) => {
       dispatch({type: types.LOGIN_REJECTED, payload: err });
