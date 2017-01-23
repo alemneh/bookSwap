@@ -18,9 +18,10 @@ const Books = ({
       )
     }
     return userBooks.map((book, index) => {
-      return <img src={book.imgUrl} key={index} style={ {float: 'left', margin: '10px'} }
+      return <div className="pin"><img src={book.imgUrl} key={index} style={ {float: 'left', margin: '10px'} }
                   alt={ book.title }
                   data-toggle="modal" data-target="#myModal" onClick={handleRemoveBook }/>
+            </div>
     })
   }
 
@@ -60,8 +61,10 @@ const Books = ({
         <input type="button" value="Add"  onClick={ _queryBook2Add }/>
       </div>
       <hr />
-      <div style={{ overflow: 'hidden'}}>
-        { renderBookList()}
+      <div className="masonary_wrapper" style={{ overflow: 'hidden'}}>
+        <div className="masonary_columns">
+          { renderBookList()}
+        </div>
       </div>
       { renderBookDeleteModal() }
     </div>

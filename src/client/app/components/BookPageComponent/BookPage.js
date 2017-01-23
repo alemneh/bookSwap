@@ -38,9 +38,11 @@ const BookPage = ({
       )
     }
     return books.map((book, index) => {
-      return <img src={book.imgUrl} alt={book.title}  key={index} style={ {float: 'left', margin: '10px'} }
+      return <div className='pin'>
+                <img src={book.imgUrl} alt={book.title}  key={index} style={ {float: 'left', margin: '10px'} }
               data-toggle="modal" data-target="#myModal"
-              onClick={() => { setRequesteeBook(book) }}/>
+              onClick={() => { setRequesteeBook(book) }} />
+            </div>
     })
   }
 
@@ -49,7 +51,12 @@ const BookPage = ({
     <div style={{ overflow: 'hidden' }}>
       <h1>Books Available for Trade</h1>
       <hr />
-      { renderBooks() }
+      <div className='masonary_wrapper'>
+        <div className='masonary_columns'>
+          { renderBooks() }
+        </div>
+      </div>
+
       <TradeRequest requesteeBook={ requesteeBook }
                     requesterBook={ requesterBook }
                     onBookSelect={ onBookSelect }

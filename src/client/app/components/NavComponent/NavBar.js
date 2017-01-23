@@ -14,30 +14,25 @@ const NavComponent = ({
   const renderNavBar = () => {
     if(token) {
       return(
-          <div className="container-fluid">
-            <div className="navbar-header">
-              <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="true">
-                <span className="sr-only">Toggle navigation</span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-              </button>
-              <Link href="#" className="navbar-brand" to="/">BK</Link>
-
-            </div>
-
-            <div className="navbar-collapse collapse in" id="bs-example-navbar-collapse-1" aria-expanded="true">
-
-              <form className="navbar-form navbar-right" role="search">
-                <div>
-                <a  >Welcome, { user.name }</a>
-                <Link className="btn btn-default" to="/profile">Profile</Link>
-                <Link className="btn btn-default" to="/books">Browse Books</Link>
-                <button type="submit" className="btn btn-default" onClick={handleLogout}>Logout</button>
-                </div>
-              </form>
-            </div>
+        <div className="container-fluid">
+          <div className="navbar-header">
+            <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+            <Link href="#" className="navbar-brand" to="/">BK</Link>
           </div>
+          <div className="navbar-collapse collapse" id="bs-example-navbar-collapse-1" aria-expanded="false" style={{height: "1px"}}>
+            <ul className="nav navbar-nav navbar-right">
+              <li><Link  to="/profile">Profile</Link></li>
+              <li><Link  to="/books">Browse Books</Link></li>
+              <li><a href="#" onClick={handleLogout}>Logout</a></li>
+            </ul>
+
+          </div>
+        </div>
       )
     }
     return (
