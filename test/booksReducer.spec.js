@@ -15,6 +15,7 @@ describe('booksReducer', () => {
       requesterBook: null,
       fetching: false,
       fetched: false,
+      success: null,
       error: null
     };
 
@@ -24,6 +25,7 @@ describe('booksReducer', () => {
       requesterBook: null,
       fetching: false,
       fetched: false,
+      success: null,
       error: null
     };
   });
@@ -88,11 +90,12 @@ describe('booksReducer', () => {
 
     expectedState.fetching = false;
     expectedState.fetched = true;
+    expectedState.success = 'Trade Request Sent!';
     expectedState.books = books.filter(b => b._id != 1 );
 
     expect(reducer(initialState, {
       type: types.MAKE_TRADE_REQUEST_FULFILLED,
-      payload: 1
+      payload: { requesteeBookId: 1, success: 'Trade Request Sent!'}
     })).to.deep.equal(expectedState);
   });
 

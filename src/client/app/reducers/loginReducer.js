@@ -16,7 +16,6 @@ export default function(state=initialState, action) {
       return {...state, fetching: true}
     }
     case types.LOGIN_REJECTED: {
-      console.log(action.payload);
       return {...state, fetching: false, error: action.payload}
     }
     case types.LOGIN_FULFILLED: {
