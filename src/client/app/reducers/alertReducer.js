@@ -2,7 +2,7 @@ import * as types from '../ActionConstants';
 
 const initialState = {
   message: '',
-  error: true
+  error: false
 };
 
 export default function(state=initialState, action) {

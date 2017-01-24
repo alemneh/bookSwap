@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as actions from '../../actions/booksActions';
 import BookPage from '../../components/BookPageComponent/BookPage';
+import Alert from '../../components/AlertComponent/Alert';
+import { setAlertMessage } from '../../actions/alertActions';
+import { fetchUserBooks } from '../../actions/userActions';
+
+
 
 class BookPageContainer extends Component {
   constructor(props) {
@@ -14,9 +19,12 @@ class BookPageContainer extends Component {
   }
 
   componentWillMount() {
-    const { fetchAllBooks, token } = this.props;
+    const { fetchAllBooks, fetchUserBooks, token, user } = this.props;
     fetchAllBooks(token);
+    fetchUserBooks(user, token);
+
   }
+
 
   onBookSelect(e) {
     e.preventDefault()
@@ -38,10 +46,30 @@ class BookPageContainer extends Component {
       requesteeName: requesteeBook.owner,
       requesterName: requesterBook.owner,
       requesterImgUrl: requesterBook.imgUrl,
-      requesteeImgUrl: requesteeBook.imgUrl
+      requesteeImgUrl: requesteeBook.imgUrl,
+      requesteeEmail: requesteeBook.ownerEmail
     }
 
     makeTradeRequest(trade, token);
+  }
+
+  renderAlert() {
+
+    const { success, error, isError, inputError, setAlertMessage } = this.props;
+    if(success) {
+      setAlertMessage(success, false);
+    } else if(error) {
+      setAlertMessage(error.response.data.message, true);
+    } else {
+      return;
+    }
+
+    return (
+      <div>
+        <Alert message={inputError }
+               error={isError} />
+      </div>
+    )
   }
 
   render() {
@@ -66,6 +94,7 @@ class BookPageContainer extends Component {
                   cancelRequesterBook={ cancelRequesterBook }
                   handleTradeRequest= {this.handleTradeRequest}
                   />
+         {/* { this.renderAlert() } */}
       </div>
     )
   }
@@ -74,10 +103,14 @@ class BookPageContainer extends Component {
 function mapPropsToState(state) {
   return {
     token: state.login.token,
+    user: state.login.user,
     allBooks: state.books.books,
     userBooks: state.user.books,
     requesteeBook: state.books.requesteeBook,
-    requesterBook: state.books.requesterBook
+    requesterBook: state.books.requesterBook,
+    error: state.books.error,
+    success: state.books.success,
+    inputError: state.alert.message
   }
 }
 
@@ -87,7 +120,9 @@ function matchDispatchToProps(dispatch) {
     makeTradeRequest: actions.makeTradeRequest,
     setRequesteeBook: actions.setRequesteeBook,
     setRequesterBook: actions.setRequesterBook,
-    cancelRequesterBook: actions.cancelRequesterBook
+    cancelRequesterBook: actions.cancelRequesterBook,
+    setAlertMessage,
+    fetchUserBooks
   }, dispatch)
 }
 

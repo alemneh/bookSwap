@@ -166,6 +166,13 @@ export function copyUserNameInput(val) {
   }
 }
 
+export function copyEmailInput(val) {
+  return {
+    type: types.EMAIL_CHANGED,
+    payload: val
+  }
+}
+
 export function copyCityInput(val) {
   return {
     type: types.CITY_CHANGED,

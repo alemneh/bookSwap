@@ -9,6 +9,7 @@ module.exports = function(mongoose, models) {
     password: String,
     city: String,
     state: String,
+    email: String,
     books: [{ type: Schema.Types.ObjectId, ref:'Book'}],
     tradeRequests: [{ type: Schema.Types.ObjectId, ref:'Trade'}],
     pendingTrades: [{ type: Schema.Types.ObjectId, ref:'Trade'}],

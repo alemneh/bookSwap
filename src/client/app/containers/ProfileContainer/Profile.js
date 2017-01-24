@@ -113,12 +113,14 @@ class ProfileContainer extends Component {
       user,
       token,
       newCity,
+      newEmail,
       newUserName,
       newState
     } = this.props
 
     const updatedUser = {
       name:  newUserName ? newUserName : user.name,
+      email: newEmail    ? newEmail : user.email,
       city:  newCity     ? newCity : user.city,
       state: newState    ? newState : user.state
     }
@@ -177,6 +179,7 @@ function mapPropsToState(state) {
     isEditing: state.user.isEditing,
     userBooks: state.user.books,
     newState: state.user.newState,
+    newEmail: state.user.newEmail,
     newCity: state.user.newCity,
     search: state.user.search,
     trade: state.user.trade,

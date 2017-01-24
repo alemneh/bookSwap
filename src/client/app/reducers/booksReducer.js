@@ -6,6 +6,7 @@ const initialState = {
   requesterBook: null,
   fetching: false,
   fetched: false,
+  success: null,
   error: null
 }
 
@@ -32,13 +33,14 @@ export default function(state=initialState, action) {
       return {...state, fetching: false, error: action.payload}
     }
     case types.MAKE_TRADE_REQUEST_FULFILLED: {
-      const requesteeBookId = action.payload;
+      const { requesteeBookId, success } = action.payload;
       const books = state.books.filter((book) => book._id != requesteeBookId);
 
       return {
         ...state,
         fetching: false,
         fetched: true,
+        success,
         books
       }
     }

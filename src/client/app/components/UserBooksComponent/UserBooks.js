@@ -18,7 +18,7 @@ const Books = ({
       )
     }
     return userBooks.map((book, index) => {
-      return <div className="pin"><img src={book.imgUrl} key={index} style={ {float: 'left', margin: '10px'} }
+      return <div key={index} className="pin"><img src={book.imgUrl}  style={ {float: 'left', margin: '10px'} }
                   alt={ book.title }
                   data-toggle="modal" data-target="#myModal" onClick={handleRemoveBook }/>
             </div>

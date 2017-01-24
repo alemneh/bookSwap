@@ -5,6 +5,7 @@ module.exports = (mongoose, models) => {
   const tradeSchema = new mongoose.Schema({
     requesteeBook: [{type: Schema.Types.ObjectId, ref: 'Book'}],
     requesterBook: [{type: Schema.Types.ObjectId, ref: 'Book'}],
+    requesteeEmail: String,
     requesteeBookTitle: String,
     requesterBookTitle: String,
     requesterName: String,

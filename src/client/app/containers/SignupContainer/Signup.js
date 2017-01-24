@@ -8,7 +8,8 @@ import {
   copyPasswordInput,
   copyCityInput,
   copyStateInput,
-  onCancelClick
+  onCancelClick,
+  copyEmailInput
 } from '../../actions/userActions';
 
 
@@ -17,6 +18,7 @@ class SignUpContianer extends Component {
     super(props);
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleCityChange = this.handleCityChange.bind(this);
     this.handleStateChange = this.handleStateChange.bind(this);
@@ -26,6 +28,11 @@ class SignUpContianer extends Component {
   handleUsernameChange(e) {
 
       this.props.copyUserNameInput(e.target.value)
+  }
+
+  handleEmailChange(e) {
+
+      this.props.copyEmailInput(e.target.value)
   }
 
   handleCityChange(e) {
@@ -47,21 +54,24 @@ class SignUpContianer extends Component {
 
   handleSignUp(e) {
     e.preventDefault();
-    let { name, password, city, state, signUp } = this.props;
+    let { name, email, password, city, state, signUp } = this.props;
 
-    const validateLoginInput = this.validateLoginInput(name, password, city, state);
+    const newUser = {
+      name,
+      email,
+      password,
+      city,
+      state
+    }
+
+    const validateLoginInput = this.validateLoginInput(newUser);
 
     if(validateLoginInput) {
 
       return;
     }
 
-    const newUser = {
-      name,
-      password,
-      city,
-      state
-    }
+
 
     signUp(newUser);
 
@@ -69,14 +79,14 @@ class SignUpContianer extends Component {
 
 
 
-  validateLoginInput(name, password, city, state) {
-    if(!name) {
+  validateLoginInput(newUser) {
+    if(!newUser.name) {
       return 'Please enter username';
-    } else if(!password) {
+    } else if(!newUser.password) {
       return 'Please enter password';
-    } else if(!city) {
+    } else if(!newUser.city) {
       return 'Please enter city'
-    } else if(!state) {
+    } else if(!newUser.state) {
       return 'Please enter state'
     } else {
       return null;
@@ -89,6 +99,7 @@ class SignUpContianer extends Component {
       <div className='container'>
         <Signup handleSignUp={ this.handleSignUp }
                 handleUsernameChange={ this.handleUsernameChange }
+                handleEmailChange={ this.handleEmailChange }
                 handleCityChange={ this.handleCityChange }
                 handleStateChange={ this.handleStateChange }
                 onCancelClick={ this.props.onCancelClick }
@@ -102,6 +113,7 @@ class SignUpContianer extends Component {
 function mapPropsToState(state) {
   return {
     name: state.user.newUserName,
+    email: state.user.newEmail,
     password: state.user.newPassword,
     city: state.user.newCity,
     state: state.user.newState
@@ -114,6 +126,7 @@ function matchDispatchToProps(dispatch) {
     copyUserNameInput,
     copyPasswordInput,
     copyCityInput,
+    copyEmailInput,
     signUp,
     copyStateInput,
     onCancelClick

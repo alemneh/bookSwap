@@ -40,6 +40,7 @@ const Info = ({
     return (
       <div>
         <h3><b>NAME:</b> <br /> {user.name}</h3>
+        <h3><b>EMAIL:</b> <br /> {user.email}</h3>
         <h3><b>CITY:</b> <br /> {user.city}</h3>
         <h3><b>STATE:</b> <br /> {user.state}</h3>
         <a onClick={ onEditClick } href="#" className="btn btn-primary">Edit</a>

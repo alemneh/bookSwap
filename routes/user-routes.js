@@ -1,7 +1,7 @@
 'use strict';
-const jwtAuth = require('../lib/auth.js');
+const jwtAuth = require('../lib/auth');
 const models = require('../models');
-
+const sendEmail = require('../lib/emails');
 const Book = models.Book;
 const User = models.User;
 const Trade = models.Trade;
@@ -163,6 +163,7 @@ let UserRoutes = {
                {$set: { isPendingTrade: true }}).exec();
       })
       .then((book) => {
+        sendEmail(newTrade);
         res.json({message: 'Trade Request Sent!', newTrade});
       })
       .catch((err) => {

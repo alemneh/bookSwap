@@ -38,8 +38,8 @@ const BookPage = ({
       )
     }
     return books.map((book, index) => {
-      return <div className='pin'>
-                <img src={book.imgUrl} alt={book.title}  key={index} style={ {float: 'left', margin: '10px'} }
+      return <div key={index} className='pin'>
+                <img src={book.imgUrl} alt={book.title}   style={ {float: 'left', margin: '10px'} }
               data-toggle="modal" data-target="#myModal"
               onClick={() => { setRequesteeBook(book) }} />
             </div>

@@ -11,6 +11,7 @@ const initialState = {
   error: null,
   newUserName: '',
   newPassword: '',
+  newEmail: '',
   newState: '',
   newCity: '',
   search: '',
@@ -181,6 +182,9 @@ export default function(state=initialState, action) {
     }
     case types.USERNAME_CHANGED: {
       return {...state, newUserName: action.payload}
+    }
+    case types.EMAIL_CHANGED: {
+      return {...state, newEmail: action.payload}
     }
     case types.PASSWORD_CHANGED: {
       return {...state, newPassword: action.payload}

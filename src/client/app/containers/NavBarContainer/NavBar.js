@@ -23,6 +23,13 @@ class NavContainer extends Component {
     this.handleLogout = this.handleLogout.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps);
+    if(nextProps.user) {
+      browserHistory.push('/books');
+    }
+  }
+
   handleUsernameChange(e) {
     this.setState( {username: e.target.value});
 
@@ -57,20 +64,16 @@ class NavContainer extends Component {
 
     const { success, error, inputError, isError, setAlertMessage } = this.props;
     if(success) {
-      setAlertMessage(success, isError);
+      setAlertMessage(success, false);
     } else if(error) {
-      setAlertMessage(error.response.data.message, isError);
+      setAlertMessage(error.response.data.message, true);
     } else if (inputError) {
-      setAlertMessage(inputError, isError);
+      setAlertMessage(inputError, true);
     } else {
       return;
     }
 
-    console.log('###################################');
-    console.log('Erorr: ' + error);
-    console.log('Success:' + success);
-    console.log('Input: ' + inputError);
-    console.log('###################################');
+
     return (
       <div>
         <Alert message={inputError }
@@ -102,7 +105,7 @@ class NavContainer extends Component {
                 handlePasswordChange={this.handlePasswordChange}
                 handleUsernameChange={this.handleUsernameChange}/>
 
-                { this.renderAlert() }
+                {/* { this.renderAlert() } */}
       </div>
     )
   }

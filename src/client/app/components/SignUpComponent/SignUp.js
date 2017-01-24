@@ -5,6 +5,7 @@ const SignUpComponent = ({
   handleUsernameChange,
   handlePasswordChange,
   handleSignUp,
+  handleEmailChange,
   handleCityChange,
   handleStateChange,
   onCancelClick
@@ -19,6 +20,13 @@ const SignUpComponent = ({
           <div className="col-lg-10">
             <input type="text" className="form-control" id="inputUsername"
                     placeholder="Username"  onChange={ handleUsernameChange }/>
+          </div>
+        </div>
+        <div className="form-group">
+          <label for="inputEmail" className="col-lg-2 control-label">Email</label>
+          <div className="col-lg-10">
+            <input type="text" className="form-control" id="inputEmail"
+                    placeholder="Email"  onChange={ handleEmailChange }/>
           </div>
         </div>
         <div className="form-group">
