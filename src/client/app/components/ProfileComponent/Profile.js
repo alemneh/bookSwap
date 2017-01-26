@@ -20,6 +20,9 @@ const ProfileComponent = ({
   onCancelClick,
   onSaveClick,
   handleUsernameChange,
+  handlePhoneNumberChange,
+  handleCheckBoxChange,
+  handleEmailChange,
   handleStateChange,
   handleCityChange,
   handleUpdateOnUser,
@@ -42,6 +45,9 @@ const ProfileComponent = ({
           <Info user={user}
                 isEditing={ isEditing }
                 handleUsernameChange={ handleUsernameChange }
+                handleEmailChange={ handleEmailChange }
+                handlePhoneNumberChange={ handlePhoneNumberChange }
+                handleCheckBoxChange={ handleCheckBoxChange }
                 handleStateChange={ handleStateChange }
                 handleCityChange={ handleCityChange }
                 onEditClick={ onEditClick }

@@ -17,18 +17,33 @@ const Info = ({
     if(isEditing) {
       return (
         <div>
-          <h3><b>NAME:</b></h3>
+          <h3><b>Name:</b></h3>
           <input type="text" defaultValue={user.name}
                              onChange={ handleUsernameChange }
                              />
-          <h3><b>CITY:</b></h3>
+         <h3><b>Email:</b></h3>
+         <input type="text" defaultValue={user.email}
+                            onChange={ handleEmailChange }
+                            />
+        <h3><b>Phone Number:</b></h3>
+        <input type="text" defaultValue={user.phoneNumber}
+                           onChange={ handlePhoneNumberChange }
+                           />
+          <h3><b>City:</b></h3>
           <input type="text" defaultValue={user.city}
                              onChange={ handleCityChange }
                              />
-          <h3><b>STATE:</b></h3>
+          <h3><b>State:</b></h3>
           <input type="text" defaultValue={user.state}
                              onChange={ handleStateChange }
-                             /> <br />
+                             />
+          <h3><b>Notifications:</b></h3>
+          <input type="checkbox" defaultValue={user.email_notification}
+                             onChange={ handleStateChange }
+                             />
+           <input type="checkbox" defaultValue={user.text_notification}
+                              onChange={ handleStateChange }
+                              /><br />
           <a style={ {margin: '5px 5px 5px 0'} } onClick={ onCancelClick }
              href="#" className="btn btn-default">Cancel</a>
           <a style={ {margin: '5px 5px 5px 0'} } onClick={ onSaveClick }
@@ -39,10 +54,15 @@ const Info = ({
 
     return (
       <div>
-        <h3><b>NAME:</b> <br /> {user.name}</h3>
-        <h3><b>EMAIL:</b> <br /> {user.email}</h3>
-        <h3><b>CITY:</b> <br /> {user.city}</h3>
-        <h3><b>STATE:</b> <br /> {user.state}</h3>
+        <h3><b>Name:</b> <br /> {user.name}</h3>
+        <h3><b>Email:</b> <br /> {user.email}</h3>
+        <h3><b>Phone Number:</b> <br /> {user.phoneNumber}</h3>
+        <h3><b>City:</b> <br /> {user.city}</h3>
+        <h3><b>State:</b> <br /> {user.state}</h3>
+        <h3><b>Notifications:</b> <br /></h3>
+        <input type="checkbox" disabled/> Email
+        <input type="checkbox" disabled/> Text
+        <br />
         <a onClick={ onEditClick } href="#" className="btn btn-primary">Edit</a>
       </div>
     )

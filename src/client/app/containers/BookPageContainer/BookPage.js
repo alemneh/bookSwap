@@ -84,7 +84,7 @@ class BookPageContainer extends Component {
     } = this.props;
 
     return (
-      <div>
+      <section className="container">
         <BookPage allBooks={ allBooks }
                   userBooks={ userBooks }
                   requesteeBook={ requesteeBook }
@@ -95,7 +95,7 @@ class BookPageContainer extends Component {
                   handleTradeRequest= {this.handleTradeRequest}
                   />
          {/* { this.renderAlert() } */}
-      </div>
+      </section>
     )
   }
 }

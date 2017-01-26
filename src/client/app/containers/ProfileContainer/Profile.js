@@ -11,12 +11,15 @@ import {
   removeBookFromUser,
   updateUserInfo,
   copyCityInput,
+  emailCheckboxClick,
+  textCheckboxClick,
   copyUserNameInput,
   copyStateInput,
   onEditClick,
   onCancelClick,
   setBook2Remove,
   copySearchInput,
+  copyPhoneNumberInput,
   declineTrade,
   acceptTrade,
   viewTrade
@@ -26,16 +29,19 @@ class ProfileContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.handleCityChange = this.handleCityChange.bind(this)
-    this.handleUsernameChange = this.handleUsernameChange.bind(this);
-    this.handleStateChange  = this.handleStateChange.bind(this);
-    this.handleBookSearchChange = this.handleBookSearchChange.bind(this);
-    this.onSaveClick = this.onSaveClick.bind(this);
-    this._queryBook2Add = this._queryBook2Add.bind(this);
-    this._removeBookFromUser = this._removeBookFromUser.bind(this);
-    this.handleRemoveBook = this.handleRemoveBook.bind(this);
-    this.handleAcceptTrade = this.handleAcceptTrade.bind(this);
-    this.handleDeclineTrade = this.handleDeclineTrade.bind(this);
+    this.handleCityChange        = this.handleCityChange.bind(this)
+    this.handleUsernameChange    = this.handleUsernameChange.bind(this);
+    this.handleStateChange       = this.handleStateChange.bind(this);
+    this.handleBookSearchChange  = this.handleBookSearchChange.bind(this);
+    this.handleEmailChange       = this.handleEmailChange.bind(this);
+    this.handleCheckBoxChange    = this.handleCheckBoxChange.bind(this);
+    this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
+    this.onSaveClick             = this.onSaveClick.bind(this);
+    this._queryBook2Add          = this._queryBook2Add.bind(this);
+    this._removeBookFromUser     = this._removeBookFromUser.bind(this);
+    this.handleRemoveBook        = this.handleRemoveBook.bind(this);
+    this.handleAcceptTrade       = this.handleAcceptTrade.bind(this);
+    this.handleDeclineTrade      = this.handleDeclineTrade.bind(this);
   }
 
   componentWillMount() {
@@ -90,6 +96,16 @@ class ProfileContainer extends Component {
     this.props.copySearchInput(e.target.value)
   }
 
+  handlePhoneNumberChange(e) {
+
+    this.props.copyPhoneNumberInput(e.target.value)
+  }
+
+  handleEmailChange(e) {
+
+    this.props.copyEmailInput(e.target.value)
+  }
+
   handleRemoveBook(e) {
     this.props.setBook2Remove(e.target.alt)
   }
@@ -106,6 +122,15 @@ class ProfileContainer extends Component {
     this.props.copyUserNameInput(e.target.value)
   }
 
+  handleCheckBoxChange(e) {
+    const { emailCheckboxClick, textCheckboxClick } = this.props;
+    if(e.target.name === 'checkboxEmail') {
+      emailCheckboxClick();
+      return;
+    }
+    textCheckboxClick();
+  }
+
   onSaveClick(e) {
     e.preventDefault();
     const {
@@ -114,6 +139,9 @@ class ProfileContainer extends Component {
       token,
       newCity,
       newEmail,
+      newPhoneNumber,
+      email_notification,
+      text_notification,
       newUserName,
       newState
     } = this.props
@@ -122,7 +150,10 @@ class ProfileContainer extends Component {
       name:  newUserName ? newUserName : user.name,
       email: newEmail    ? newEmail : user.email,
       city:  newCity     ? newCity : user.city,
-      state: newState    ? newState : user.state
+      state: newState    ? newState : user.state,
+      phoneNumber: newPhoneNumber ? newPhoneNumber : user.phoneNumber,
+      email_notification: email_notification ? true : false,
+      text_notification: text_notification ? true : false
     }
 
     updateUserInfo(updatedUser, user._id, token)
@@ -144,7 +175,7 @@ class ProfileContainer extends Component {
       onCancelClick
      } = this.props;
     return (
-      <div>
+      <section className="container">
         <Profile  user={ user }
                   book2Remove={ book2Remove }
                   search={ search }
@@ -158,6 +189,9 @@ class ProfileContainer extends Component {
                   onCancelClick= { onCancelClick }
                   _queryBook2Add={ this._queryBook2Add }
                   _removeBookFromUser={ this._removeBookFromUser }
+                  handlePhoneNumberChange={ this.handlePhoneNumberChange }
+                  handleCheckBoxChange={ this.handleCheckBoxChange }
+                  handlePasswordChange={ this.handlePasswordChange}
                   handleUsernameChange={ this.handleUsernameChange }
                   handleStateChange={ this.handleStateChange }
                   handleCityChange={ this.handleCityChange }
@@ -167,7 +201,7 @@ class ProfileContainer extends Component {
                   handleBookSearchChange={ this.handleBookSearchChange }
                   handleRemoveBook={ this.handleRemoveBook }
                   />
-      </div>
+      </section>
     )
   }
 }
@@ -178,6 +212,9 @@ function mapPropsToState(state) {
     token: state.login.token,
     isEditing: state.user.isEditing,
     userBooks: state.user.books,
+    newPhoneNumber: state.user.newPhoneNumber,
+    email_notification: state.user.email_notification,
+    text_notification: state.user.text_notification,
     newState: state.user.newState,
     newEmail: state.user.newEmail,
     newCity: state.user.newCity,

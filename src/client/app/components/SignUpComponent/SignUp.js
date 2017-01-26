@@ -4,10 +4,12 @@ import React from 'react';
 const SignUpComponent = ({
   handleUsernameChange,
   handlePasswordChange,
+  handlePhoneNumberChange,
   handleSignUp,
   handleEmailChange,
   handleCityChange,
   handleStateChange,
+  handleCheckBoxChange,
   onCancelClick
 }) => {
 
@@ -37,6 +39,13 @@ const SignUpComponent = ({
           </div>
         </div>
         <div className="form-group">
+          <label for="inputPhoneNumber" className="col-lg-2 control-label">Phone Number</label>
+          <div className="col-lg-10">
+            <input type="text" className="form-control" id="inputPhoneNumber"
+                  placeholder="Phone Number..." onChange={ handlePhoneNumberChange }/>
+          </div>
+        </div>
+        <div className="form-group">
           <label for="inputCity" className="col-lg-2 control-label">City</label>
           <div className="col-lg-10">
             <input type="text" className="form-control" id="inputCity"
@@ -48,6 +57,21 @@ const SignUpComponent = ({
           <div className="col-lg-10">
             <input type="text" className="form-control" id="inputState"
                   placeholder="State..." onChange={ handleStateChange }/>
+          </div>
+        </div>
+        <div className="form-group">
+          <label for="inputPassword" className="col-lg-2 control-label">Notifications</label>
+          <div class="col-lg-10">
+            <div className="checkbox">
+              <label>
+                <input type="checkbox" name="checkboxEmail" onChange={ handleCheckBoxChange }/> Email
+              </label>
+            </div>
+            <div className="checkbox">
+              <label>
+                <input type="checkbox" name="checkboxText" onChange={ handleCheckBoxChange }/> Text
+              </label>
+            </div>
           </div>
         </div>
         <div className="form-group">

@@ -11,10 +11,13 @@ const initialState = {
   error: null,
   newUserName: '',
   newPassword: '',
+  newPhoneNumber: '',
   newEmail: '',
   newState: '',
   newCity: '',
   search: '',
+  email_notification: false,
+  text_notification: false,
   trade: null,
   viewTrade: false,
   book2Remove: null,
@@ -194,6 +197,15 @@ export default function(state=initialState, action) {
     }
     case types.STATE_CHANGED: {
       return {...state, newState: action.payload}
+    }
+    case types.EMAIL_NOTIFICATIONS_CLICKED: {
+      return {...state, email_notification: !state.email_notification}
+    }
+    case types.TEXT_NOTIFICATIONS_CLICKED: {
+      return {...state, text_notification: !state.text_notification}
+    }
+    case types.PHONE_NUMBER_CHANGED: {
+      return {...state, newPhoneNumber: action.payload}
     }
     case types.SEARCH_INPUT_CHANGE: {
       return {...state, search: action.payload}

@@ -130,66 +130,85 @@ export function viewTrade(trade) {
   return {
     type: types.VIEW_TRADE,
     payload: trade
-  }
+  };
 }
 
 export function onEditClick() {
   return {
     type: types.EDIT_BTN_CLICK
-  }
+  };
 }
 
 export function setBook2Remove(val) {
   return {
     type: types.SET_BOOK_TO_REMOVE,
     payload: val
-  }
+  };
 }
 
 export function copySearchInput(val) {
   return {
     type: types.SEARCH_INPUT_CHANGE,
     payload: val
-  }
+  };
 }
 
 export function onCancelClick() {
   return {
     type: types.CANCEL_BTN_CLICK
-  }
+  };
 }
 
 export function copyUserNameInput(val) {
   return {
     type: types.USERNAME_CHANGED,
     payload: val
-  }
+  };
 }
 
 export function copyEmailInput(val) {
   return {
     type: types.EMAIL_CHANGED,
     payload: val
-  }
+  };
 }
 
 export function copyCityInput(val) {
   return {
     type: types.CITY_CHANGED,
     payload: val
-  }
+  };
 }
 
 export function copyStateInput(val) {
   return {
     type: types.STATE_CHANGED,
     payload: val
-  }
+  };
 }
 
 export function copyPasswordInput(val) {
   return {
     type: types.PASSWORD_CHANGED,
     payload: val
-  }
+  };
+}
+
+export function copyPhoneNumberInput(val) {
+  return {
+    type: types.PHONE_NUMBER_CHANGED,
+    payload: val
+  };
+}
+
+export function emailCheckboxClick() {
+  return {
+    type: types.EMAIL_NOTIFICATIONS_CLICKED
+  };
+}
+
+export function textCheckboxClick() {
+  return {
+    type: types.TEXT_NOTIFICATIONS_CLICKED
+  };
 }

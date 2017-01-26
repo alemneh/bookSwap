@@ -8,6 +8,9 @@ import {
   copyPasswordInput,
   copyCityInput,
   copyStateInput,
+  copyPhoneNumberInput,
+  emailCheckboxClick,
+  textCheckboxClick,
   onCancelClick,
   copyEmailInput
 } from '../../actions/userActions';
@@ -17,23 +20,31 @@ class SignUpContianer extends Component {
   constructor(props) {
     super(props);
 
-    this.handleUsernameChange = this.handleUsernameChange.bind(this);
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleCityChange = this.handleCityChange.bind(this);
-    this.handleStateChange = this.handleStateChange.bind(this);
-    this.handleSignUp = this.handleSignUp.bind(this);
+    this.handleUsernameChange    = this.handleUsernameChange.bind(this);
+    this.handleEmailChange       = this.handleEmailChange.bind(this);
+    this.handlePasswordChange    = this.handlePasswordChange.bind(this);
+    this.handleCityChange        = this.handleCityChange.bind(this);
+    this.handleStateChange       = this.handleStateChange.bind(this);
+    this.handleCheckBoxChange    = this.handleCheckBoxChange.bind(this);
+    this.handlePhoneNumberChange = this.handlePhoneNumberChange.bind(this);
+    this.handleSignUp            = this.handleSignUp.bind(this);
   }
 
   handleUsernameChange(e) {
 
-      this.props.copyUserNameInput(e.target.value)
+    this.props.copyUserNameInput(e.target.value)
   }
 
   handleEmailChange(e) {
 
-      this.props.copyEmailInput(e.target.value)
+    his.props.copyEmailInput(e.target.value)
   }
+
+  handlePhoneNumberChange(e) {
+
+    this.props.copyPhoneNumberInput(e.target.value);
+  }
+
 
   handleCityChange(e) {
 
@@ -50,18 +61,40 @@ class SignUpContianer extends Component {
     this.props.copyPasswordInput(e.target.value);
   }
 
+  handleCheckBoxChange(e) {
+    const { emailCheckboxClick, textCheckboxClick } = this.props;
+    if(e.target.name === 'checkboxEmail') {
+      emailCheckboxClick();
+      return;
+    }
+    textCheckboxClick();
+  }
+
+
 
 
   handleSignUp(e) {
     e.preventDefault();
-    let { name, email, password, city, state, signUp } = this.props;
+    let {
+      name,
+      email,
+      password,
+      city,
+      state,
+      signUp,
+      phoneNumber,
+      email_notification,
+      text_notification } = this.props;
 
     const newUser = {
       name,
       email,
       password,
       city,
-      state
+      state,
+      phoneNumber,
+      email_notification,
+      text_notification
     }
 
     const validateLoginInput = this.validateLoginInput(newUser);
@@ -84,6 +117,8 @@ class SignUpContianer extends Component {
       return 'Please enter username';
     } else if(!newUser.password) {
       return 'Please enter password';
+    } else if(!newUser.phoneNumber) {
+      return 'Please enter phone number'
     } else if(!newUser.city) {
       return 'Please enter city'
     } else if(!newUser.state) {
@@ -94,17 +129,18 @@ class SignUpContianer extends Component {
   }
 
   render() {
-    console.log(this.props);
     return (
-      <div className='container'>
+      <section className='container'>
         <Signup handleSignUp={ this.handleSignUp }
                 handleUsernameChange={ this.handleUsernameChange }
                 handleEmailChange={ this.handleEmailChange }
                 handleCityChange={ this.handleCityChange }
                 handleStateChange={ this.handleStateChange }
                 onCancelClick={ this.props.onCancelClick }
+                handlePhoneNumberChange={ this.handlePhoneNumberChange }
+                handleCheckBoxChange={ this.handleCheckBoxChange}
                 handlePasswordChange={ this.handlePasswordChange }/>
-      </div>
+      </section>
     )
   }
 
@@ -116,7 +152,10 @@ function mapPropsToState(state) {
     email: state.user.newEmail,
     password: state.user.newPassword,
     city: state.user.newCity,
-    state: state.user.newState
+    state: state.user.newState,
+    phoneNumber: state.user.newPhoneNumber,
+    email_notification: state.user.email_notification,
+    text_notification: state.user.text_notification
   }
 }
 
@@ -127,6 +166,9 @@ function matchDispatchToProps(dispatch) {
     copyPasswordInput,
     copyCityInput,
     copyEmailInput,
+    copyPhoneNumberInput,
+    emailCheckboxClick,
+    textCheckboxClick,
     signUp,
     copyStateInput,
     onCancelClick
