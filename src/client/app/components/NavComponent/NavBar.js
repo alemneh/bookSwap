@@ -47,7 +47,7 @@ const NavComponent = ({
       </div>
         { renderNavBar() }
       <div id="ham-menu">
-        <span onClick={ toggleNavBar } href="#">☰</span>
+        <span onClick={ toggleNavBar } >☰</span>
       </div>
     </header>
 

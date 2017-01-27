@@ -24,10 +24,10 @@ class NavContainer extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
-    if(nextProps.user) {
-      browserHistory.push('/books');
-    }
+    // console.log(nextProps);
+    // if(nextProps.user) {
+    //   browserHistory.push('/books');
+    // }
   }
 
   handleUsernameChange(e) {

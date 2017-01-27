@@ -68,7 +68,7 @@ section {
 }
 
 div.landing-image {
-  background-image: url(https://static.pexels.com/photos/12064/pexels-photo-12064.jpeg);
+  background-image: url('../../resources/images/book-background.jpeg');
   background-size: cover;
   background-position: center;
   width: 100%;
