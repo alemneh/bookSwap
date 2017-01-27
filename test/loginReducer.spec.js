@@ -14,6 +14,7 @@ describe('loginReducer', () => {
       success: null,
       fetching: false,
       fetched: false,
+      slideToggleClass: '',
       error: null
     };
 
@@ -22,6 +23,7 @@ describe('loginReducer', () => {
       user: null,
       success: null,
       fetching: false,
+      slideToggleClass: '',
       fetched: false,
       error: null
     };
@@ -95,6 +97,22 @@ describe('loginReducer', () => {
   it('should handle LOGOUT', () => {
     expect(reducer(initialState, {
       type: types.LOGOUT
+    })).to.deep.equal(expectedState);
+  });
+
+  it('should handle TOGGLE_NAVBAR', () => {
+    expectedState.slideToggleClass = 'none';
+
+    expect(reducer(initialState, {
+      type: types.TOGGLE_NAVBAR
+    })).to.deep.equal(expectedState);
+
+    initialState.slideToggleClass = 'none';
+
+    expectedState.slideToggleClass = '';
+
+    expect(reducer(initialState, {
+      type:types.TOGGLE_NAVBAR
     })).to.deep.equal(expectedState);
   });
 
