@@ -32,6 +32,12 @@ export function signUp(newUser) {
   };
 }
 
+export function toggleNavBar() {
+  return {
+    type: types.TOGGLE_NAVBAR
+  };
+}
+
 export function handleLogout() {
   return {
     type: types.LOGOUT

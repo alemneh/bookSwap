@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import NavBar from '../../components/NavComponent/NavBar';
 import Alert from '../../components/AlertComponent/Alert';
-import { handleLogin, handleLogout } from '../../actions/loginActions';
+import { handleLogin, handleLogout, toggleNavBar } from '../../actions/loginActions';
 import { copyUserNameInput, copyPasswordInput } from '../../actions/userActions'
 import { setAlertMessage } from '../../actions/alertActions.js';
 
@@ -95,13 +95,15 @@ class NavContainer extends Component {
   }
 
   render() {
-    const { user, token, error} = this.props;
+    const { user, token, error, toggleNavBar, slideToggleClass } = this.props;
     return(
       <div>
         <NavBar token={token}
                 user={user}
                 handleLogin={this.handleLogin}
                 handleLogout={this.handleLogout}
+                slideToggleClass={ slideToggleClass }
+                toggleNavBar={ toggleNavBar }
                 handlePasswordChange={this.handlePasswordChange}
                 handleUsernameChange={this.handleUsernameChange}/>
 
@@ -120,7 +122,8 @@ function mapPropsToState(state) {
     error: state.login.error,
     success: state.login.success,
     inputError: state.alert.message,
-    isError: state.alert.error
+    isError: state.alert.error,
+    slideToggleClass: state.login.slideToggleClass
   }
 }
 
@@ -130,7 +133,8 @@ function matchDispatchToProps(dispatch) {
     handleLogout,
     copyUserNameInput,
     copyPasswordInput,
-    setAlertMessage
+    setAlertMessage,
+    toggleNavBar,
    }, dispatch)
 }
 

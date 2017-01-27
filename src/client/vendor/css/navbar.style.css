@@ -50,9 +50,7 @@ li > a:focus {
 }
 
 
-.hide {
-  display: none;
-}
+
 
 section {
   margin-top: 80px;
@@ -199,6 +197,10 @@ footer {
     line-height: 80px;
     text-decoration: none;
     font-size: 50px;
+  }
+
+  .hide {
+    display: none;
   }
 
 

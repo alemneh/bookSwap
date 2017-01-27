@@ -7,7 +7,8 @@ const initialState = {
   fetching: false,
   fetched: false,
   error: null,
-  success: null
+  success: null,
+  slideToggleClass: ''
 }
 
 export default function(state=initialState, action) {
@@ -37,8 +38,11 @@ export default function(state=initialState, action) {
     case types.SIGN_UP_FULFILLED: {
       return {...state, fetching: false, fetched: true}
     }
-    case types.LOGOUT:{
+    case types.LOGOUT: {
       return initialState;
+    }
+    case types.TOGGLE_NAVBAR: {
+      return {...state, slideToggleClass: state.slideToggleClass ? '' : 'none' }
     }
   }
   return state;

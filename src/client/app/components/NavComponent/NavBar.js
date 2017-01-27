@@ -7,33 +7,35 @@ const NavComponent = ({
   token,
   handleLogin,
   handleLogout,
+  toggleNavBar,
+  slideToggleClass,
   handleUsernameChange,
   handlePasswordChange
 }) => {
 
-  let slideClass = '';
 
-  const slideToggle = () => {
-
+  let styles = {
+    display: slideToggleClass
   }
+
 
   const renderNavBar = (slide) => {
     if(token) {
       return(
         <nav>
-          <li><Link  to="/">Home</Link></li>
-          <li><Link  to="/profile">Profile</Link></li>
-          <li><Link  to="/books">Browse Books</Link></li>
-          <li><a href="#" onClick={handleLogout}>Logout</a></li>
+          <li style={styles}><Link  to="/">Home</Link></li>
+          <li style={styles}><Link  to="/profile">Profile</Link></li>
+          <li style={styles}><Link  to="/books">Browse Books</Link></li>
+          <li style={styles}><a href="#" onClick={handleLogout}>Logout</a></li>
         </nav>
       )
     }
     return (
 
-      <nav >
-        <li><Link  to="/">Home</Link></li>
-        <li className={slide} ><Link  to="/signup-form">Sign Up</Link></li>
-        <li><Link  to="/login-form">Log In</Link></li>
+      <nav>
+        <li style={styles}><Link  to="/">Home</Link></li>
+        <li style={styles}><Link  to="/signup-form">Sign Up</Link></li>
+        <li style={styles}><Link  to="/login-form">Log In</Link></li>
       </nav>
     )
   }
@@ -43,9 +45,9 @@ const NavComponent = ({
       <div id="logo">
         <img src="../resources/images/book-logo.png" alt="Book Swap Meet Logo" />
       </div>
-        { renderNavBar(slideClass) }
+        { renderNavBar() }
       <div id="ham-menu">
-        <span onClick={() => { slideClass= 'hide'; console.log(slideClass);}} href="#">☰</span>
+        <span onClick={ toggleNavBar } href="#">☰</span>
       </div>
     </header>
 
@@ -58,6 +60,8 @@ NavComponent.propTypes = {
   token: PropTypes.string,
   handleLogin: PropTypes.func.isRequired,
   handleLogout: PropTypes.func.isRequired,
+  toggleNavBar: PropTypes.func.isRequired,
+  slideToggleClass: PropTypes.string.isRequired,
   handleUsernameChange: PropTypes.func.isRequired,
   handlePasswordChange: PropTypes.func.isRequired
 }
