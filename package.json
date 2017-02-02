@@ -36,6 +36,7 @@
     "redux-thunk": "^2.1.0",
     "request": "^2.79.0",
     "textbelt": "0.0.3",
+    "twilio": "^2.11.1",
     "webpack": "^1.13.2"
   },
   "devDependencies": {
