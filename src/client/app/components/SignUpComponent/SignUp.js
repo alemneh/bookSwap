@@ -68,7 +68,6 @@ const SignUpComponent = ({
                 <input type="checkbox" name="checkboxEmail" onChange={ handleCheckBoxChange }/> Email
               </label>
             </div>
-            {/* <br /> */}
             <div className="checkbox">
               <label>
                 <input type="checkbox" name="checkboxText" onChange={ handleCheckBoxChange }/> Text
