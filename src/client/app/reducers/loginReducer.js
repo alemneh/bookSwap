@@ -3,7 +3,7 @@ import * as types from '../ActionConstants';
 
 const initialState = {
   token: null,
-  user: null,
+  userId: null,
   fetching: false,
   fetched: false,
   error: null,
@@ -20,13 +20,14 @@ export default function(state=initialState, action) {
       return {...state, fetching: false, error: action.payload}
     }
     case types.LOGIN_FULFILLED: {
-      const { token, user} = action.payload;
+      console.log(action);
+      const { token, userId} = action.payload;
       return {
         ...state,
         fetching: false,
         fetched: true,
         token,
-        user
+        userId
       }
     }
     case types.SIGN_UP: {

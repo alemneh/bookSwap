@@ -5,6 +5,9 @@ const Info = ({
   isEditing,
   handleCityChange,
   handleStateChange,
+  handleEmailChange,
+  handlePhoneNumberChange,
+  handleCheckBoxChange,
   handleUsernameChange,
   onCancelClick,
   onSaveClick,
@@ -38,12 +41,18 @@ const Info = ({
                              onChange={ handleStateChange }
                              />
           <h3><b>Notifications:</b></h3>
-          <input type="checkbox" defaultValue={user.email_notification}
-                             onChange={ handleStateChange }
-                             />
-           <input type="checkbox" defaultValue={user.text_notification}
-                              onChange={ handleStateChange }
-                              /><br />
+          { (user.email_notification) ? <input type="checkbox" checked
+                                        name='checkboxEmail'
+                                        onChange={ handleCheckBoxChange }/> :
+                                        <input type="checkbox"
+                                        name='checkboxEmail'
+                                        onChange={ handleCheckBoxChange }/> } Email
+          <br />
+          { (user.text_notification) ? <input type="checkbox" checked
+                                       onChange={ handleCheckBoxChange }/> :
+                                        <input type="checkbox"
+                                        onChange={ handleCheckBoxChange }/> } Text
+          <br />
           <a style={ {margin: '5px 5px 5px 0'} } onClick={ onCancelClick }
              href="#" className="btn btn-default">Cancel</a>
           <a style={ {margin: '5px 5px 5px 0'} } onClick={ onSaveClick }
@@ -60,8 +69,11 @@ const Info = ({
         <h3><b>City:</b> <br /> {user.city}</h3>
         <h3><b>State:</b> <br /> {user.state}</h3>
         <h3><b>Notifications:</b> <br /></h3>
-        <input type="checkbox" disabled/> Email
-        <input type="checkbox" disabled/> Text
+        { (user.email_notification) ? <input type="checkbox" disabled checked/> :
+                                      <input type="checkbox" disabled /> } Email
+        <br />
+        { (user.text_notification) ? <input type="checkbox" disabled checked/> :
+                                      <input type="checkbox" disabled /> } Text
         <br />
         <a onClick={ onEditClick } href="#" className="btn btn-primary">Edit</a>
       </div>

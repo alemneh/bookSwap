@@ -24,7 +24,7 @@ let LoginController = {
       } else {
         user.password = undefined;
         res.json({
-          user,
+          userId: user._id,
           token: user.generateToken()
         });
       }

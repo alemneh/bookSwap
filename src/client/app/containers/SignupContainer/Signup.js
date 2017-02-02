@@ -37,7 +37,7 @@ class SignUpContianer extends Component {
 
   handleEmailChange(e) {
 
-    his.props.copyEmailInput(e.target.value)
+    this.props.copyEmailInput(e.target.value)
   }
 
   handlePhoneNumberChange(e) {

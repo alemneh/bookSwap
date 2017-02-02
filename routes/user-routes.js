@@ -2,6 +2,7 @@
 const jwtAuth = require('../lib/auth');
 const models = require('../models');
 const sendEmail = require('../lib/emails');
+const text = require('../lib/text-notifications');
 const Book = models.Book;
 const User = models.User;
 const Trade = models.Trade;
@@ -40,6 +41,7 @@ let UserRoutes = {
   },
 
   updateUser: function(req, res) {
+    console.log(req.body);
     User.findByIdAndUpdate(req.params.id, req.body, {new: true}, (err, user) => {
       if(err) throw err;
       res.json({message: 'Update successful!', user });
@@ -139,7 +141,7 @@ let UserRoutes = {
   },
 
   requestATrade: function(req, res) {
-    let newTrade, requesteeBookId, requesterBookId;
+    let newTrade, requesteeBookId, requesterBookId, requesteePhoneNumber;
 
     newTrade        = new Trade(req.body.trade);
     requesteeBookId = newTrade.requesteeBook[0];
@@ -152,6 +154,7 @@ let UserRoutes = {
         return User.findById(req.body.trade.requesteeId).exec();
       })
       .then((requesteeUser) => {
+        requesteePhoneNumber = requesteeUser.phoneNumber;
         requesteeUser.tradeRequests.push(newTrade._id);
         requesteeUser.save();
         newTrade.save();
@@ -164,6 +167,7 @@ let UserRoutes = {
       })
       .then((book) => {
         sendEmail(newTrade);
+        text.send(requesteePhoneNumber);
         res.json({message: 'Trade Request Sent!', newTrade});
       })
       .catch((err) => {

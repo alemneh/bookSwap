@@ -6,6 +6,7 @@ import books from 'google-books-search';
 import Profile from '../../components/ProfileComponent/Profile';
 import {
   fetchUserBooks,
+  fetchCurrentUser,
   fetchUserTrades,
   addBookToUser,
   removeBookFromUser,
@@ -15,6 +16,7 @@ import {
   textCheckboxClick,
   copyUserNameInput,
   copyStateInput,
+  copyEmailInput,
   onEditClick,
   onCancelClick,
   setBook2Remove,
@@ -45,10 +47,11 @@ class ProfileContainer extends Component {
   }
 
   componentWillMount() {
-    const {fetchUserBooks, fetchUserTrades, user, token} = this.props;
-    if(!user) return browserHistory.push('/');
-    fetchUserBooks(user, token);
-    fetchUserTrades(user, token);
+    const {fetchCurrentUser, fetchUserBooks, fetchUserTrades, userId, token} = this.props;
+    if(!token) return browserHistory.push('/');
+    fetchCurrentUser(userId, token);
+    fetchUserBooks(userId, token);
+    fetchUserTrades(userId, token);
   }
 
   _queryBook2Add() {
@@ -58,7 +61,8 @@ class ProfileContainer extends Component {
         const newBook = {
           title: res[0].title,
           imgUrl: res[0].thumbnail,
-          owner: user.name
+          owner: user.name,
+          ownerEmail: user.email
         };
         console.log(newBook);
 
@@ -102,7 +106,7 @@ class ProfileContainer extends Component {
   }
 
   handleEmailChange(e) {
-
+    console.log(e.target.value);
     this.props.copyEmailInput(e.target.value)
   }
 
@@ -123,12 +127,16 @@ class ProfileContainer extends Component {
   }
 
   handleCheckBoxChange(e) {
-    const { emailCheckboxClick, textCheckboxClick } = this.props;
+    const { emailCheckboxClick, textCheckboxClick, user } = this.props;
+    let val;
     if(e.target.name === 'checkboxEmail') {
-      emailCheckboxClick();
+      console.log('email_notification: ' +user.email_notification);
+      val = user.email_notification
+      emailCheckboxClick(val);
       return;
     }
-    textCheckboxClick();
+    val = user.text_notification
+    textCheckboxClick(val);
   }
 
   onSaveClick(e) {
@@ -140,8 +148,6 @@ class ProfileContainer extends Component {
       newCity,
       newEmail,
       newPhoneNumber,
-      email_notification,
-      text_notification,
       newUserName,
       newState
     } = this.props
@@ -152,15 +158,14 @@ class ProfileContainer extends Component {
       city:  newCity     ? newCity : user.city,
       state: newState    ? newState : user.state,
       phoneNumber: newPhoneNumber ? newPhoneNumber : user.phoneNumber,
-      email_notification: email_notification ? true : false,
-      text_notification: text_notification ? true : false
+      email_notification: user.email_notification,
+      text_notification: user.text_notification
     }
-
+    console.log(updatedUser);
     updateUserInfo(updatedUser, user._id, token)
   }
 
-
-  render() {
+  renderProfileComponent() {
     const {
       user,
       isEditing,
@@ -174,8 +179,15 @@ class ProfileContainer extends Component {
       onEditClick,
       onCancelClick
      } = this.props;
+
+    if(!user) {
+      return (
+        <div>loading...</div>
+      )
+    }
+
     return (
-      <section className="container">
+      <div className="container">
         <Profile  user={ user }
                   book2Remove={ book2Remove }
                   search={ search }
@@ -192,6 +204,7 @@ class ProfileContainer extends Component {
                   handlePhoneNumberChange={ this.handlePhoneNumberChange }
                   handleCheckBoxChange={ this.handleCheckBoxChange }
                   handlePasswordChange={ this.handlePasswordChange}
+                  handleEmailChange={ this.handleEmailChange }
                   handleUsernameChange={ this.handleUsernameChange }
                   handleStateChange={ this.handleStateChange }
                   handleCityChange={ this.handleCityChange }
@@ -201,20 +214,28 @@ class ProfileContainer extends Component {
                   handleBookSearchChange={ this.handleBookSearchChange }
                   handleRemoveBook={ this.handleRemoveBook }
                   />
-      </section>
+      </div>
+    )
+  }
+
+
+  render() {
+    return (
+      <div>
+        { this.renderProfileComponent() }
+      </div>
     )
   }
 }
 
 function mapPropsToState(state) {
   return {
-    user: state.user.user || state.login.user,
+    user: state.user.user,
     token: state.login.token,
+    userId: state.login.userId,
     isEditing: state.user.isEditing,
     userBooks: state.user.books,
     newPhoneNumber: state.user.newPhoneNumber,
-    email_notification: state.user.email_notification,
-    text_notification: state.user.text_notification,
     newState: state.user.newState,
     newEmail: state.user.newEmail,
     newCity: state.user.newCity,
@@ -230,12 +251,16 @@ function mapPropsToState(state) {
 function matchDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchUserBooks,
+    fetchCurrentUser,
     fetchUserTrades,
     addBookToUser,
     removeBookFromUser,
     updateUserInfo,
     copyCityInput,
     copyUserNameInput,
+    emailCheckboxClick,
+    textCheckboxClick,
+    copyEmailInput,
     copyStateInput,
     declineTrade,
     acceptTrade,

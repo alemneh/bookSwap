@@ -62,11 +62,13 @@ const SignUpComponent = ({
         <div className="form-group">
           <label for="inputPassword" className="col-lg-2 control-label">Notifications</label>
           <div class="col-lg-10">
+          <br />
             <div className="checkbox">
               <label>
                 <input type="checkbox" name="checkboxEmail" onChange={ handleCheckBoxChange }/> Email
               </label>
             </div>
+            {/* <br /> */}
             <div className="checkbox">
               <label>
                 <input type="checkbox" name="checkboxText" onChange={ handleCheckBoxChange }/> Text

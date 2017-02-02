@@ -19,9 +19,9 @@ class BookPageContainer extends Component {
   }
 
   componentWillMount() {
-    const { fetchAllBooks, fetchUserBooks, token, user } = this.props;
+    const { fetchAllBooks, fetchUserBooks, token, userId } = this.props;
     fetchAllBooks(token);
-    fetchUserBooks(user, token);
+    fetchUserBooks(userId, token);
 
   }
 
@@ -34,13 +34,14 @@ class BookPageContainer extends Component {
   }
 
   handleTradeRequest() {
-    const { requesterBook, requesteeBook, makeTradeRequest, token} = this.props;
+    const { requesterBook, requesteeBook, makeTradeRequest, token, user} = this.props;
 
     const trade = {
       requesterId: requesterBook._owner,
       requesteeId: requesteeBook._owner,
       requesteeBook: requesteeBook._id,
       requesterBook: requesterBook._id,
+      requesteeEmail: user.email,
       requesteeBookTitle: requesteeBook.title,
       requesterBookTitle: requesterBook.title,
       requesteeName: requesteeBook.owner,
@@ -49,7 +50,8 @@ class BookPageContainer extends Component {
       requesteeImgUrl: requesteeBook.imgUrl,
       requesteeEmail: requesteeBook.ownerEmail
     }
-
+    console.log(user);
+    console.log(trade);
     makeTradeRequest(trade, token);
   }
 
@@ -102,8 +104,9 @@ class BookPageContainer extends Component {
 
 function mapPropsToState(state) {
   return {
+    user: state.user.user,
     token: state.login.token,
-    user: state.login.user,
+    userId: state.login.userId,
     allBooks: state.books.books,
     userBooks: state.user.books,
     requesteeBook: state.books.requesteeBook,

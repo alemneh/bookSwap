@@ -9,7 +9,7 @@ const LoginComponent = ({
 }) => {
 
   return (
-    <form className="form-horizontal">
+    <form onSubmit={ handleLogin } className="form-horizontal">
       <fieldset>
         <legend>Log In</legend>
         <div className="form-group">
@@ -29,7 +29,7 @@ const LoginComponent = ({
         <div className="form-group">
           <div className="col-lg-10 col-lg-offset-2">
             <button type="reset" className="btn btn-default" onClick={ onCancelClick }>Cancel</button>
-            <button type="submit" className="btn btn-primary" onClick={ handleLogin }>Submit</button>
+            <button type="submit" className="btn btn-primary" >Submit</button>
           </div>
         </div>
       </fieldset>

@@ -38,6 +38,7 @@ class LoginContainer extends Component {
       setAlertMessage(validateLoginInput);
       return;
     }
+    console.log('Username: ' + username + '\n' + 'Password: ' + password);
 
     this.props.handleLogin(username, password);
   }
@@ -53,6 +54,9 @@ class LoginContainer extends Component {
   }
 
   render() {
+    if(this.props.token) browserHistory.push('/profile');
+
+
     return (
       <section className="container">
         <Login  handleLogin={this.handleLogin}
@@ -69,7 +73,8 @@ class LoginContainer extends Component {
 function mapPropsToState(state) {
   return {
     username: state.user.newUserName,
-    password: state.user.newPassword
+    password: state.user.newPassword,
+    token: state.login.token
   }
 }
 

@@ -16,8 +16,6 @@ const initialState = {
   newState: '',
   newCity: '',
   search: '',
-  email_notification: false,
-  text_notification: false,
   trade: null,
   viewTrade: false,
   book2Remove: null,
@@ -199,10 +197,16 @@ export default function(state=initialState, action) {
       return {...state, newState: action.payload}
     }
     case types.EMAIL_NOTIFICATIONS_CLICKED: {
-      return {...state, email_notification: !state.email_notification}
+      let user = {...state.user};
+      user.email_notification = !action.payload;
+
+      return {...state, user}
     }
     case types.TEXT_NOTIFICATIONS_CLICKED: {
-      return {...state, text_notification: !state.text_notification}
+      let user = {...state.user};
+      user.text_notification = !action.payload;
+
+      return {...state, user}
     }
     case types.PHONE_NUMBER_CHANGED: {
       return {...state, newPhoneNumber: action.payload}

@@ -1,10 +1,10 @@
 import * as types from '../ActionConstants';
 import axios from 'axios';
 
-export function fetchCurrentUser(user, token) {
+export function fetchCurrentUser(userId, token) {
   return function(dispatch) {
     dispatch({ type: types.FETCH_USER })
-    axios.get(process.env.URL + '/users/' + user._id, {
+    axios.get(process.env.URL + '/users/' + userId, {
       headers: {'token': token}
     })
     .then((res) => {
@@ -16,10 +16,10 @@ export function fetchCurrentUser(user, token) {
   };
 }
 
-export function fetchUserTrades(user, token) {
+export function fetchUserTrades(userId, token) {
   return function(dispatch) {
     dispatch({ type: types.FETCH_USER_TRADES });
-    axios.get(process.env.URL + '/users/' + user._id + '/trades', {
+    axios.get(process.env.URL + '/users/' + userId + '/trades', {
       headers: { 'token': token}
     })
     .then((res) => {
@@ -35,10 +35,10 @@ export function fetchUserTrades(user, token) {
   }
 }
 
-export function fetchUserBooks(user, token) {
+export function fetchUserBooks(userId, token) {
   return function(dispatch) {
     dispatch({ type: types.FETCH_USER_BOOKS })
-    axios.get(process.env.URL + '/users/' + user._id + '/books', {
+    axios.get(process.env.URL + '/users/' + userId + '/books', {
       headers: { 'token': token }
     })
       .then((res) => {
@@ -82,6 +82,7 @@ export function removeBookFromUser(book, token) {
 }
 
 export function updateUserInfo(updatedUser, userId, token) {
+  console.log(updatedUser);
   return function(dispatch) {
     dispatch({ type: types.UPDATE_USER });
     axios.put(process.env.URL + '/users/' + userId, updatedUser, {
@@ -201,14 +202,17 @@ export function copyPhoneNumberInput(val) {
   };
 }
 
-export function emailCheckboxClick() {
+export function emailCheckboxClick(val) {
+  console.log('Actioon email: ' +val);
   return {
-    type: types.EMAIL_NOTIFICATIONS_CLICKED
+    type: types.EMAIL_NOTIFICATIONS_CLICKED,
+    payload: val
   };
 }
 
-export function textCheckboxClick() {
+export function textCheckboxClick(val) {
   return {
-    type: types.TEXT_NOTIFICATIONS_CLICKED
+    type: types.TEXT_NOTIFICATIONS_CLICKED,
+    payload: val
   };
 }

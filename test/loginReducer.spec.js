@@ -10,7 +10,7 @@ describe('loginReducer', () => {
   beforeEach(() => {
     initialState = {
       token: null,
-      user: null,
+      userId: null,
       success: null,
       fetching: false,
       fetched: false,
@@ -20,7 +20,7 @@ describe('loginReducer', () => {
 
     expectedState = {
       token: null,
-      user: null,
+      userId: null,
       success: null,
       fetching: false,
       slideToggleClass: '',
@@ -55,12 +55,12 @@ describe('loginReducer', () => {
 
     expectedState.fetching = false;
     expectedState.fetched = true;
-    expectedState.user = {name: 'Alem'};
+    expectedState.userId = 'ABC123';
     expectedState.token = '123abc';
 
     expect(reducer(initialState, {
       type: types.LOGIN_FULFILLED,
-      payload: {token: '123abc', user: {name: 'Alem'}}
+      payload: {token: '123abc', userId: 'ABC123'}
     })).to.deep.equal(expectedState);
   });
 

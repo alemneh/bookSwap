@@ -31,7 +31,7 @@ const ProfileComponent = ({
   handleBookSearchChange,
   handleRemoveBook
  }) => {
-
+   
   return (
       <div>
         <h2>{user.name}'s Profile</h2>
