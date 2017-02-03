@@ -55,24 +55,27 @@ class BookPageContainer extends Component {
     makeTradeRequest(trade, token);
   }
 
-  renderAlert() {
-
-    const { success, error, isError, inputError, setAlertMessage } = this.props;
-    if(success) {
-      setAlertMessage(success, false);
-    } else if(error) {
-      setAlertMessage(error.response.data.message, true);
-    } else {
-      return;
-    }
+  renderError() {
+    const { error, success, setAlertMessage, alertMessage } = this.props;
+    if(error) setAlertMessage(error.response.data.message, true);
+    if(success) setAlertMessage(success, false);
+    if(!alertMessage) { return null;}
+    const styles = error ? 'alert alert-dismissible alert-danger' :
+                           'alert alert-dismissible alert-success'
+    window.setTimeout(() => {
+      console.log('late hit');
+      setAlertMessage('', false);
+    }, 2000)
 
     return (
-      <div>
-        <Alert message={inputError }
-               error={isError} />
-      </div>
+         <div className={styles}>
+           <button type="button" className="close" data-dismiss="alert">&times;</button>
+           {alertMessage}
+         </div>
     )
   }
+
+
 
   render() {
     const {
@@ -87,6 +90,7 @@ class BookPageContainer extends Component {
 
     return (
       <section className="container">
+        { this.renderError() }
         <BookPage allBooks={ allBooks }
                   userBooks={ userBooks }
                   requesteeBook={ requesteeBook }
@@ -113,7 +117,7 @@ function mapPropsToState(state) {
     requesterBook: state.books.requesterBook,
     error: state.books.error,
     success: state.books.success,
-    inputError: state.alert.message
+    alertMessage: state.alert.message
   }
 }
 

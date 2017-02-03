@@ -195,6 +195,10 @@ footer {
     background-color: #333;
   }
 
+  .nav.nav-tabs  li > a {
+    background-color: white;
+  }
+
   #ham-menu {
     display: block;
     height: 80px;

@@ -13,6 +13,7 @@ class LoginContainer extends Component {
   constructor(props) {
     super(props);
 
+
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handleLogin = this.handleLogin.bind(this);
@@ -35,10 +36,9 @@ class LoginContainer extends Component {
     const { username, password, setAlertMessage } = this.props;
     const validateLoginInput = this.validateLoginInput(username, password);
     if(validateLoginInput) {
-      setAlertMessage(validateLoginInput);
+      setAlertMessage(validateLoginInput, true);
       return;
     }
-    console.log('Username: ' + username + '\n' + 'Password: ' + password);
 
     this.props.handleLogin(username, password);
   }
@@ -53,16 +53,39 @@ class LoginContainer extends Component {
     }
   }
 
+  renderError() {
+    const { error, message, setAlertMessage, loginError } = this.props;
+
+    if(loginError) setAlertMessage(loginError.response.data.message, true);
+    console.log(message);
+    if(!message) { return null;}
+    const styles = error ? 'alert alert-dismissible alert-danger' :
+                           'alert alert-dismissible alert-success'
+    window.setTimeout(() => {
+      console.log('late hit');
+      setAlertMessage('', false)
+    }, 2000)
+
+    return (
+         <div className={styles}>
+           <button type="button" className="close" data-dismiss="alert">&times;</button>
+           {message}
+         </div>
+    )
+  }
+
   render() {
     if(this.props.token) browserHistory.push('/profile');
 
 
     return (
       <section className="container">
+        { this.renderError() }
         <Login  handleLogin={this.handleLogin}
                 onCancelClick={ onCancelClick }
                 handlePasswordChange={this.handlePasswordChange}
                 handleUsernameChange={this.handleUsernameChange}/>
+
       </section>
     )
   }
@@ -74,7 +97,10 @@ function mapPropsToState(state) {
   return {
     username: state.user.newUserName,
     password: state.user.newPassword,
-    token: state.login.token
+    token: state.login.token,
+    error: state.alert.error,
+    message: state.alert.message,
+    loginError: state.login.error
   }
 }
 
@@ -83,6 +109,7 @@ function matchDispatchToProps(dispatch) {
     copyPasswordInput,
     copyUserNameInput,
     onCancelClick,
+    setAlertMessage,
     handleLogin
   }, dispatch)
 }
