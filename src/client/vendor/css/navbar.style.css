@@ -68,7 +68,7 @@ section {
 }
 
 div.landing-image {
-  background-image: url('../../resources/images/book-background.jpeg');
+  background-image: url('../../resources/images/book-background.min.jpeg');
   background-size: cover;
   background-position: center;
   width: 100%;
