@@ -20,7 +20,6 @@ export default function(state=initialState, action) {
       return {...state, fetching: false, error: action.payload}
     }
     case types.LOGIN_FULFILLED: {
-      console.log(action);
       const { token, userId} = action.payload;
       return {
         ...state,
