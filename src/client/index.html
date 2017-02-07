@@ -31,9 +31,18 @@
         window.attachEvent("onload", downloadJSAtOnload);
       else window.onload = downloadJSAtOnload;
   </script>
+  <script async>
+/* First CSS File */
+var giftofspeed = document.createElement('link');
+giftofspeed.rel = 'stylesheet';
+giftofspeed.href = './public/styles.min.css';
+giftofspeed.type = 'text/css';
+var godefer = document.getElementsByTagName('link')[0];
+godefer.parentNode.insertBefore(giftofspeed, godefer);
+
+</script>
   <!-- <script src="./vendor/js/axios.min.js"></script> -->
   <script src="./public/bundle.min.js" defer="true"></script>
-  <link rel="stylesheet" href="./public/styles.min.css" media="none" onload="if(media!='all')media='all'">
   <noscript><link rel="stylesheet" href="./public/styles.min.css"></noscript>
 
   <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
