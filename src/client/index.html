@@ -3,8 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./public/css/styles.min.css" media="screen" title="no title">
-    <link rel="icon" href="./resources/favicon.ico">
+    <noscript>
+      <link rel="stylesheet" type="text/css" href="./public/navbar.style.css" />
+      <link rel="stylesheet" type="text/css" href="./public/style.min.css" />
+      <link rel="icon" href="./resources/favicon.ico">
+    </noscript>
     <title>Book Swap Meet</title>
 
   </head>
@@ -12,6 +15,30 @@
     <div id="app">
 
     </div>
+  <script type="text/javascript">
+    /* First CSS File */
+    var giftofspeed = document.createElement('link');
+    giftofspeed.rel = 'stylesheet';
+    giftofspeed.href = './public/navbar.style.css';
+    giftofspeed.type = 'text/css';
+    var godefer = document.getElementsByTagName('link')[0];
+    godefer.parentNode.insertBefore(giftofspeed, godefer);
+
+    /* Second CSS File */
+    var giftofspeed2 = document.createElement('link');
+    giftofspeed2.rel = 'stylesheet';
+    giftofspeed2.href = './public/style.min.css';
+    giftofspeed2.type = 'text/css';
+    var godefer2 = document.getElementsByTagName('link')[0];
+    godefer2.parentNode.insertBefore(giftofspeed2, godefer2);
+
+    /* Third CSS File */
+    var giftofspeed2 = document.createElement('link');
+    giftofspeed3.rel = 'icon';
+    giftofspeed3.href = './resources/favicon.ico';
+    var godefer3 = document.getElementsByTagName('link')[0];
+    godefer3.parentNode.insertBefore(giftofspeed3, godefer3);
+  </script>
   <script type="text/javascript">
 
       function downloadJSAtOnload() {

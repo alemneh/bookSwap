@@ -23,6 +23,14 @@ body {
   padding: 0px;
 }
 
+div.landing-image {
+  background-image: url('../../resources/images/book-background-min.jpeg');
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+  height: 400px;
+}
+
 footer div a {
   text-decoration: none;
 
