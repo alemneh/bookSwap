@@ -8,11 +8,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Things you need to install the software and how to install them
 
-Node.js
-MongoDB
-NPM
+####Node.js
+####MongoDB
+####NPM
 
 ### Installing
 
@@ -23,7 +23,7 @@ Download all dependencies
 npm install
 ```
 
-Create an environment variable and set it to production
+Create an environment variable and set it to developement
 
 ```
 export NODE_ENV=development
@@ -58,10 +58,10 @@ npm run test
 
 ## Built With
 
-* [Node.js](https://nodejs.org/en/) - The web framework used
-* [React.js](https://facebook.github.io/react/) - Dependency Management
-* [MongoDB](https://www.mongodb.com/) - Used to generate RSS Feeds
-* [Express](https://expressjs.com/) - Used to generate RSS Feeds
+* [Node.js](https://nodejs.org/en/) - Server-side language
+* [React.js](https://facebook.github.io/react/) - UI Library
+* [MongoDB](https://www.mongodb.com/) - NoSql Database
+* [Express](https://expressjs.com/) - Web Framework
 
 
 
